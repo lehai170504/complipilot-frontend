@@ -8,6 +8,7 @@ import type {
 import { clearAuthCookies, getRefreshToken, setAuthCookies } from "@/lib/auth/token-cookies";
 import { appConfig } from "@/lib/config/app-config";
 import type { LoginRequest, RegisterRequest } from "@/features/auth/types/auth-types";
+import { clearActiveOrganization } from "@/features/organizations/api/organization-storage";
 
 export async function registerUser(request: RegisterRequest): Promise<RegisterResponse> {
   return apiClient<RegisterResponse>(
@@ -49,6 +50,7 @@ export async function logoutUser(): Promise<void> {
   }
 
   clearAuthCookies();
+  clearActiveOrganization();
 }
 
 export async function getCurrentUser(): Promise<AuthUser> {
