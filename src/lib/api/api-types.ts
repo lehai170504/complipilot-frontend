@@ -171,3 +171,34 @@ export type ApplyFrameworkResponse = {
   skippedCount: number;
   createdItems: CompanyComplianceItem[];
 };
+
+export type EvidenceType =
+  | "POLICY"
+  | "PROCEDURE"
+  | "SCREENSHOT"
+  | "REPORT"
+  | "CONTRACT"
+  | "CERTIFICATE"
+  | "AUDIT_NOTE"
+  | "OTHER";
+
+export type EvidenceSourceType = "FILE" | "URL" | "TEXT_NOTE";
+
+export type EvidenceStatus = "DRAFT" | "ACTIVE" | "ARCHIVED";
+
+export type EvidenceDocument = {
+  id: string;
+  organizationId: string;
+  title: string;
+  description: string | null;
+  evidenceType: EvidenceType;
+  sourceType: EvidenceSourceType;
+  fileObjectKey: string | null;
+  externalUrl: string | null;
+  contentType: string | null;
+  fileSizeBytes: number | null;
+  uploadedByUserId: string;
+  status: EvidenceStatus;
+  createdAt: string;
+  updatedAt: string;
+};
