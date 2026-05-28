@@ -51,3 +51,107 @@ export type RegisterResponse = {
   organizationName: string;
   role: "OWNER";
 };
+
+export type ComplianceStatus =
+  | "OPEN"
+  | "IN_PROGRESS"
+  | "READY_FOR_REVIEW"
+  | "COMPLIANT"
+  | "NON_COMPLIANT"
+  | "WAIVED";
+
+export type CompanyComplianceItem = {
+  id: string;
+  organizationId: string;
+  requirementId: string;
+  requirementCode: string;
+  requirementTitle: string;
+  status: ComplianceStatus;
+  ownerUserId: string | null;
+  dueDate: string | null;
+  notes: string | null;
+};
+
+export type ComplianceSummaryResponse = {
+  organizationId: string;
+  totalItems: number;
+  open: number;
+  inProgress: number;
+  readyForReview: number;
+  compliant: number;
+  nonCompliant: number;
+  waived: number;
+};
+
+export type ComplianceTaskStatus =
+  | "OPEN"
+  | "IN_PROGRESS"
+  | "DONE"
+  | "CANCELLED";
+
+export type ComplianceTaskPriority =
+  | "LOW"
+  | "MEDIUM"
+  | "HIGH"
+  | "CRITICAL";
+
+export type ComplianceTask = {
+  id: string;
+  organizationId: string;
+  complianceItemId: string | null;
+  title: string;
+  description: string | null;
+  assigneeUserId: string | null;
+  assigneeEmail: string | null;
+  createdByUserId: string;
+  createdByEmail: string;
+  status: ComplianceTaskStatus;
+  priority: ComplianceTaskPriority;
+  dueDate: string | null;
+  completedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type ComplianceTaskSummaryResponse = {
+  organizationId: string;
+  total: number;
+  open: number;
+  inProgress: number;
+  done: number;
+  cancelled: number;
+  overdue: number;
+};
+
+export type AuditAction =
+  | "COMPLIANCE_FRAMEWORK_APPLIED"
+  | "COMPLIANCE_ITEM_CREATED"
+  | "COMPLIANCE_ITEM_UPDATED"
+  | "EVIDENCE_DOCUMENT_CREATED"
+  | "EVIDENCE_DOCUMENT_UPDATED"
+  | "EVIDENCE_DOCUMENT_ARCHIVED"
+  | "EVIDENCE_LINK_CREATED"
+  | "EVIDENCE_LINK_DELETED"
+  | "COMPLIANCE_TASK_CREATED"
+  | "COMPLIANCE_TASK_UPDATED"
+  | "COMPLIANCE_TASK_DELETED";
+
+export type AuditResourceType =
+  | "COMPLIANCE_FRAMEWORK"
+  | "COMPLIANCE_ITEM"
+  | "EVIDENCE_DOCUMENT"
+  | "EVIDENCE_LINK"
+  | "COMPLIANCE_TASK";
+
+export type AuditEvent = {
+  id: string;
+  organizationId: string;
+  actorUserId: string | null;
+  actorEmail: string | null;
+  action: AuditAction;
+  resourceType: AuditResourceType;
+  resourceId: string | null;
+  summary: string;
+  metadataJson: string | null;
+  createdAt: string;
+};
