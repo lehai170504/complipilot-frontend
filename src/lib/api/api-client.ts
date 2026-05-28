@@ -1,7 +1,12 @@
-import { clearAuthTokens, getAccessToken, getRefreshToken, setAuthTokens } from "@/lib/auth/token-storage";
-import type { ApiErrorResponse, LoginResponse } from "@/lib/api/types";
-
-const API_BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL ?? "http://localhost:8081";
+import { appConfig } from "@/lib/config/app-config";
+import { ApiClientError } from "@/lib/api/api-error";
+import type { ApiErrorResponse, LoginResponse } from "@/lib/api/api-types";
+import {
+  clearAuthCookies,
+  getAccessToken,
+  getRefreshToken,
+  setAuthCookies,
+} from "@/lib/auth/token-cookies";
 
 function createRequestId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
@@ -11,30 +16,37 @@ function createRequestId(): string {
   return `req_${Date.now()}_${Math.random().toString(16).slice(2)}`;
 }
 
-async function parseApiError(response: Response, path: string, fallbackRequestId: string): Promise<ApiErrorResponse> {
+async function parseApiError(
+  response: Response,
+  path: string,
+  fallbackRequestId: string
+): Promise<ApiClientError> {
   const body = (await response.json().catch(() => null)) as ApiErrorResponse | null;
 
-  return body ?? {
-    timestamp: new Date().toISOString(),
-    status: response.status,
-    error: response.statusText,
-    message: response.statusText,
-    path,
-    requestId: response.headers.get("X-Request-Id") ?? fallbackRequestId,
-    fieldViolations: [],
-  };
+  return new ApiClientError(
+    body ?? {
+      timestamp: new Date().toISOString(),
+      status: response.status,
+      error: response.statusText,
+      message: response.statusText || "Request failed",
+      path,
+      requestId: response.headers.get("X-Request-Id") ?? fallbackRequestId,
+      fieldViolations: [],
+    }
+  );
 }
 
 async function refreshAuthToken(): Promise<LoginResponse> {
   const refreshToken = getRefreshToken();
 
   if (!refreshToken) {
+    clearAuthCookies();
     throw new Error("Missing refresh token");
   }
 
   const requestId = createRequestId();
 
-  const response = await fetch(`${API_BASE_URL}/api/v1/auth/refresh`, {
+  const response = await fetch(`${appConfig.apiBaseUrl}/api/v1/auth/refresh`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -44,37 +56,37 @@ async function refreshAuthToken(): Promise<LoginResponse> {
   });
 
   if (!response.ok) {
-    clearAuthTokens();
+    clearAuthCookies();
     throw await parseApiError(response, "/api/v1/auth/refresh", requestId);
   }
 
   const data = (await response.json()) as LoginResponse;
-  setAuthTokens(data.accessToken, data.refreshToken);
+  setAuthCookies(data.accessToken, data.refreshToken);
 
   return data;
 }
 
-export async function apiFetch<T>(
+export async function apiClient<TResponse>(
   path: string,
   options: RequestInit = {},
   retryOnUnauthorized = true
-): Promise<T> {
-  const token = getAccessToken();
+): Promise<TResponse> {
   const requestId = createRequestId();
+  const accessToken = getAccessToken();
 
-  const response = await fetch(`${API_BASE_URL}${path}`, {
+  const response = await fetch(`${appConfig.apiBaseUrl}${path}`, {
     ...options,
     headers: {
       "Content-Type": "application/json",
       "X-Request-Id": requestId,
-      ...(token ? { Authorization: `Bearer ${token}` } : {}),
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...(options.headers ?? {}),
     },
   });
 
   if (response.status === 401 && retryOnUnauthorized && getRefreshToken()) {
     await refreshAuthToken();
-    return apiFetch<T>(path, options, false);
+    return apiClient<TResponse>(path, options, false);
   }
 
   if (!response.ok) {
@@ -82,10 +94,8 @@ export async function apiFetch<T>(
   }
 
   if (response.status === 204) {
-    return undefined as T;
+    return undefined as TResponse;
   }
 
-  return response.json() as Promise<T>;
+  return response.json() as Promise<TResponse>;
 }
-
-export { API_BASE_URL };
