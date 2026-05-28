@@ -1,0 +1,140 @@
+"use client";
+
+import { CalendarDays, Save } from "lucide-react";
+import { useState } from "react";
+
+import { ErrorAlert } from "@/components/feedback/error-alert";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import { Label } from "@/components/ui/label";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Textarea } from "@/components/ui/textarea";
+import { ComplianceStatusBadge } from "@/features/compliance/components/compliance-status-badge";
+import {
+  complianceStatusLabels,
+  complianceStatusOptions,
+} from "@/features/compliance/constants";
+import { useUpdateComplianceItemMutation } from "@/features/compliance/hooks/compliance-hooks";
+import type { CompanyComplianceItem, ComplianceStatus } from "@/lib/api/api-types";
+
+function formatDate(date: string | null) {
+  if (!date) {
+    return "No due date";
+  }
+
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(date));
+}
+
+export function ComplianceItemCard({
+  item,
+  organizationId,
+  canManageCompliance,
+}: {
+  item: CompanyComplianceItem;
+  organizationId: string | undefined;
+  canManageCompliance: boolean;
+}) {
+  const updateMutation = useUpdateComplianceItemMutation(organizationId);
+
+  const [status, setStatus] = useState<ComplianceStatus>(item.status);
+  const [notes, setNotes] = useState(item.notes ?? "");
+
+  const hasChanges = status !== item.status || notes !== (item.notes ?? "");
+
+  function handleSave() {
+    updateMutation.mutate({
+      itemId: item.id,
+      request: {
+        status,
+        notes: notes.trim() ? notes.trim() : null,
+      },
+    });
+  }
+
+  return (
+    <Card className="overflow-hidden">
+      <CardContent className="p-0">
+        <div className="border-b bg-white p-5">
+          <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <span className="rounded-full bg-slate-950 px-3 py-1 text-xs font-semibold text-cyan-300">
+                  {item.requirementCode}
+                </span>
+                <ComplianceStatusBadge status={item.status} />
+              </div>
+
+              <h3 className="mt-3 text-lg font-semibold tracking-tight">
+                {item.requirementTitle}
+              </h3>
+
+              <div className="mt-3 flex items-center gap-2 text-sm text-muted-foreground">
+                <CalendarDays className="size-4" />
+                {formatDate(item.dueDate)}
+              </div>
+            </div>
+
+            {canManageCompliance ? (
+              <div className="w-full space-y-2 lg:w-56">
+                <Label>Status</Label>
+                <Select
+                  value={status}
+                  onValueChange={(value) => setStatus(value as ComplianceStatus)}
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select status" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {complianceStatusOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {complianceStatusLabels[option]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            ) : null}
+          </div>
+        </div>
+
+        <div className="space-y-4 bg-slate-50 p-5">
+          <div className="space-y-2">
+            <Label>Notes</Label>
+            <Textarea
+              disabled={!canManageCompliance}
+              value={notes}
+              onChange={(event) => setNotes(event.target.value)}
+              placeholder="Add compliance notes, evidence context, or review decisions..."
+              rows={3}
+            />
+          </div>
+
+          {updateMutation.error ? <ErrorAlert error={updateMutation.error} /> : null}
+
+          {canManageCompliance ? (
+            <div className="flex justify-end">
+              <Button
+                disabled={!hasChanges || updateMutation.isPending}
+                onClick={handleSave}
+                type="button"
+              >
+                <Save className="mr-2 size-4" />
+                {updateMutation.isPending ? "Saving..." : "Save changes"}
+              </Button>
+            </div>
+          ) : null}
+        </div>
+      </CardContent>
+    </Card>
+  );
+}

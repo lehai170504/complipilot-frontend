@@ -2,9 +2,17 @@ import { apiClient } from "@/lib/api/api-client";
 import type {
   ApplyFrameworkResponse,
   CompanyComplianceItem,
+  ComplianceStatus,
   ComplianceSummaryResponse,
   FrameworkResponse,
 } from "@/lib/api/api-types";
+
+export type UpdateComplianceItemRequest = {
+  status?: ComplianceStatus | null;
+  ownerUserId?: string | null;
+  dueDate?: string | null;
+  notes?: string | null;
+};
 
 export async function seedSecurityBaselineFramework(): Promise<FrameworkResponse> {
   return apiClient<FrameworkResponse>(
@@ -43,6 +51,14 @@ export async function getComplianceSummary(
   );
 }
 
+export async function listComplianceItems(
+  organizationId: string
+): Promise<CompanyComplianceItem[]> {
+  return apiClient<CompanyComplianceItem[]>(
+    `/api/v1/organizations/${organizationId}/compliance-items`
+  );
+}
+
 export async function getDueSoonComplianceItems(
   organizationId: string
 ): Promise<CompanyComplianceItem[]> {
@@ -56,5 +72,19 @@ export async function getOverdueComplianceItems(
 ): Promise<CompanyComplianceItem[]> {
   return apiClient<CompanyComplianceItem[]>(
     `/api/v1/organizations/${organizationId}/compliance-items/overdue`
+  );
+}
+
+export async function updateComplianceItem(
+  organizationId: string,
+  itemId: string,
+  request: UpdateComplianceItemRequest
+): Promise<CompanyComplianceItem> {
+  return apiClient<CompanyComplianceItem>(
+    `/api/v1/organizations/${organizationId}/compliance-items/${itemId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(request),
+    }
   );
 }
