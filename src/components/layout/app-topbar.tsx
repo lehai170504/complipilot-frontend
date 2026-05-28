@@ -10,7 +10,7 @@ export function AppTopbar() {
   const logoutMutation = useLogoutMutation();
 
   return (
-    <header className="sticky top-0 z-20 border-b bg-background/80 px-4 py-3 backdrop-blur xl:px-8">
+    <header className="z-20 shrink-0 border-b bg-background/90 px-4 py-3 backdrop-blur xl:px-8">
       <div className="flex items-center justify-between gap-4">
         <div className="flex items-center gap-3">
           <Button className="lg:hidden" size="icon" variant="outline">

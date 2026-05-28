@@ -1,12 +1,14 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   getComplianceSummary,
   getDueSoonComplianceItems,
   getOverdueComplianceItems,
+  seedDemoWorkspace,
 } from "@/features/compliance/api/compliance-api";
 
 export const complianceQueryKeys = {
+  all: ["compliance"] as const,
   summary: (organizationId: string | undefined) =>
     ["compliance", "summary", organizationId] as const,
   dueSoon: (organizationId: string | undefined) =>
@@ -40,5 +42,20 @@ export function useOverdueComplianceItemsQuery(
     queryKey: complianceQueryKeys.overdue(organizationId),
     queryFn: () => getOverdueComplianceItems(organizationId as string),
     enabled: Boolean(organizationId),
+  });
+}
+
+export function useSeedDemoWorkspaceMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (organizationId: string) => seedDemoWorkspace(organizationId),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["compliance"] }),
+        queryClient.invalidateQueries({ queryKey: ["tasks"] }),
+        queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
+      ]);
+    },
   });
 }

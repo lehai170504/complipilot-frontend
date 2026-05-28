@@ -25,6 +25,7 @@ import {
   useTasksQuery,
 } from "@/features/tasks/hooks/tasks-hooks";
 import { useAuditEventsQuery } from "@/features/audit/hooks/audit-hooks";
+import { SeedDemoWorkspaceButton } from "@/features/dashboard/components/seed-demo-workspace-button";
 
 function formatDate(date: string | null) {
   if (!date) return "No due date";
@@ -66,7 +67,7 @@ export default function DashboardPage() {
           sortBy: "dueDate",
           sortDirection: "ASC",
         }
-      : undefined
+      : undefined,
   );
 
   const auditEventsQuery = useAuditEventsQuery(
@@ -78,7 +79,7 @@ export default function DashboardPage() {
           sortBy: "createdAt",
           sortDirection: "DESC",
         }
-      : undefined
+      : undefined,
   );
 
   const complianceSummary = complianceSummaryQuery.data;
@@ -89,7 +90,7 @@ export default function DashboardPage() {
       ? Math.round(
           ((complianceSummary.compliant + complianceSummary.waived) /
             complianceSummary.totalItems) *
-            100
+            100,
         )
       : 0;
 
@@ -114,14 +115,20 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-4">
-              <p className="text-sm text-slate-400">Active organization</p>
-              <p className="mt-1 text-lg font-semibold">
-                {activeOrganization?.organizationName ?? "Loading..."}
-              </p>
-              <p className="mt-1 text-sm text-cyan-200">
-                {activeOrganization?.role ?? "—"}
-              </p>
+            <div className="space-y-4 rounded-3xl border border-white/10 bg-white/[0.06] p-4">
+              <div>
+                <p className="text-sm text-slate-400">Active organization</p>
+                <p className="mt-1 text-lg font-semibold">
+                  {activeOrganization?.organizationName ?? "Loading..."}
+                </p>
+                <p className="mt-1 text-sm text-cyan-200">
+                  {activeOrganization?.role ?? "—"}
+                </p>
+              </div>
+
+              {canManageCompliance ? (
+                <SeedDemoWorkspaceButton organizationId={organizationId} />
+              ) : null}
             </div>
           </div>
         </div>

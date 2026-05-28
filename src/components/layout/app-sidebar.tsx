@@ -12,7 +12,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <aside className="hidden min-h-screen w-72 shrink-0 border-r border-white/10 bg-slate-950 text-white lg:flex lg:flex-col">
+    <aside className="hidden h-screen w-72 shrink-0 overflow-hidden border-r border-white/10 bg-slate-950 text-white lg:flex lg:flex-col">
       <div className="p-5">
         <Link className="flex items-center gap-3" href="/dashboard">
           <div className="flex size-11 items-center justify-center rounded-2xl bg-cyan-400/15 text-cyan-300 ring-1 ring-cyan-300/25">
@@ -29,7 +29,7 @@ export function AppSidebar() {
         <WorkspaceSelector />
       </div>
 
-      <nav className="mt-6 flex-1 space-y-1 px-3">
+      <nav className="mt-6 flex-1 space-y-1 overflow-y-auto px-3 pb-4">
         {appNavigationItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(`${item.href}/`);
@@ -50,7 +50,7 @@ export function AppSidebar() {
         })}
       </nav>
 
-      <div className="p-5">
+      <div className="shrink-0 p-5">
         <div className="rounded-3xl border border-cyan-300/15 bg-cyan-300/10 p-4">
           <p className="text-sm font-semibold text-cyan-100">Audit-ready MVP</p>
           <p className="mt-2 text-xs leading-5 text-slate-300">

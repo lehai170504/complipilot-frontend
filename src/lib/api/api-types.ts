@@ -155,3 +155,19 @@ export type AuditEvent = {
   metadataJson: string | null;
   createdAt: string;
 };
+
+export type FrameworkResponse = {
+  id: string;
+  code: string;
+  name: string;
+  description: string | null;
+  systemTemplate: boolean;
+};
+
+export type ApplyFrameworkResponse = {
+  organizationId: string;
+  frameworkId: string;
+  createdCount: number;
+  skippedCount: number;
+  createdItems: CompanyComplianceItem[];
+};
