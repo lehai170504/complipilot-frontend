@@ -9,32 +9,32 @@ import {
 
 export const appNavigationItems = [
   {
-    title: "Dashboard",
+    labelKey: "dashboard",
     href: "/dashboard",
     icon: Gauge,
   },
   {
-    title: "Compliance",
+    labelKey: "compliance",
     href: "/compliance",
     icon: ClipboardCheck,
   },
   {
-    title: "Evidence",
+    labelKey: "evidence",
     href: "/evidence",
     icon: FileCheck2,
   },
   {
-    title: "Tasks",
+    labelKey: "tasks",
     href: "/tasks",
     icon: ListChecks,
   },
   {
-    title: "Audit",
+    labelKey: "audit",
     href: "/audit",
     icon: ScrollText,
   },
   {
-    title: "Workspaces",
+    labelKey: "workspaces",
     href: "/workspaces",
     icon: Building2,
   },

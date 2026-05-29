@@ -3,8 +3,8 @@
 import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
-import { hasAuthCookies } from "@/lib/auth/token-cookies";
 import { useCurrentUserQuery } from "@/features/auth/hooks/auth-hooks";
+import { hasAuthCookies } from "@/lib/auth/token-cookies";
 
 function AuthGuardLoading() {
   return (
@@ -23,33 +23,30 @@ function AuthGuardLoading() {
 
 export function AuthGuard({ children }: { children: ReactNode }) {
   const router = useRouter();
-  const [isMounted, setIsMounted] = useState(false);
-  const [hasSession, setHasSession] = useState(false);
+
+  const [hasSession] = useState(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+
+    return hasAuthCookies();
+  });
 
   const currentUserQuery = useCurrentUserQuery({
-    enabled: isMounted && hasSession,
+    enabled: hasSession,
   });
 
   useEffect(() => {
-    setIsMounted(true);
-
-    const sessionExists = hasAuthCookies();
-    setHasSession(sessionExists);
-
-    if (!sessionExists) {
+    if (!hasSession) {
       router.replace("/login");
     }
-  }, [router]);
+  }, [hasSession, router]);
 
   useEffect(() => {
-    if (isMounted && currentUserQuery.isError) {
+    if (currentUserQuery.isError) {
       router.replace("/login");
     }
-  }, [currentUserQuery.isError, isMounted, router]);
-
-  if (!isMounted) {
-    return <AuthGuardLoading />;
-  }
+  }, [currentUserQuery.isError, router]);
 
   if (!hasSession) {
     return <AuthGuardLoading />;

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { cn } from "@/lib/utils";
 import { appNavigationItems } from "@/components/layout/app-navigation";
@@ -10,6 +11,9 @@ import { WorkspaceSelector } from "@/components/layout/workspace-selector";
 
 export function AppSidebar() {
   const pathname = usePathname();
+  const tBrand = useTranslations("brand");
+  const tNavigation = useTranslations("navigation");
+  const tSidebar = useTranslations("sidebar");
 
   return (
     <aside className="hidden h-screen w-72 shrink-0 overflow-hidden border-r border-white/6 bg-slate-950 text-white lg:flex lg:flex-col">
@@ -20,9 +24,11 @@ export function AppSidebar() {
             <ShieldCheck className="size-5" />
           </div>
           <div>
-            <p className="text-base font-bold tracking-tight">CompliPilot</p>
+            <p className="text-base font-bold tracking-tight">
+              {tBrand("name")}
+            </p>
             <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-500">
-              Compliance OS
+              {tBrand("shortDescription")}
             </p>
           </div>
         </Link>
@@ -53,7 +59,7 @@ export function AppSidebar() {
                   isActive ? "text-cyan-300" : "text-slate-500"
                 )}
               />
-              {item.title}
+              {tNavigation(item.labelKey)}
             </Link>
           );
         })}
@@ -62,10 +68,10 @@ export function AppSidebar() {
       <div className="shrink-0 p-5">
         <div className="rounded-2xl border border-cyan-300/10 bg-linear-to-br from-cyan-400/5 to-cyan-600/5 p-4">
           <p className="text-sm font-semibold text-cyan-200">
-            Audit-ready MVP
+            {tSidebar("mvpTitle")}
           </p>
           <p className="mt-2 text-xs leading-5 text-slate-400">
-            Controls, evidence, tasks, and audit history are wired to the backend.
+            {tSidebar("mvpDescription")}
           </p>
         </div>
       </div>

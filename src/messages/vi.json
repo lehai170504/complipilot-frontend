@@ -1,0 +1,48 @@
+{
+  "brand": {
+    "name": "CompliPilot",
+    "shortDescription": "Hệ điều hành tuân thủ"
+  },
+  "navigation": {
+    "dashboard": "Bảng điều khiển",
+    "compliance": "Tuân thủ",
+    "evidence": "Bằng chứng",
+    "tasks": "Công việc",
+    "audit": "Nhật ký kiểm toán",
+    "workspaces": "Không gian làm việc"
+  },
+  "topbar": {
+    "workspace": "Không gian làm việc",
+    "title": "Trung tâm điều phối tuân thủ",
+    "searchPlaceholder": "Tìm controls, bằng chứng, công việc...",
+    "loadingUser": "Đang tải..."
+  },
+  "sidebar": {
+    "mvpTitle": "MVP sẵn sàng kiểm toán",
+    "mvpDescription": "Controls, bằng chứng, công việc và nhật ký kiểm toán đã được kết nối với backend."
+  },
+  "workspace": {
+    "noWorkspace": "Chưa có workspace",
+    "loading": "Đang tải workspace..."
+  },
+  "language": {
+    "label": "Ngôn ngữ",
+    "english": "Tiếng Anh",
+    "vietnamese": "Tiếng Việt",
+    "shortEnglish": "EN",
+    "shortVietnamese": "VI"
+  },
+  "auth": {
+    "logout": "Đăng xuất"
+  },
+  "status": {
+    "ACTIVE": "Đang hoạt động",
+    "INVITED": "Đã mời",
+    "DISABLED": "Đã vô hiệu",
+    "OWNER": "Chủ sở hữu",
+    "ADMIN": "Quản trị viên",
+    "COMPLIANCE_MANAGER": "Quản lý tuân thủ",
+    "MEMBER": "Thành viên",
+    "AUDITOR": "Kiểm toán viên"
+  }
+}

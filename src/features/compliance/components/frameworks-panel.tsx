@@ -19,9 +19,7 @@ import {
 } from "@/features/compliance/hooks/compliance-hooks";
 import {
   createFrameworkSchema,
-  createRequirementSchema,
   type CreateFrameworkFormData,
-  type CreateRequirementFormData,
 } from "@/lib/validation-schemas";
 
 export function FrameworksPanel() {
@@ -36,17 +34,21 @@ export function FrameworksPanel() {
           <div>
             <h3 className="text-lg font-semibold">Compliance frameworks</h3>
             <p className="mt-1 text-sm text-muted-foreground">
-              {frameworks.length} framework{frameworks.length !== 1 ? "s" : ""} available
+              {frameworks.length} framework{frameworks.length !== 1 ? "s" : ""}{" "}
+              available
             </p>
           </div>
           <CreateFrameworkButton />
         </div>
 
         {frameworksQuery.isLoading ? (
-          <p className="mt-4 text-sm text-muted-foreground">Loading frameworks...</p>
+          <p className="mt-4 text-sm text-muted-foreground">
+            Loading frameworks...
+          </p>
         ) : frameworks.length === 0 ? (
           <p className="mt-4 text-sm text-muted-foreground">
-            No frameworks yet. Seed the security baseline or create a custom framework.
+            No frameworks yet. Seed the security baseline or create a custom
+            framework.
           </p>
         ) : (
           <div className="mt-4 space-y-2">
@@ -72,12 +74,18 @@ function FrameworkRow({
   isExpanded,
   onToggle,
 }: {
-  framework: { id: string; code: string; name: string; description: string | null; systemTemplate: boolean };
+  framework: {
+    id: string;
+    code: string;
+    name: string;
+    description: string | null;
+    systemTemplate: boolean;
+  };
   isExpanded: boolean;
   onToggle: () => void;
 }) {
   const requirementsQuery = useRequirementsQuery(
-    isExpanded ? framework.id : undefined
+    isExpanded ? framework.id : undefined,
   );
 
   return (
@@ -93,21 +101,32 @@ function FrameworkRow({
           </div>
           <div>
             <p className="truncate font-semibold">{framework.name}</p>
-            <p className="truncate text-xs text-muted-foreground">{framework.code}</p>
+            <p className="truncate text-xs text-muted-foreground">
+              {framework.code}
+            </p>
           </div>
           {framework.systemTemplate ? (
-            <Badge className="bg-cyan-50 text-cyan-700 hover:bg-cyan-50" variant="secondary">
+            <Badge
+              className="bg-cyan-50 text-cyan-700 hover:bg-cyan-50"
+              variant="secondary"
+            >
               Template
             </Badge>
           ) : null}
         </div>
-        {isExpanded ? <ChevronDown className="size-5" /> : <ChevronRight className="size-5" />}
+        {isExpanded ? (
+          <ChevronDown className="size-5" />
+        ) : (
+          <ChevronRight className="size-5" />
+        )}
       </button>
 
       {isExpanded ? (
         <div className="border-t px-4 pb-4">
           {framework.description ? (
-            <p className="py-3 text-sm text-muted-foreground">{framework.description}</p>
+            <p className="py-3 text-sm text-muted-foreground">
+              {framework.description}
+            </p>
           ) : null}
 
           <div className="flex items-center justify-between">
@@ -120,7 +139,9 @@ function FrameworkRow({
           {requirementsQuery.isLoading ? (
             <p className="mt-2 text-sm text-muted-foreground">Loading...</p>
           ) : requirementsQuery.data?.length === 0 ? (
-            <p className="mt-2 text-sm text-muted-foreground">No requirements yet.</p>
+            <p className="mt-2 text-sm text-muted-foreground">
+              No requirements yet.
+            </p>
           ) : (
             <div className="mt-2 space-y-1">
               {requirementsQuery.data?.map((req) => (
@@ -133,7 +154,9 @@ function FrameworkRow({
                   </span>
                   <span className="min-w-0 flex-1 truncate">{req.title}</span>
                   {req.category ? (
-                    <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline">{req.category}</span>
+                    <span className="hidden shrink-0 text-xs text-muted-foreground sm:inline">
+                      {req.category}
+                    </span>
                   ) : null}
                 </div>
               ))}
@@ -162,40 +185,70 @@ function CreateFrameworkButton() {
   if (!showForm) {
     return (
       <Button onClick={() => setShowForm(true)} size="sm" variant="outline">
-        <Plus className="mr-2 size-4" />New framework
+        <Plus className="mr-2 size-4" />
+        New framework
       </Button>
     );
   }
 
   function onSubmit(data: CreateFrameworkFormData) {
     createMutation.mutate(
-      { code: data.code.trim(), name: data.name.trim(), description: data.description?.trim() || null },
-      { onSuccess: () => { setShowForm(false); reset(); } }
+      {
+        code: data.code.trim(),
+        name: data.name.trim(),
+        description: data.description?.trim() || null,
+      },
+      {
+        onSuccess: () => {
+          setShowForm(false);
+          reset();
+        },
+      },
     );
   }
 
   return (
-    <form className="rounded-xl border bg-white p-4 space-y-3" onSubmit={handleSubmit(onSubmit)}>
+    <form
+      className="rounded-xl border bg-white p-4 space-y-3"
+      onSubmit={handleSubmit(onSubmit)}
+    >
       <div className="grid grid-cols-2 gap-3">
         <div className="space-y-1">
           <Label className="text-xs">Code</Label>
           <Input {...register("code")} placeholder="SEC-BASIC" />
-          {errors.code ? <p className="text-xs text-red-600">{errors.code.message}</p> : null}
+          {errors.code ? (
+            <p className="text-xs text-red-600">{errors.code.message}</p>
+          ) : null}
         </div>
         <div className="space-y-1">
           <Label className="text-xs">Name</Label>
           <Input {...register("name")} placeholder="Security Baseline" />
-          {errors.name ? <p className="text-xs text-red-600">{errors.name.message}</p> : null}
+          {errors.name ? (
+            <p className="text-xs text-red-600">{errors.name.message}</p>
+          ) : null}
         </div>
       </div>
       <div className="space-y-1">
         <Label className="text-xs">Description</Label>
         <Input {...register("description")} placeholder="Optional..." />
       </div>
-      {createMutation.error ? <ErrorAlert error={createMutation.error} /> : null}
+      {createMutation.error ? (
+        <ErrorAlert error={createMutation.error} />
+      ) : null}
       <div className="flex justify-end gap-2">
-        <Button size="sm" variant="ghost" onClick={() => setShowForm(false)} type="button">Cancel</Button>
-        <Button size="sm" disabled={isSubmitting || createMutation.isPending} type="submit">
+        <Button
+          size="sm"
+          variant="ghost"
+          onClick={() => setShowForm(false)}
+          type="button"
+        >
+          Cancel
+        </Button>
+        <Button
+          size="sm"
+          disabled={isSubmitting || createMutation.isPending}
+          type="submit"
+        >
           {createMutation.isPending ? "Creating..." : "Create"}
         </Button>
       </div>
@@ -227,28 +280,54 @@ function CreateRequirementButton({ frameworkId }: { frameworkId: string }) {
         <div className="grid grid-cols-[1fr_80px] gap-2">
           <div className="space-y-1">
             <Label className="text-xs">Code</Label>
-            <Input value={code} onChange={(e) => setCode(e.target.value)} placeholder="SEC-006" size={10} />
+            <Input
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="SEC-006"
+              size={10}
+            />
           </div>
           <div className="space-y-1">
             <Label className="text-xs">Order</Label>
-            <Input value={sortOrder} onChange={(e) => setSortOrder(e.target.value)} type="number" size={5} />
+            <Input
+              value={sortOrder}
+              onChange={(e) => setSortOrder(e.target.value)}
+              type="number"
+              size={5}
+            />
           </div>
         </div>
         <div className="space-y-1">
           <Label className="text-xs">Title</Label>
-          <Input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Requirement title" />
+          <Input
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            placeholder="Requirement title"
+          />
         </div>
         <div className="space-y-1">
           <Label className="text-xs">Category (optional)</Label>
-          <Input value={category} onChange={(e) => setCategory(e.target.value)} placeholder="Access Control" />
+          <Input
+            value={category}
+            onChange={(e) => setCategory(e.target.value)}
+            placeholder="Access Control"
+          />
         </div>
         <div className="space-y-1">
           <Label className="text-xs">Description (optional)</Label>
-          <Input value={description} onChange={(e) => setDescription(e.target.value)} placeholder="Optional..." />
+          <Input
+            value={description}
+            onChange={(e) => setDescription(e.target.value)}
+            placeholder="Optional..."
+          />
         </div>
-        {createMutation.error ? <ErrorAlert error={createMutation.error} /> : null}
+        {createMutation.error ? (
+          <ErrorAlert error={createMutation.error} />
+        ) : null}
         <div className="flex justify-end gap-2">
-          <Button size="sm" variant="ghost" onClick={() => setShowForm(false)}>Cancel</Button>
+          <Button size="sm" variant="ghost" onClick={() => setShowForm(false)}>
+            Cancel
+          </Button>
           <Button
             size="sm"
             disabled={!code.trim() || !title.trim() || createMutation.isPending}
@@ -261,7 +340,16 @@ function CreateRequirementButton({ frameworkId }: { frameworkId: string }) {
                   category: category.trim() || null,
                   sortOrder: parseInt(sortOrder) || 1,
                 },
-                { onSuccess: () => { setShowForm(false); setCode(""); setTitle(""); setDescription(""); setCategory(""); setSortOrder("1"); } }
+                {
+                  onSuccess: () => {
+                    setShowForm(false);
+                    setCode("");
+                    setTitle("");
+                    setDescription("");
+                    setCategory("");
+                    setSortOrder("1");
+                  },
+                },
               );
             }}
           >

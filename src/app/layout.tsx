@@ -1,8 +1,16 @@
 import type { Metadata, Viewport } from "next";
+import { cookies } from "next/headers";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import { NextIntlClientProvider } from "next-intl";
 import { Toaster } from "sonner";
 
 import { Providers } from "@/app/providers";
+import {
+  defaultLocale,
+  isAppLocale,
+  localeCookieName,
+  type AppLocale,
+} from "@/i18n/config";
 
 import "./globals.css";
 
@@ -36,11 +44,6 @@ export const metadata: Metadata = {
     "Compliance Tasks",
     "AI Compliance",
   ],
-  authors: [
-    {
-      name: "CompliPilot",
-    },
-  ],
 };
 
 export const viewport: Viewport = {
@@ -49,19 +52,35 @@ export const viewport: Viewport = {
   themeColor: "#020617",
 };
 
-export default function RootLayout({
+async function getLocaleFromCookie(): Promise<AppLocale> {
+  const cookieStore = await cookies();
+  const locale = cookieStore.get(localeCookieName)?.value;
+
+  return isAppLocale(locale) ? locale : defaultLocale;
+}
+
+async function getMessages(locale: AppLocale) {
+  return (await import(`@/messages/${locale}.json`)).default;
+}
+
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const locale = await getLocaleFromCookie();
+  const messages = await getMessages(locale);
+
   return (
     <html
-      lang="en"
+      lang={locale}
       className={`${inter.variable} ${jetBrainsMono.variable} h-full bg-background antialiased`}
       suppressHydrationWarning
     >
       <body className="min-h-screen overflow-x-hidden bg-background font-sans text-foreground">
-        <Providers>{children}</Providers>
+        <NextIntlClientProvider locale={locale} messages={messages}>
+          <Providers>{children}</Providers>
+        </NextIntlClientProvider>
 
         <Toaster
           position="top-right"

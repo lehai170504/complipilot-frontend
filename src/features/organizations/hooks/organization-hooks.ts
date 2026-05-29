@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import {
   getActiveOrganization,
@@ -11,40 +11,33 @@ import { useMyOrganizationsQuery } from "@/features/auth/hooks/auth-hooks";
 
 export function useActiveOrganization() {
   const organizationsQuery = useMyOrganizationsQuery();
-  const [activeOrganization, setActiveOrganizationState] =
-    useState<ActiveOrganization | null>(null);
 
-  useEffect(() => {
-    const storedOrganization = getActiveOrganization();
-
-    if (storedOrganization) {
-      setActiveOrganizationState(storedOrganization);
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!organizationsQuery.data || organizationsQuery.data.length === 0) {
-      return;
+  const [selectedOrganizationId, setSelectedOrganizationId] = useState<
+    string | null
+  >(() => {
+    if (typeof window === "undefined") {
+      return null;
     }
 
-    const storedOrganization = getActiveOrganization();
+    return getActiveOrganization()?.organizationId ?? null;
+  });
 
-    const storedOrganizationStillExists = storedOrganization
-      ? organizationsQuery.data.some(
+  const activeOrganization = useMemo<ActiveOrganization | null>(() => {
+    const organizations = organizationsQuery.data ?? [];
+
+    if (organizations.length === 0) {
+      return null;
+    }
+
+    const selectedOrganization = selectedOrganizationId
+      ? organizations.find(
           (organization) =>
-            organization.organizationId === storedOrganization.organizationId
+            organization.organizationId === selectedOrganizationId
         )
-      : false;
+      : null;
 
-    if (storedOrganization && storedOrganizationStillExists) {
-      setActiveOrganizationState(storedOrganization);
-      return;
-    }
-
-    const firstOrganization = organizationsQuery.data[0];
-    setActiveOrganization(firstOrganization);
-    setActiveOrganizationState(firstOrganization);
-  }, [organizationsQuery.data]);
+    return selectedOrganization ?? organizations[0];
+  }, [organizationsQuery.data, selectedOrganizationId]);
 
   function changeActiveOrganization(organizationId: string) {
     const organization = organizationsQuery.data?.find(
@@ -56,7 +49,7 @@ export function useActiveOrganization() {
     }
 
     setActiveOrganization(organization);
-    setActiveOrganizationState(organization);
+    setSelectedOrganizationId(organization.organizationId);
   }
 
   const canManageCompliance = useMemo(() => {

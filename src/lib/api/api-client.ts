@@ -7,6 +7,7 @@ import {
   getRefreshToken,
   setAuthCookies,
 } from "@/lib/auth/token-cookies";
+import { getClientLocale } from "@/i18n/locale-cookie";
 
 type ApiClientOptions = RequestInit & {
   auth?: boolean;
@@ -23,9 +24,11 @@ function createRequestId(): string {
 async function parseApiError(
   response: Response,
   path: string,
-  fallbackRequestId: string
+  fallbackRequestId: string,
 ): Promise<ApiClientError> {
-  const body = (await response.json().catch(() => null)) as ApiErrorResponse | null;
+  const body = (await response
+    .json()
+    .catch(() => null)) as ApiErrorResponse | null;
 
   return new ApiClientError(
     body ?? {
@@ -36,7 +39,7 @@ async function parseApiError(
       path,
       requestId: response.headers.get("X-Request-Id") ?? fallbackRequestId,
       fieldViolations: [],
-    }
+    },
   );
 }
 
@@ -50,11 +53,14 @@ async function refreshAuthToken(): Promise<LoginResponse> {
 
   const requestId = createRequestId();
 
+  const locale = getClientLocale();
+
   const response = await fetch(`${appConfig.apiBaseUrl}/api/v1/auth/refresh`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       "X-Request-Id": requestId,
+      "Accept-Language": locale,
     },
     body: JSON.stringify({ refreshToken }),
   });
@@ -73,19 +79,29 @@ async function refreshAuthToken(): Promise<LoginResponse> {
 export async function apiClient<TResponse>(
   path: string,
   options: ApiClientOptions = {},
-  retryOnUnauthorized = true
+  retryOnUnauthorized = true,
 ): Promise<TResponse> {
   const requestId = createRequestId();
   const shouldAttachAuth = options.auth ?? true;
   const accessToken = shouldAttachAuth ? getAccessToken() : undefined;
 
-  const { auth: _auth, headers, ...fetchOptions } = options;
+  const headers = options.headers;
+
+  const fetchOptions: RequestInit = {
+    ...options,
+  };
+
+  delete (fetchOptions as ApiClientOptions).auth;
+  delete fetchOptions.headers;
+
+  const locale = getClientLocale();
 
   const response = await fetch(`${appConfig.apiBaseUrl}${path}`, {
     ...fetchOptions,
     headers: {
       "Content-Type": "application/json",
       "X-Request-Id": requestId,
+      "Accept-Language": locale,
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
       ...(headers ?? {}),
     },

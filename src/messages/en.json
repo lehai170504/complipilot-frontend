@@ -1,0 +1,48 @@
+{
+  "brand": {
+    "name": "CompliPilot",
+    "shortDescription": "Compliance OS"
+  },
+  "navigation": {
+    "dashboard": "Dashboard",
+    "compliance": "Compliance",
+    "evidence": "Evidence",
+    "tasks": "Tasks",
+    "audit": "Audit",
+    "workspaces": "Workspaces"
+  },
+  "topbar": {
+    "workspace": "Workspace",
+    "title": "Compliance Command",
+    "searchPlaceholder": "Search controls, evidence, tasks...",
+    "loadingUser": "Loading..."
+  },
+  "sidebar": {
+    "mvpTitle": "Audit-ready MVP",
+    "mvpDescription": "Controls, evidence, tasks, and audit history are wired to the backend."
+  },
+  "workspace": {
+    "noWorkspace": "No workspace",
+    "loading": "Loading workspace..."
+  },
+  "language": {
+    "label": "Language",
+    "english": "English",
+    "vietnamese": "Vietnamese",
+    "shortEnglish": "EN",
+    "shortVietnamese": "VI"
+  },
+  "auth": {
+    "logout": "Logout"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "INVITED": "Invited",
+    "DISABLED": "Disabled",
+    "OWNER": "Owner",
+    "ADMIN": "Admin",
+    "COMPLIANCE_MANAGER": "Compliance manager",
+    "MEMBER": "Member",
+    "AUDITOR": "Auditor"
+  }
+}

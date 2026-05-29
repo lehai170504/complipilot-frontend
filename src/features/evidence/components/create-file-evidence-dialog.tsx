@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { FileUp, X } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -52,7 +52,8 @@ export function CreateFileEvidenceDialog({
   onOpenChange: (open: boolean) => void;
   organizationId: string | undefined;
 }) {
-  const createFileEvidenceMutation = useCreateFileEvidenceMutation(organizationId);
+  const createFileEvidenceMutation =
+    useCreateFileEvidenceMutation(organizationId);
 
   const [file, setFile] = useState<File | null>(null);
   const [title, setTitle] = useState("");
@@ -60,16 +61,13 @@ export function CreateFileEvidenceDialog({
   const [evidenceType, setEvidenceType] = useState<EvidenceType>("SCREENSHOT");
   const [clientError, setClientError] = useState<string | null>(null);
 
-  useEffect(() => {
-    if (createFileEvidenceMutation.isSuccess) {
-      onOpenChange(false);
-      setFile(null);
-      setTitle("");
-      setDescription("");
-      setEvidenceType("SCREENSHOT");
-      setClientError(null);
-    }
-  }, [createFileEvidenceMutation.isSuccess, onOpenChange]);
+  function resetForm() {
+    setFile(null);
+    setTitle("");
+    setDescription("");
+    setEvidenceType("SCREENSHOT");
+    setClientError(null);
+  }
 
   function handleFileChange(selectedFile: File | null) {
     setClientError(null);
@@ -107,12 +105,20 @@ export function CreateFileEvidenceDialog({
       return;
     }
 
-    createFileEvidenceMutation.mutate({
-      file,
-      title: title.trim(),
-      description: description.trim() ? description.trim() : null,
-      evidenceType,
-    });
+    createFileEvidenceMutation.mutate(
+      {
+        file,
+        title: title.trim(),
+        description: description.trim() ? description.trim() : null,
+        evidenceType,
+      },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+          resetForm();
+        },
+      },
+    );
   }
 
   const isSubmitting = createFileEvidenceMutation.isPending;

@@ -4,14 +4,7 @@ import { Clock, Tag, User } from "lucide-react";
 
 import { Card, CardContent } from "@/components/ui/card";
 import { StatusPill } from "@/features/dashboard/components/status-pill";
-import type { AuditAction, AuditEvent, AuditResourceType } from "@/lib/api/api-types";
-
-function formatActionLabel(action: AuditAction) {
-  return action
-    .replaceAll("_", " ")
-    .toLowerCase()
-    .replace(/\b\w/g, (c) => c.toUpperCase());
-}
+import type { AuditEvent, AuditResourceType } from "@/lib/api/api-types";
 
 function formatResourceTypeLabel(type: AuditResourceType) {
   return type
@@ -42,7 +35,9 @@ export function AuditEventCard({ event }: { event: AuditEvent }) {
                 {formatResourceTypeLabel(event.resourceType)}
               </span>
             </div>
-            <p className="mt-3 break-words text-sm font-medium">{event.summary}</p>
+            <p className="mt-3 break-words text-sm font-medium">
+              {event.summary}
+            </p>
             <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
               {event.actorEmail ? (
                 <span className="inline-flex items-center gap-1">

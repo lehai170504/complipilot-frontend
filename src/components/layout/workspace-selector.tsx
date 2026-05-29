@@ -1,6 +1,7 @@
 "use client";
 
 import { Building2, ChevronsUpDown } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,9 @@ export function WorkspaceSelector() {
     changeActiveOrganization,
   } = useActiveOrganization();
 
+  const tWorkspace = useTranslations("workspace");
+  const tStatus = useTranslations("status");
+
   if (isLoading) {
     return (
       <div className="h-11 w-full animate-pulse rounded-2xl bg-white/10" />
@@ -30,7 +34,7 @@ export function WorkspaceSelector() {
   if (!activeOrganization) {
     return (
       <div className="rounded-2xl border border-white/10 bg-white/5 p-3 text-sm text-slate-300">
-        No workspace
+        {tWorkspace("noWorkspace")}
       </div>
     );
   }
@@ -52,9 +56,9 @@ export function WorkspaceSelector() {
               </span>
               <span className="mt-1 flex items-center gap-2 text-xs text-slate-400">
                 <Badge className="h-5 rounded-full bg-cyan-300/15 px-2 text-[10px] text-cyan-200 hover:bg-cyan-300/15">
-                  {activeOrganization.role}
+                  {tStatus(activeOrganization.role)}
                 </Badge>
-                {activeOrganization.status}
+                {tStatus(activeOrganization.status)}
               </span>
             </span>
           </span>
@@ -74,9 +78,11 @@ export function WorkspaceSelector() {
               value={organization.organizationId}
             >
               <span className="flex flex-col">
-                <span className="font-medium">{organization.organizationName}</span>
+                <span className="font-medium">
+                  {organization.organizationName}
+                </span>
                 <span className="text-xs text-muted-foreground">
-                  {organization.role} · {organization.status}
+                  {tStatus(organization.role)} · {tStatus(organization.status)}
                 </span>
               </span>
             </DropdownMenuRadioItem>

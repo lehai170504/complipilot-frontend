@@ -1,7 +1,6 @@
-
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import { Plus } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -21,8 +20,11 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useCreateComplianceItemMutation } from "@/features/compliance/hooks/compliance-hooks";
-import { useFrameworksQuery, useRequirementsQuery } from "@/features/compliance/hooks/compliance-hooks";
+import {
+  useCreateComplianceItemMutation,
+  useFrameworksQuery,
+  useRequirementsQuery,
+} from "@/features/compliance/hooks/compliance-hooks";
 
 export function CreateComplianceItemDialog({
   open,
@@ -35,36 +37,58 @@ export function CreateComplianceItemDialog({
 }) {
   const createMutation = useCreateComplianceItemMutation(organizationId);
   const frameworksQuery = useFrameworksQuery();
-  const [selectedFrameworkId, setSelectedFrameworkId] = useState<string>("");
-  const requirementsQuery = useRequirementsQuery(selectedFrameworkId || undefined);
-  const [selectedRequirementId, setSelectedRequirementId] = useState<string>("");
+
+  const [selectedFrameworkId, setSelectedFrameworkId] = useState("");
+  const [selectedRequirementId, setSelectedRequirementId] = useState("");
+
+  const requirementsQuery = useRequirementsQuery(
+    selectedFrameworkId || undefined,
+  );
 
   const frameworks = frameworksQuery.data ?? [];
   const requirements = requirementsQuery.data ?? [];
 
-  useEffect(() => {
-    if (createMutation.isSuccess) {
-      onOpenChange(false);
-      setSelectedFrameworkId("");
-      setSelectedRequirementId("");
-    }
-  }, [createMutation.isSuccess, onOpenChange]);
-
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
-    e.preventDefault();
-    if (!selectedRequirementId) return;
-    createMutation.mutate({ requirementId: selectedRequirementId });
+  function resetForm() {
+    setSelectedFrameworkId("");
+    setSelectedRequirementId("");
   }
 
-  const selectedFramework = frameworks.find((f) => f.id === selectedFrameworkId);
+  function handleOpenChange(nextOpen: boolean) {
+    onOpenChange(nextOpen);
+
+    if (!nextOpen && !createMutation.isPending) {
+      resetForm();
+    }
+  }
+
+  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+
+    if (!selectedRequirementId) {
+      return;
+    }
+
+    createMutation.mutate(
+      {
+        requirementId: selectedRequirementId,
+      },
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+          resetForm();
+        },
+      },
+    );
+  }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
           <DialogTitle>Create compliance item</DialogTitle>
           <DialogDescription>
-            Select a framework and requirement to create a new compliance control.
+            Select a framework and requirement to create a new compliance
+            control.
           </DialogDescription>
         </DialogHeader>
 
@@ -73,8 +97,8 @@ export function CreateComplianceItemDialog({
             <Label>Framework</Label>
             <Select
               value={selectedFrameworkId}
-              onValueChange={(v) => {
-                setSelectedFrameworkId(v);
+              onValueChange={(value) => {
+                setSelectedFrameworkId(value);
                 setSelectedRequirementId("");
               }}
             >
@@ -83,13 +107,17 @@ export function CreateComplianceItemDialog({
               </SelectTrigger>
               <SelectContent>
                 {frameworksQuery.isLoading ? (
-                  <SelectItem value="loading" disabled>Loading frameworks...</SelectItem>
+                  <SelectItem value="loading" disabled>
+                    Loading frameworks...
+                  </SelectItem>
                 ) : frameworks.length === 0 ? (
-                  <SelectItem value="none" disabled>No frameworks available</SelectItem>
+                  <SelectItem value="none" disabled>
+                    No frameworks available
+                  </SelectItem>
                 ) : (
-                  frameworks.map((f) => (
-                    <SelectItem key={f.id} value={f.id}>
-                      {f.code} — {f.name}
+                  frameworks.map((framework) => (
+                    <SelectItem key={framework.id} value={framework.id}>
+                      {framework.code} — {framework.name}
                     </SelectItem>
                   ))
                 )}
@@ -109,13 +137,17 @@ export function CreateComplianceItemDialog({
                 </SelectTrigger>
                 <SelectContent>
                   {requirementsQuery.isLoading ? (
-                    <SelectItem value="loading" disabled>Loading requirements...</SelectItem>
+                    <SelectItem value="loading" disabled>
+                      Loading requirements...
+                    </SelectItem>
                   ) : requirements.length === 0 ? (
-                    <SelectItem value="none" disabled>No requirements in this framework</SelectItem>
+                    <SelectItem value="none" disabled>
+                      No requirements in this framework
+                    </SelectItem>
                   ) : (
-                    requirements.map((r) => (
-                      <SelectItem key={r.id} value={r.id}>
-                        {r.code} — {r.title}
+                    requirements.map((requirement) => (
+                      <SelectItem key={requirement.id} value={requirement.id}>
+                        {requirement.code} — {requirement.title}
                       </SelectItem>
                     ))
                   )}
@@ -124,13 +156,23 @@ export function CreateComplianceItemDialog({
             </div>
           ) : null}
 
-          {createMutation.error ? <ErrorAlert error={createMutation.error} /> : null}
+          {createMutation.error ? (
+            <ErrorAlert error={createMutation.error} />
+          ) : null}
 
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleOpenChange(false)}
+              disabled={createMutation.isPending}
+            >
               Cancel
             </Button>
-            <Button disabled={!selectedRequirementId || createMutation.isPending} type="submit">
+            <Button
+              disabled={!selectedRequirementId || createMutation.isPending}
+              type="submit"
+            >
               <Plus className="mr-2 size-4" />
               {createMutation.isPending ? "Creating..." : "Create item"}
             </Button>
