@@ -1,6 +1,9 @@
+"use client";
+
+import { useTranslations } from "next-intl";
+
 import type { ComplianceStatus } from "@/lib/api/api-types";
 import { Badge } from "@/components/ui/badge";
-import { complianceStatusLabels } from "@/features/compliance/constants";
 
 const classNameMap: Record<ComplianceStatus, string> = {
   OPEN: "bg-slate-100 text-slate-700 hover:bg-slate-100",
@@ -11,10 +14,16 @@ const classNameMap: Record<ComplianceStatus, string> = {
   WAIVED: "bg-purple-50 text-purple-700 hover:bg-purple-50",
 };
 
-export function ComplianceStatusBadge({ status }: { status: ComplianceStatus }) {
+export function ComplianceStatusBadge({
+  status,
+}: {
+  status: ComplianceStatus;
+}) {
+  const tStatus = useTranslations("status");
+
   return (
     <Badge className={classNameMap[status]} variant="secondary">
-      {complianceStatusLabels[status]}
+      {tStatus(status)}
     </Badge>
   );
 }

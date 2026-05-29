@@ -1,6 +1,7 @@
 "use client";
 
 import { DatabaseZap } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -11,6 +12,7 @@ export function SeedDemoWorkspaceButton({
 }: {
   organizationId: string | undefined;
 }) {
+  const t = useTranslations("seedDemo");
   const seedDemoWorkspaceMutation = useSeedDemoWorkspaceMutation();
 
   function handleSeedDemoWorkspace() {
@@ -30,16 +32,15 @@ export function SeedDemoWorkspaceButton({
         type="button"
       >
         <DatabaseZap className="mr-2 size-4" />
-        {seedDemoWorkspaceMutation.isPending
-          ? "Preparing demo..."
-          : "Seed demo workspace"}
+        {seedDemoWorkspaceMutation.isPending ? t("preparing") : t("button")}
       </Button>
 
       {seedDemoWorkspaceMutation.isSuccess ? (
         <p className="text-sm text-cyan-100">
-          Demo framework applied. Created{" "}
-          {seedDemoWorkspaceMutation.data.createdCount} controls, skipped{" "}
-          {seedDemoWorkspaceMutation.data.skippedCount}.
+          {t("success", {
+            createdCount: seedDemoWorkspaceMutation.data.createdCount,
+            skippedCount: seedDemoWorkspaceMutation.data.skippedCount,
+          })}
         </p>
       ) : null}
 

@@ -412,5 +412,53 @@
     "empty": "No evidence found.",
     "linked": "Linked",
     "link": "Link"
+  },
+  "seedDemo": {
+    "button": "Seed demo workspace",
+    "preparing": "Preparing demo...",
+    "success": "Demo framework applied. Created {createdCount} controls, skipped {skippedCount}."
+  },
+  "complianceItemCard": {
+    "noDueDate": "No due date",
+    "viewDetails": "View details & evidence",
+    "status": "Status",
+    "selectStatus": "Select status",
+    "notes": "Notes",
+    "notesPlaceholder": "Add compliance notes, evidence context, or review decisions...",
+    "saving": "Saving...",
+    "saveChanges": "Save changes"
+  },
+  "frameworksPanel": {
+    "title": "Compliance frameworks",
+    "available": "{count} {count, plural, one {framework} other {frameworks}} available",
+    "loading": "Loading frameworks...",
+    "empty": "No frameworks yet. Seed the security baseline or create a custom framework.",
+    "template": "Template",
+    "requirements": "Requirements ({count})",
+    "loadingShort": "Loading...",
+    "noRequirements": "No requirements yet.",
+    "newFramework": "New framework",
+    "add": "Add",
+    "create": "Create",
+    "creating": "Creating...",
+    "cancel": "Cancel",
+    "fields": {
+      "code": "Code",
+      "name": "Name",
+      "description": "Description",
+      "title": "Title",
+      "category": "Category",
+      "categoryOptional": "Category (optional)",
+      "descriptionOptional": "Description (optional)",
+      "order": "Order"
+    },
+    "placeholders": {
+      "frameworkCode": "SEC-BASIC",
+      "frameworkName": "Security Baseline",
+      "optional": "Optional...",
+      "requirementCode": "SEC-006",
+      "requirementTitle": "Requirement title",
+      "category": "Access Control"
+    }
   }
 }

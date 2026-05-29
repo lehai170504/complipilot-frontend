@@ -412,5 +412,53 @@
     "empty": "Không tìm thấy bằng chứng.",
     "linked": "Đã liên kết",
     "link": "Liên kết"
+  },
+  "seedDemo": {
+    "button": "Seed workspace mẫu",
+    "preparing": "Đang chuẩn bị dữ liệu mẫu...",
+    "success": "Đã áp dụng framework mẫu. Tạo {createdCount} controls, bỏ qua {skippedCount}."
+  },
+  "complianceItemCard": {
+    "noDueDate": "Chưa có hạn",
+    "viewDetails": "Xem chi tiết & bằng chứng",
+    "status": "Trạng thái",
+    "selectStatus": "Chọn trạng thái",
+    "notes": "Ghi chú",
+    "notesPlaceholder": "Thêm ghi chú tuân thủ, ngữ cảnh bằng chứng hoặc quyết định rà soát...",
+    "saving": "Đang lưu...",
+    "saveChanges": "Lưu thay đổi"
+  },
+  "frameworksPanel": {
+    "title": "Frameworks tuân thủ",
+    "available": "Có {count} framework",
+    "loading": "Đang tải frameworks...",
+    "empty": "Chưa có framework. Seed security baseline hoặc tạo framework tùy chỉnh.",
+    "template": "Mẫu",
+    "requirements": "Requirements ({count})",
+    "loadingShort": "Đang tải...",
+    "noRequirements": "Chưa có requirement.",
+    "newFramework": "Framework mới",
+    "add": "Thêm",
+    "create": "Tạo",
+    "creating": "Đang tạo...",
+    "cancel": "Hủy",
+    "fields": {
+      "code": "Mã",
+      "name": "Tên",
+      "description": "Mô tả",
+      "title": "Tiêu đề",
+      "category": "Danh mục",
+      "categoryOptional": "Danh mục (tùy chọn)",
+      "descriptionOptional": "Mô tả (tùy chọn)",
+      "order": "Thứ tự"
+    },
+    "placeholders": {
+      "frameworkCode": "SEC-BASIC",
+      "frameworkName": "Security Baseline",
+      "optional": "Tùy chọn...",
+      "requirementCode": "SEC-006",
+      "requirementTitle": "Tiêu đề requirement",
+      "category": "Access Control"
+    }
   }
 }
