@@ -202,3 +202,10 @@ export type EvidenceDocument = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type CreateEvidenceUploadUrlResponse = {
+  objectKey: string;
+  uploadUrl: string;
+  method: "PUT";
+  expiresInMinutes: number;
+};

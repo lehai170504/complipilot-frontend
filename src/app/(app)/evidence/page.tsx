@@ -6,6 +6,7 @@ import { FileCheck2 } from "lucide-react";
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { CreateFileEvidenceDialog } from "@/features/evidence/components/create-file-evidence-dialog";
 import { CreateUrlEvidenceDialog } from "@/features/evidence/components/create-url-evidence-dialog";
 import { EvidenceCard } from "@/features/evidence/components/evidence-card";
 import {
@@ -19,7 +20,8 @@ export default function EvidencePage() {
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
 
   const [page, setPage] = useState(0);
-  const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [isCreateUrlDialogOpen, setIsCreateUrlDialogOpen] = useState(false);
+  const [isCreateFileDialogOpen, setIsCreateFileDialogOpen] = useState(false);
   const [toolbarState, setToolbarState] = useState<EvidenceToolbarState>({
     q: "",
     evidenceType: undefined,
@@ -70,8 +72,8 @@ export default function EvidencePage() {
               Collect and review evidence for audit readiness.
             </h2>
             <p className="mt-3 max-w-2xl text-slate-300">
-              Search, filter, sort, create, and archive evidence documents for
-              your active organization.
+              Search, filter, sort, create, upload, and archive evidence
+              documents for your active organization.
             </p>
           </div>
 
@@ -88,7 +90,8 @@ export default function EvidencePage() {
       <EvidenceToolbar
         value={toolbarState}
         onChange={handleToolbarChange}
-        onCreateClick={() => setIsCreateDialogOpen(true)}
+        onCreateUrlClick={() => setIsCreateUrlDialogOpen(true)}
+        onCreateFileClick={() => setIsCreateFileDialogOpen(true)}
         canManageCompliance={canManageCompliance}
       />
 
@@ -108,12 +111,22 @@ export default function EvidencePage() {
             </div>
             <h3 className="mt-5 text-xl font-semibold">No evidence found</h3>
             <p className="mt-2 max-w-md text-muted-foreground">
-              Add URL evidence or adjust filters/search to find existing evidence.
+              Add URL evidence, upload file evidence, or adjust filters/search
+              to find existing evidence.
             </p>
+
             {canManageCompliance ? (
-              <Button className="mt-5" onClick={() => setIsCreateDialogOpen(true)}>
-                Add evidence
-              </Button>
+              <div className="mt-5 flex flex-col gap-2 sm:flex-row">
+                <Button onClick={() => setIsCreateFileDialogOpen(true)}>
+                  Upload file
+                </Button>
+                <Button
+                  onClick={() => setIsCreateUrlDialogOpen(true)}
+                  variant="outline"
+                >
+                  Add URL
+                </Button>
+              </div>
             ) : null}
           </CardContent>
         </Card>
@@ -154,8 +167,14 @@ export default function EvidencePage() {
       </div>
 
       <CreateUrlEvidenceDialog
-        open={isCreateDialogOpen}
-        onOpenChange={setIsCreateDialogOpen}
+        open={isCreateUrlDialogOpen}
+        onOpenChange={setIsCreateUrlDialogOpen}
+        organizationId={organizationId}
+      />
+
+      <CreateFileEvidenceDialog
+        open={isCreateFileDialogOpen}
+        onOpenChange={setIsCreateFileDialogOpen}
         organizationId={organizationId}
       />
     </div>

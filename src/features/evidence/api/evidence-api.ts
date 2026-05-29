@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api/api-client";
 import type {
+  CreateEvidenceUploadUrlResponse,
   EvidenceDocument,
   EvidenceSourceType,
   EvidenceType,
@@ -34,6 +35,19 @@ export type CreateEvidenceRequest = {
   externalUrl?: string | null;
   contentType?: string | null;
   fileSizeBytes?: number | null;
+};
+
+export type CreateEvidenceUploadUrlRequest = {
+  filename: string;
+  contentType: string;
+  fileSizeBytes: number;
+};
+
+export type CreateFileEvidenceRequest = {
+  file: File;
+  title: string;
+  description?: string | null;
+  evidenceType: EvidenceType;
 };
 
 function buildEvidenceQuery(params: ListEvidenceParams): string {
@@ -86,6 +100,60 @@ export async function createEvidence(
       body: JSON.stringify(request),
     }
   );
+}
+
+export async function createEvidenceUploadUrl(
+  organizationId: string,
+  request: CreateEvidenceUploadUrlRequest
+): Promise<CreateEvidenceUploadUrlResponse> {
+  return apiClient<CreateEvidenceUploadUrlResponse>(
+    `/api/v1/organizations/${organizationId}/evidence/upload-url`,
+    {
+      method: "POST",
+      body: JSON.stringify(request),
+    }
+  );
+}
+
+export async function uploadFileToPresignedUrl(
+  uploadUrl: string,
+  file: File
+): Promise<void> {
+  const response = await fetch(uploadUrl, {
+    method: "PUT",
+    headers: {
+      "Content-Type": file.type || "application/octet-stream",
+    },
+    body: file,
+  });
+
+  if (!response.ok) {
+    throw new Error("Failed to upload file to storage");
+  }
+}
+
+export async function createFileEvidence(
+  organizationId: string,
+  request: CreateFileEvidenceRequest
+): Promise<EvidenceDocument> {
+  const uploadUrlResponse = await createEvidenceUploadUrl(organizationId, {
+    filename: request.file.name,
+    contentType: request.file.type || "application/octet-stream",
+    fileSizeBytes: request.file.size,
+  });
+
+  await uploadFileToPresignedUrl(uploadUrlResponse.uploadUrl, request.file);
+
+  return createEvidence(organizationId, {
+    title: request.title,
+    description: request.description ?? null,
+    evidenceType: request.evidenceType,
+    sourceType: "FILE",
+    fileObjectKey: uploadUrlResponse.objectKey,
+    externalUrl: null,
+    contentType: request.file.type || "application/octet-stream",
+    fileSizeBytes: request.file.size,
+  });
 }
 
 export async function archiveEvidence(

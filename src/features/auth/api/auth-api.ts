@@ -5,30 +5,44 @@ import type {
   OrganizationMembership,
   RegisterResponse,
 } from "@/lib/api/api-types";
-import { clearAuthCookies, getRefreshToken, setAuthCookies } from "@/lib/auth/token-cookies";
+import {
+  clearAuthCookies,
+  getRefreshToken,
+  setAuthCookies,
+} from "@/lib/auth/token-cookies";
 import { appConfig } from "@/lib/config/app-config";
-import type { LoginRequest, RegisterRequest } from "@/features/auth/types/auth-types";
+import type {
+  LoginRequest,
+  RegisterRequest,
+} from "@/features/auth/types/auth-types";
 import { clearActiveOrganization } from "@/features/organizations/api/organization-storage";
 
-export async function registerUser(request: RegisterRequest): Promise<RegisterResponse> {
+export async function registerUser(
+  request: RegisterRequest,
+): Promise<RegisterResponse> {
   return apiClient<RegisterResponse>(
     "/api/v1/auth/register",
     {
       method: "POST",
       body: JSON.stringify(request),
+      auth: false,
     },
-    false
+    false,
   );
 }
 
 export async function loginUser(request: LoginRequest): Promise<LoginResponse> {
+  clearAuthCookies();
+  clearActiveOrganization();
+
   const response = await apiClient<LoginResponse>(
     "/api/v1/auth/login",
     {
       method: "POST",
       body: JSON.stringify(request),
+      auth: false,
     },
-    false
+    false,
   );
 
   setAuthCookies(response.accessToken, response.refreshToken);

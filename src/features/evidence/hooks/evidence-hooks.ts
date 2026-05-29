@@ -3,8 +3,10 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   archiveEvidence,
   createEvidence,
+  createFileEvidence,
   listEvidence,
   type CreateEvidenceRequest,
+  type CreateFileEvidenceRequest,
   type ListEvidenceParams,
 } from "@/features/evidence/api/evidence-api";
 
@@ -28,6 +30,23 @@ export function useCreateEvidenceMutation(organizationId: string | undefined) {
   return useMutation({
     mutationFn: (request: CreateEvidenceRequest) =>
       createEvidence(organizationId as string, request),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: evidenceQueryKeys.all }),
+        queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
+      ]);
+    },
+  });
+}
+
+export function useCreateFileEvidenceMutation(
+  organizationId: string | undefined
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: CreateFileEvidenceRequest) =>
+      createFileEvidence(organizationId as string, request),
     onSuccess: async () => {
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: evidenceQueryKeys.all }),

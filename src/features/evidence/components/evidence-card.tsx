@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, ExternalLink, FileCheck2 } from "lucide-react";
+import { Archive, Download, ExternalLink, FileCheck2 } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -20,6 +20,22 @@ function formatDateTime(date: string) {
     hour: "2-digit",
     minute: "2-digit",
   }).format(new Date(date));
+}
+
+function formatFileSize(size: number | null) {
+  if (!size) {
+    return "Unknown size";
+  }
+
+  if (size < 1024) {
+    return `${size} B`;
+  }
+
+  if (size < 1024 * 1024) {
+    return `${(size / 1024).toFixed(1)} KB`;
+  }
+
+  return `${(size / 1024 / 1024).toFixed(1)} MB`;
 }
 
 export function EvidenceCard({
@@ -66,6 +82,19 @@ export function EvidenceCard({
               {evidence.description ?? "No description provided."}
             </p>
 
+            {evidence.sourceType === "FILE" ? (
+              <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm">
+                <p className="font-medium text-slate-700">Stored file evidence</p>
+                <p className="mt-1 text-muted-foreground">
+                  {evidence.contentType ?? "Unknown content type"} ·{" "}
+                  {formatFileSize(evidence.fileSizeBytes)}
+                </p>
+                <p className="mt-1 break-all text-xs text-muted-foreground">
+                  Object key: {evidence.fileObjectKey}
+                </p>
+              </div>
+            ) : null}
+
             {evidence.externalUrl ? (
               <a
                 className="mt-4 inline-flex items-center text-sm font-medium text-cyan-700 hover:text-cyan-800"
@@ -83,8 +112,15 @@ export function EvidenceCard({
             </p>
           </div>
 
-          {canManageCompliance ? (
-            <div className="flex shrink-0 flex-col gap-2">
+          <div className="flex shrink-0 flex-col gap-2">
+            {evidence.sourceType === "FILE" ? (
+              <Button disabled size="sm" type="button" variant="outline">
+                <Download className="mr-2 size-4" />
+                Download soon
+              </Button>
+            ) : null}
+
+            {canManageCompliance ? (
               <Button
                 disabled={archiveMutation.isPending}
                 onClick={handleArchive}
@@ -95,8 +131,8 @@ export function EvidenceCard({
                 <Archive className="mr-2 size-4" />
                 {archiveMutation.isPending ? "Archiving..." : "Archive"}
               </Button>
-            </div>
-          ) : null}
+            ) : null}
+          </div>
         </div>
 
         {archiveMutation.error ? (

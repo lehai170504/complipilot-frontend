@@ -1,5 +1,7 @@
 "use client";
 
+import { Link2, UploadCloud } from "lucide-react";
+
 import type {
   EvidenceSourceType,
   EvidenceType,
@@ -35,12 +37,14 @@ export type EvidenceToolbarState = {
 export function EvidenceToolbar({
   value,
   onChange,
-  onCreateClick,
+  onCreateUrlClick,
+  onCreateFileClick,
   canManageCompliance,
 }: {
   value: EvidenceToolbarState;
   onChange: (value: EvidenceToolbarState) => void;
-  onCreateClick: () => void;
+  onCreateUrlClick: () => void;
+  onCreateFileClick: () => void;
   canManageCompliance: boolean;
 }) {
   function updateValue(nextValue: Partial<EvidenceToolbarState>) {
@@ -52,7 +56,7 @@ export function EvidenceToolbar({
 
   return (
     <div className="rounded-3xl border bg-white p-4 shadow-sm">
-      <div className="grid gap-3 lg:grid-cols-[1fr_180px_180px_180px_150px_auto]">
+      <div className="grid gap-3 xl:grid-cols-[1fr_180px_180px_180px_150px_auto]">
         <Input
           placeholder="Search title, description, external URL..."
           value={value.q}
@@ -63,7 +67,8 @@ export function EvidenceToolbar({
           value={value.evidenceType ?? ALL}
           onValueChange={(nextValue) =>
             updateValue({
-              evidenceType: nextValue === ALL ? undefined : (nextValue as EvidenceType),
+              evidenceType:
+                nextValue === ALL ? undefined : (nextValue as EvidenceType),
             })
           }
         >
@@ -85,7 +90,9 @@ export function EvidenceToolbar({
           onValueChange={(nextValue) =>
             updateValue({
               sourceType:
-                nextValue === ALL ? undefined : (nextValue as EvidenceSourceType),
+                nextValue === ALL
+                  ? undefined
+                  : (nextValue as EvidenceSourceType),
             })
           }
         >
@@ -138,9 +145,16 @@ export function EvidenceToolbar({
         </Select>
 
         {canManageCompliance ? (
-          <Button onClick={onCreateClick} type="button">
-            Add evidence
-          </Button>
+          <div className="flex flex-col gap-2 sm:flex-row xl:flex-col">
+            <Button onClick={onCreateFileClick} type="button">
+              <UploadCloud className="mr-2 size-4" />
+              Upload
+            </Button>
+            <Button onClick={onCreateUrlClick} type="button" variant="outline">
+              <Link2 className="mr-2 size-4" />
+              URL
+            </Button>
+          </div>
         ) : null}
       </div>
     </div>

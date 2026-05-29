@@ -8,6 +8,10 @@ import {
   setAuthCookies,
 } from "@/lib/auth/token-cookies";
 
+type ApiClientOptions = RequestInit & {
+  auth?: boolean;
+};
+
 function createRequestId(): string {
   if (typeof crypto !== "undefined" && "randomUUID" in crypto) {
     return crypto.randomUUID();
@@ -68,23 +72,31 @@ async function refreshAuthToken(): Promise<LoginResponse> {
 
 export async function apiClient<TResponse>(
   path: string,
-  options: RequestInit = {},
+  options: ApiClientOptions = {},
   retryOnUnauthorized = true
 ): Promise<TResponse> {
   const requestId = createRequestId();
-  const accessToken = getAccessToken();
+  const shouldAttachAuth = options.auth ?? true;
+  const accessToken = shouldAttachAuth ? getAccessToken() : undefined;
+
+  const { auth: _auth, headers, ...fetchOptions } = options;
 
   const response = await fetch(`${appConfig.apiBaseUrl}${path}`, {
-    ...options,
+    ...fetchOptions,
     headers: {
       "Content-Type": "application/json",
       "X-Request-Id": requestId,
       ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
-      ...(options.headers ?? {}),
+      ...(headers ?? {}),
     },
   });
 
-  if (response.status === 401 && retryOnUnauthorized && getRefreshToken()) {
+  if (
+    response.status === 401 &&
+    retryOnUnauthorized &&
+    shouldAttachAuth &&
+    getRefreshToken()
+  ) {
     await refreshAuthToken();
     return apiClient<TResponse>(path, options, false);
   }
