@@ -460,5 +460,137 @@
       "requirementTitle": "Requirement title",
       "category": "Access Control"
     }
+  },
+  "authShell": {
+    "eyebrow": "Built for compliance operations",
+    "title": "Turn compliance work into a clear operating system.",
+    "description": "Manage controls, evidence, owners, deadlines, and audit history in one workspace designed for trust, traceability, and speed.",
+    "features": {
+      "evidence": "Evidence-first workflows with upload and linking",
+      "tasks": "Task ownership, filters, search, sorting, and audit trail",
+      "support": "Request ID tracing for production-grade support"
+    }
+  },
+  "authGuard": {
+    "loadingWorkspace": "Loading workspace..."
+  },
+  "login": {
+    "title": "Sign in",
+    "description": "Continue to your compliance workspace.",
+    "email": "Email",
+    "password": "Password",
+    "submitting": "Signing in...",
+    "submit": "Sign in",
+    "noAccount": "No account yet?",
+    "createOne": "Create one"
+  },
+  "register": {
+    "title": "Create account",
+    "description": "Start a workspace with OWNER access.",
+    "fullName": "Full name",
+    "organization": "Organization",
+    "email": "Email",
+    "password": "Password",
+    "submitting": "Creating account...",
+    "submit": "Create account",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in"
+  },
+  "landing": {
+    "brandSubtitle": "Compliance OS",
+    "nav": {
+      "features": "Features",
+      "workflow": "Workflow",
+      "modules": "Modules",
+      "signIn": "Sign in",
+      "createAccount": "Create account"
+    },
+    "hero": {
+      "eyebrow": "AI Compliance & Evidence OS",
+      "title": "Turn compliance into a clear operating system.",
+      "description": "Manage controls, evidence, tasks, frameworks, and audit history in one workspace built for trust, speed, and audit readiness.",
+      "primaryCta": "Start demo workspace",
+      "secondaryCta": "Sign in"
+    },
+    "stats": {
+      "modulesValue": "5",
+      "modulesLabel": "Compliance modules",
+      "endpointsValue": "33+",
+      "endpointsLabel": "Backend API endpoints",
+      "coverageValue": "100%",
+      "coverageLabel": "Audit traceability flow"
+    },
+    "preview": {
+      "eyebrow": "Platform capabilities",
+      "title": "What is inside",
+      "badge": "MVP ready",
+      "ctaTitle": "Ready to start?",
+      "ctaDescription": "Create a workspace, seed the security baseline, and go from zero to audit-ready in minutes.",
+      "cta": "Get started"
+    },
+    "highlights": {
+      "controls": {
+        "title": "Compliance Controls",
+        "description": "Track requirements, update statuses with enforced workflow transitions, and manage due dates."
+      },
+      "evidence": {
+        "title": "Evidence Management",
+        "description": "Upload files via presigned URLs, link URL evidence, and build audit-ready traceability."
+      },
+      "tasks": {
+        "title": "Task Tracking",
+        "description": "Create, assign, prioritize, search, sort, and resolve compliance action items."
+      },
+      "audit": {
+        "title": "Audit Trail",
+        "description": "Every compliance action is logged so teams can filter, search, and review the full history."
+      },
+      "frameworks": {
+        "title": "Framework Library",
+        "description": "Seed security baselines or build custom frameworks with requirements and categories."
+      }
+    },
+    "workflow": {
+      "eyebrow": "Operating model",
+      "title": "From framework to audit-ready evidence.",
+      "description": "CompliPilot connects the daily compliance workflow into one traceable system.",
+      "steps": {
+        "framework": {
+          "title": "Apply framework",
+          "description": "Start from a security baseline or create custom controls."
+        },
+        "control": {
+          "title": "Manage controls",
+          "description": "Update status, notes, due dates, and readiness."
+        },
+        "evidence": {
+          "title": "Attach evidence",
+          "description": "Upload files or link URL evidence to controls."
+        },
+        "audit": {
+          "title": "Review audit trail",
+          "description": "Every key action becomes searchable audit history."
+        }
+      }
+    },
+    "modules": {
+      "eyebrow": "Product modules",
+      "title": "Everything needed for a practical compliance MVP.",
+      "description": "The app is structured around clear modules so the frontend, backend, and future AI service can evolve cleanly.",
+      "items": {
+        "auth": "Cookie-based auth flow with protected workspace routes",
+        "dashboard": "Compliance dashboard with readiness metrics",
+        "evidence": "Evidence library with upload, download, archive, and linking",
+        "tasks": "Task tracking with filters, priorities, and status flow",
+        "audit": "Audit trail with search, filters, sort, and request tracing",
+        "i18n": "English and Vietnamese interface foundation"
+      }
+    },
+    "finalCta": {
+      "title": "Build compliance evidence without losing context.",
+      "description": "Start with a workspace, seed baseline controls, upload evidence, and keep every action traceable.",
+      "primary": "Create account",
+      "secondary": "Sign in"
+    }
   }
 }

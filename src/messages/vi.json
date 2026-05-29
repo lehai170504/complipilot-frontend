@@ -460,5 +460,137 @@
       "requirementTitle": "Tiêu đề requirement",
       "category": "Access Control"
     }
+  },
+  "authShell": {
+    "eyebrow": "Dành cho vận hành tuân thủ",
+    "title": "Biến công việc tuân thủ thành một hệ điều hành rõ ràng.",
+    "description": "Quản lý controls, bằng chứng, người phụ trách, deadline và lịch sử kiểm toán trong một workspace được thiết kế cho sự tin cậy, truy vết và tốc độ.",
+    "features": {
+      "evidence": "Quy trình ưu tiên bằng chứng với tải lên và liên kết",
+      "tasks": "Quản lý đầu việc, bộ lọc, tìm kiếm, sắp xếp và audit trail",
+      "support": "Truy vết Request ID để hỗ trợ theo chuẩn production"
+    }
+  },
+  "authGuard": {
+    "loadingWorkspace": "Đang tải workspace..."
+  },
+  "login": {
+    "title": "Đăng nhập",
+    "description": "Tiếp tục vào workspace tuân thủ của bạn.",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "submitting": "Đang đăng nhập...",
+    "submit": "Đăng nhập",
+    "noAccount": "Chưa có tài khoản?",
+    "createOne": "Tạo tài khoản"
+  },
+  "register": {
+    "title": "Tạo tài khoản",
+    "description": "Khởi tạo workspace với quyền OWNER.",
+    "fullName": "Họ và tên",
+    "organization": "Tổ chức",
+    "email": "Email",
+    "password": "Mật khẩu",
+    "submitting": "Đang tạo tài khoản...",
+    "submit": "Tạo tài khoản",
+    "alreadyHaveAccount": "Đã có tài khoản?",
+    "signIn": "Đăng nhập"
+  },
+  "landing": {
+    "brandSubtitle": "Hệ điều hành tuân thủ",
+    "nav": {
+      "features": "Tính năng",
+      "workflow": "Quy trình",
+      "modules": "Modules",
+      "signIn": "Đăng nhập",
+      "createAccount": "Tạo tài khoản"
+    },
+    "hero": {
+      "eyebrow": "AI Compliance & Evidence OS",
+      "title": "Biến quy trình tuân thủ thành một hệ điều hành rõ ràng.",
+      "description": "Quản lý controls, bằng chứng, công việc, frameworks và lịch sử kiểm toán trong một workspace được xây dựng cho sự tin cậy, tốc độ và sẵn sàng audit.",
+      "primaryCta": "Bắt đầu workspace mẫu",
+      "secondaryCta": "Đăng nhập"
+    },
+    "stats": {
+      "modulesValue": "5",
+      "modulesLabel": "Modules tuân thủ",
+      "endpointsValue": "33+",
+      "endpointsLabel": "Backend API endpoints",
+      "coverageValue": "100%",
+      "coverageLabel": "Luồng truy vết audit"
+    },
+    "preview": {
+      "eyebrow": "Năng lực nền tảng",
+      "title": "Bên trong có gì",
+      "badge": "MVP sẵn sàng",
+      "ctaTitle": "Sẵn sàng bắt đầu?",
+      "ctaDescription": "Tạo workspace, seed security baseline và đi từ con số 0 đến audit-ready chỉ trong vài phút.",
+      "cta": "Bắt đầu"
+    },
+    "highlights": {
+      "controls": {
+        "title": "Compliance Controls",
+        "description": "Theo dõi requirements, cập nhật trạng thái theo workflow được kiểm soát và quản lý ngày đến hạn."
+      },
+      "evidence": {
+        "title": "Quản lý bằng chứng",
+        "description": "Tải file qua presigned URL, liên kết bằng chứng URL và xây dựng khả năng truy vết sẵn sàng audit."
+      },
+      "tasks": {
+        "title": "Theo dõi công việc",
+        "description": "Tạo, giao, ưu tiên, tìm kiếm, sắp xếp và hoàn tất các đầu việc tuân thủ."
+      },
+      "audit": {
+        "title": "Audit Trail",
+        "description": "Mọi hành động tuân thủ đều được ghi lại để đội ngũ có thể lọc, tìm kiếm và rà soát lịch sử."
+      },
+      "frameworks": {
+        "title": "Thư viện Framework",
+        "description": "Seed security baseline hoặc tạo framework tùy chỉnh với requirements và categories."
+      }
+    },
+    "workflow": {
+      "eyebrow": "Mô hình vận hành",
+      "title": "Từ framework đến bằng chứng sẵn sàng kiểm toán.",
+      "description": "CompliPilot kết nối công việc tuân thủ hằng ngày thành một hệ thống có thể truy vết.",
+      "steps": {
+        "framework": {
+          "title": "Áp dụng framework",
+          "description": "Bắt đầu từ security baseline hoặc tạo controls tùy chỉnh."
+        },
+        "control": {
+          "title": "Quản lý controls",
+          "description": "Cập nhật trạng thái, ghi chú, ngày đến hạn và mức độ sẵn sàng."
+        },
+        "evidence": {
+          "title": "Gắn bằng chứng",
+          "description": "Tải file hoặc liên kết bằng chứng URL vào controls."
+        },
+        "audit": {
+          "title": "Rà soát audit trail",
+          "description": "Mọi hành động quan trọng trở thành lịch sử audit có thể tìm kiếm."
+        }
+      }
+    },
+    "modules": {
+      "eyebrow": "Product modules",
+      "title": "Đủ các phần cần thiết cho một compliance MVP thực tế.",
+      "description": "Ứng dụng được chia theo module rõ ràng để frontend, backend và AI service tương lai có thể phát triển sạch hơn.",
+      "items": {
+        "auth": "Auth bằng cookie với protected workspace routes",
+        "dashboard": "Dashboard compliance với readiness metrics",
+        "evidence": "Thư viện bằng chứng với upload, download, archive và linking",
+        "tasks": "Task tracking với filters, priorities và status flow",
+        "audit": "Audit trail với search, filters, sort và request tracing",
+        "i18n": "Nền tảng giao diện tiếng Anh và tiếng Việt"
+      }
+    },
+    "finalCta": {
+      "title": "Xây dựng bằng chứng tuân thủ mà không mất ngữ cảnh.",
+      "description": "Bắt đầu với workspace, seed baseline controls, tải bằng chứng lên và giữ mọi hành động có thể truy vết.",
+      "primary": "Tạo tài khoản",
+      "secondary": "Đăng nhập"
+    }
   }
 }
