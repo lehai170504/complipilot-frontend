@@ -169,12 +169,67 @@ export async function createEvidenceDownloadUrl(
   );
 }
 
+export async function updateEvidence(
+  organizationId: string,
+  evidenceId: string,
+  request: {
+    title: string;
+    description?: string | null;
+    evidenceType: EvidenceType;
+    externalUrl?: string | null;
+  }
+): Promise<EvidenceDocument> {
+  return apiClient<EvidenceDocument>(
+    `/api/v1/organizations/${organizationId}/evidence/${evidenceId}`,
+    {
+      method: "PATCH",
+      body: JSON.stringify(request),
+    }
+  );
+}
+
 export async function archiveEvidence(
   organizationId: string,
   evidenceId: string
 ): Promise<void> {
   return apiClient<void>(
     `/api/v1/organizations/${organizationId}/evidence/${evidenceId}`,
+    {
+      method: "DELETE",
+    }
+  );
+}
+
+export async function linkEvidenceToComplianceItem(
+  organizationId: string,
+  itemId: string,
+  evidenceDocumentId: string
+): Promise<import("@/lib/api/api-types").ComplianceItemEvidenceLink> {
+  return apiClient<import("@/lib/api/api-types").ComplianceItemEvidenceLink>(
+    `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links`,
+    {
+      method: "POST",
+      body: JSON.stringify({ evidenceDocumentId }),
+    }
+  );
+}
+
+export async function listEvidenceLinks(
+  organizationId: string,
+  itemId: string
+): Promise<import("@/lib/api/api-types").ComplianceItemEvidenceLink[]> {
+  return apiClient<import("@/lib/api/api-types").ComplianceItemEvidenceLink[]>(
+    `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links`
+  );
+}
+
+export async function unlinkEvidence(
+  organizationId: string,
+  itemId: string,
+  evidenceDocumentId: string
+): Promise<void> {
+  return apiClient<void>(
+    `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links/${evidenceDocumentId}`,
     {
       method: "DELETE",
     }

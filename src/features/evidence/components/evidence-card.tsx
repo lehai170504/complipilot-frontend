@@ -1,6 +1,6 @@
 "use client";
 
-import { Archive, Download, ExternalLink, FileCheck2 } from "lucide-react";
+import { Archive, Download, ExternalLink, FileCheck2, Pencil } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -45,10 +45,12 @@ export function EvidenceCard({
   evidence,
   organizationId,
   canManageCompliance,
+  onEdit,
 }: {
   evidence: EvidenceDocument;
   organizationId: string | undefined;
   canManageCompliance: boolean;
+  onEdit?: () => void;
 }) {
   const archiveMutation = useArchiveEvidenceMutation(organizationId);
   const downloadUrlMutation =
@@ -85,11 +87,11 @@ export function EvidenceCard({
               <EvidenceSourceBadge sourceType={evidence.sourceType} />
             </div>
 
-            <h3 className="mt-4 text-lg font-semibold tracking-tight">
+            <h3 className="mt-4 truncate text-lg font-semibold tracking-tight">
               {evidence.title}
             </h3>
 
-            <p className="mt-2 line-clamp-2 text-sm leading-6 text-muted-foreground">
+            <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-muted-foreground">
               {evidence.description ?? "No description provided."}
             </p>
 
@@ -102,7 +104,7 @@ export function EvidenceCard({
                   {evidence.contentType ?? "Unknown content type"} ·{" "}
                   {formatFileSize(evidence.fileSizeBytes)}
                 </p>
-                <p className="mt-1 break-all text-xs text-muted-foreground">
+                <p className="mt-1 max-w-full truncate text-xs text-muted-foreground">
                   Object key: {evidence.fileObjectKey}
                 </p>
               </div>
@@ -126,6 +128,17 @@ export function EvidenceCard({
           </div>
 
           <div className="flex shrink-0 flex-col gap-2">
+            {canManageCompliance ? (
+              <Button
+                onClick={onEdit}
+                size="sm"
+                type="button"
+                variant="outline"
+              >
+                <Pencil className="mr-2 size-4" />
+                Edit
+              </Button>
+            ) : null}
             {evidence.sourceType === "FILE" ? (
               <Button
                 disabled={downloadUrlMutation.isPending}

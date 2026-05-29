@@ -164,6 +164,16 @@ export type FrameworkResponse = {
   systemTemplate: boolean;
 };
 
+export type RequirementResponse = {
+  id: string;
+  frameworkId: string;
+  code: string;
+  title: string;
+  description: string | null;
+  category: string | null;
+  sortOrder: number;
+};
+
 export type ApplyFrameworkResponse = {
   organizationId: string;
   frameworkId: string;
@@ -214,4 +224,28 @@ export type EvidenceDownloadUrlResponse = {
   downloadUrl: string;
   method: "GET";
   expiresInMinutes: number;
+};
+
+export type ComplianceItemEvidenceLink = {
+  linkId: string;
+  complianceItemId: string;
+  evidence: EvidenceDocument;
+  linkedByUserId: string;
+  linkedAt: string;
+};
+
+export type UpdateEvidenceDocumentRequest = {
+  title: string;
+  description?: string | null;
+  evidenceType: EvidenceType;
+  externalUrl?: string | null;
+};
+
+export type CreateComplianceTaskRequest = {
+  complianceItemId?: string | null;
+  title: string;
+  description?: string | null;
+  assigneeUserId?: string | null;
+  priority?: ComplianceTaskPriority | null;
+  dueDate?: string | null;
 };

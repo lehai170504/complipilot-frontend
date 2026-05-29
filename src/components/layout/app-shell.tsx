@@ -9,7 +9,7 @@ import { AuthGuard } from "@/features/auth/components/auth-guard";
 export function AppShell({ children }: { children: ReactNode }) {
   return (
     <AuthGuard>
-      <div className="h-screen overflow-hidden bg-slate-50">
+      <div className="h-screen overflow-hidden bg-linear-to-br from-slate-50 via-white to-slate-100">
         <div className="flex h-screen overflow-hidden">
           <AppSidebar />
 

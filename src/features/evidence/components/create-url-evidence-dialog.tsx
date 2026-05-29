@@ -1,6 +1,8 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { useEffect } from "react";
+import { useForm, Controller } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -26,7 +28,7 @@ import {
   evidenceTypeOptions,
 } from "@/features/evidence/constants";
 import { useCreateEvidenceMutation } from "@/features/evidence/hooks/evidence-hooks";
-import type { EvidenceType } from "@/lib/api/api-types";
+import { urlEvidenceSchema, type UrlEvidenceFormData } from "@/lib/validation-schemas";
 
 export function CreateUrlEvidenceDialog({
   open,
@@ -39,30 +41,36 @@ export function CreateUrlEvidenceDialog({
 }) {
   const createEvidenceMutation = useCreateEvidenceMutation(organizationId);
 
-  const [title, setTitle] = useState("MFA configuration guide");
-  const [description, setDescription] = useState(
-    "URL evidence for MFA configuration and access control review."
-  );
-  const [externalUrl, setExternalUrl] = useState(
-    "https://example.com/security/mfa-guide"
-  );
-  const [evidenceType, setEvidenceType] = useState<EvidenceType>("PROCEDURE");
+  const {
+    register,
+    handleSubmit,
+    control,
+    reset,
+    formState: { errors, isSubmitting },
+  } = useForm<UrlEvidenceFormData>({
+    resolver: zodResolver(urlEvidenceSchema),
+    defaultValues: {
+      title: "MFA configuration guide",
+      description: "URL evidence for MFA configuration and access control review.",
+      externalUrl: "https://example.com/security/mfa-guide",
+      evidenceType: "PROCEDURE",
+    },
+  });
 
   useEffect(() => {
     if (createEvidenceMutation.isSuccess) {
       onOpenChange(false);
+      reset();
     }
-  }, [createEvidenceMutation.isSuccess, onOpenChange]);
+  }, [createEvidenceMutation.isSuccess, onOpenChange, reset]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault();
-
+  function onSubmit(data: UrlEvidenceFormData) {
     createEvidenceMutation.mutate({
-      title,
-      description: description.trim() ? description.trim() : null,
-      evidenceType,
+      title: data.title,
+      description: data.description?.trim() || null,
+      evidenceType: data.evidenceType as Parameters<typeof createEvidenceMutation.mutate>[0]["evidenceType"],
       sourceType: "URL",
-      externalUrl,
+      externalUrl: data.externalUrl,
       fileObjectKey: null,
       contentType: null,
       fileSizeBytes: null,
@@ -75,60 +83,49 @@ export function CreateUrlEvidenceDialog({
         <DialogHeader>
           <DialogTitle>Add URL evidence</DialogTitle>
           <DialogDescription>
-            Create evidence metadata for an external URL. File upload will be
-            added in the next step.
+            Create evidence metadata for an external URL.
           </DialogDescription>
         </DialogHeader>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-2">
             <Label htmlFor="evidence-title">Title</Label>
-            <Input
-              id="evidence-title"
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-              required
-            />
+            <Input id="evidence-title" {...register("title")} />
+            {errors.title ? <p className="text-sm text-red-600">{errors.title.message}</p> : null}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="evidence-type">Evidence type</Label>
-            <Select
-              value={evidenceType}
-              onValueChange={(value) => setEvidenceType(value as EvidenceType)}
-            >
-              <SelectTrigger id="evidence-type">
-                <SelectValue placeholder="Select evidence type" />
-              </SelectTrigger>
-              <SelectContent>
-                {evidenceTypeOptions.map((type) => (
-                  <SelectItem key={type} value={type}>
-                    {evidenceTypeLabels[type]}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <Controller
+              name="evidenceType"
+              control={control}
+              render={({ field }) => (
+                <Select value={field.value} onValueChange={field.onChange}>
+                  <SelectTrigger id="evidence-type">
+                    <SelectValue placeholder="Select evidence type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {evidenceTypeOptions.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {evidenceTypeLabels[type]}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
+            />
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="external-url">External URL</Label>
-            <Input
-              id="external-url"
-              type="url"
-              value={externalUrl}
-              onChange={(event) => setExternalUrl(event.target.value)}
-              required
-            />
+            <Input id="external-url" type="url" {...register("externalUrl")} />
+            {errors.externalUrl ? <p className="text-sm text-red-600">{errors.externalUrl.message}</p> : null}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="evidence-description">Description</Label>
-            <Textarea
-              id="evidence-description"
-              value={description}
-              onChange={(event) => setDescription(event.target.value)}
-              rows={4}
-            />
+            <Textarea id="evidence-description" {...register("description")} rows={4} />
+            {errors.description ? <p className="text-sm text-red-600">{errors.description.message}</p> : null}
           </div>
 
           {createEvidenceMutation.error ? (
@@ -136,14 +133,10 @@ export function CreateUrlEvidenceDialog({
           ) : null}
 
           <div className="flex justify-end gap-3">
-            <Button
-              type="button"
-              variant="outline"
-              onClick={() => onOpenChange(false)}
-            >
+            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>
               Cancel
             </Button>
-            <Button disabled={createEvidenceMutation.isPending} type="submit">
+            <Button disabled={isSubmitting || createEvidenceMutation.isPending} type="submit">
               {createEvidenceMutation.isPending ? "Creating..." : "Create evidence"}
             </Button>
           </div>

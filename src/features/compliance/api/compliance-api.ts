@@ -5,6 +5,7 @@ import type {
   ComplianceStatus,
   ComplianceSummaryResponse,
   FrameworkResponse,
+  RequirementResponse,
 } from "@/lib/api/api-types";
 
 export type UpdateComplianceItemRequest = {
@@ -14,6 +15,26 @@ export type UpdateComplianceItemRequest = {
   notes?: string | null;
 };
 
+export type CreateFrameworkRequest = {
+  code: string;
+  name: string;
+  description?: string | null;
+};
+
+export type CreateRequirementRequest = {
+  code: string;
+  title: string;
+  description?: string | null;
+  category?: string | null;
+  sortOrder: number;
+};
+
+export type CreateComplianceItemRequest = {
+  requirementId: string;
+};
+
+// ── Framework endpoints ──
+
 export async function seedSecurityBaselineFramework(): Promise<FrameworkResponse> {
   return apiClient<FrameworkResponse>(
     "/api/v1/compliance/frameworks/seed/security-baseline",
@@ -22,6 +43,42 @@ export async function seedSecurityBaselineFramework(): Promise<FrameworkResponse
     }
   );
 }
+
+export async function listFrameworks(): Promise<FrameworkResponse[]> {
+  return apiClient<FrameworkResponse[]>("/api/v1/compliance/frameworks");
+}
+
+export async function createFramework(
+  request: CreateFrameworkRequest
+): Promise<FrameworkResponse> {
+  return apiClient<FrameworkResponse>("/api/v1/compliance/frameworks", {
+    method: "POST",
+    body: JSON.stringify(request),
+  });
+}
+
+export async function listRequirements(
+  frameworkId: string
+): Promise<RequirementResponse[]> {
+  return apiClient<RequirementResponse[]>(
+    `/api/v1/compliance/frameworks/${frameworkId}/requirements`
+  );
+}
+
+export async function createRequirement(
+  frameworkId: string,
+  request: CreateRequirementRequest
+): Promise<RequirementResponse> {
+  return apiClient<RequirementResponse>(
+    `/api/v1/compliance/frameworks/${frameworkId}/requirements`,
+    {
+      method: "POST",
+      body: JSON.stringify(request),
+    }
+  );
+}
+
+// ── Organization compliance endpoints ──
 
 export async function applyFrameworkToOrganization(
   organizationId: string,
@@ -72,6 +129,19 @@ export async function getOverdueComplianceItems(
 ): Promise<CompanyComplianceItem[]> {
   return apiClient<CompanyComplianceItem[]>(
     `/api/v1/organizations/${organizationId}/compliance-items/overdue`
+  );
+}
+
+export async function createComplianceItem(
+  organizationId: string,
+  request: CreateComplianceItemRequest
+): Promise<CompanyComplianceItem> {
+  return apiClient<CompanyComplianceItem>(
+    `/api/v1/organizations/${organizationId}/compliance-items`,
+    {
+      method: "POST",
+      body: JSON.stringify(request),
+    }
   );
 }
 

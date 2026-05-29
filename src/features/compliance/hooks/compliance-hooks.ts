@@ -1,14 +1,23 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
+  createComplianceItem,
+  createFramework,
+  createRequirement,
   getComplianceSummary,
   getDueSoonComplianceItems,
   getOverdueComplianceItems,
   listComplianceItems,
+  listFrameworks,
+  listRequirements,
   seedDemoWorkspace,
   updateComplianceItem,
+  type CreateComplianceItemRequest,
+  type CreateFrameworkRequest,
+  type CreateRequirementRequest,
   type UpdateComplianceItemRequest,
 } from "@/features/compliance/api/compliance-api";
+import { toast } from "@/lib/toast";
 
 export const complianceQueryKeys = {
   all: ["compliance"] as const,
@@ -20,6 +29,9 @@ export const complianceQueryKeys = {
     ["compliance", "due-soon", organizationId] as const,
   overdue: (organizationId: string | undefined) =>
     ["compliance", "overdue", organizationId] as const,
+  frameworks: ["compliance", "frameworks"] as const,
+  requirements: (frameworkId: string | undefined) =>
+    ["compliance", "requirements", frameworkId] as const,
 };
 
 export function useComplianceSummaryQuery(organizationId: string | undefined) {
@@ -58,17 +70,38 @@ export function useOverdueComplianceItemsQuery(
   });
 }
 
+export function useFrameworksQuery() {
+  return useQuery({
+    queryKey: complianceQueryKeys.frameworks,
+    queryFn: listFrameworks,
+  });
+}
+
+export function useRequirementsQuery(frameworkId: string | undefined) {
+  return useQuery({
+    queryKey: complianceQueryKeys.requirements(frameworkId),
+    queryFn: () => listRequirements(frameworkId as string),
+    enabled: Boolean(frameworkId),
+  });
+}
+
 export function useSeedDemoWorkspaceMutation() {
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: (organizationId: string) => seedDemoWorkspace(organizationId),
-    onSuccess: async () => {
+    onSuccess: async (data) => {
+      toast.success("Workspace seeded", {
+        description: `${data.createdCount} controls created, ${data.skippedCount} skipped.`,
+      });
       await Promise.all([
         queryClient.invalidateQueries({ queryKey: ["compliance"] }),
         queryClient.invalidateQueries({ queryKey: ["tasks"] }),
         queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
       ]);
+    },
+    onError: () => {
+      toast.error("Failed to seed workspace");
     },
   });
 }
@@ -85,6 +118,7 @@ export function useUpdateComplianceItemMutation(organizationId: string | undefin
       request: UpdateComplianceItemRequest;
     }) => updateComplianceItem(organizationId as string, itemId, request),
     onSuccess: async () => {
+      toast.success("Control updated");
       await Promise.all([
         queryClient.invalidateQueries({
           queryKey: complianceQueryKeys.items(organizationId),
@@ -100,6 +134,63 @@ export function useUpdateComplianceItemMutation(organizationId: string | undefin
         }),
         queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
       ]);
+    },
+    onError: () => {
+      toast.error("Failed to update control");
+    },
+  });
+}
+
+export function useCreateComplianceItemMutation(organizationId: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: CreateComplianceItemRequest) =>
+      createComplianceItem(organizationId as string, request),
+    onSuccess: async () => {
+      toast.success("Compliance item created");
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: complianceQueryKeys.all }),
+        queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
+      ]);
+    },
+    onError: () => {
+      toast.error("Failed to create compliance item");
+    },
+  });
+}
+
+export function useCreateFrameworkMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: CreateFrameworkRequest) => createFramework(request),
+    onSuccess: async () => {
+      toast.success("Framework created");
+      await queryClient.invalidateQueries({
+        queryKey: complianceQueryKeys.frameworks,
+      });
+    },
+    onError: () => {
+      toast.error("Failed to create framework");
+    },
+  });
+}
+
+export function useCreateRequirementMutation(frameworkId: string | undefined) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: CreateRequirementRequest) =>
+      createRequirement(frameworkId as string, request),
+    onSuccess: async () => {
+      toast.success("Requirement created");
+      await queryClient.invalidateQueries({
+        queryKey: complianceQueryKeys.requirements(frameworkId),
+      });
+    },
+    onError: () => {
+      toast.error("Failed to create requirement");
     },
   });
 }

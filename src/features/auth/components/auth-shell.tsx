@@ -27,7 +27,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
               "Request ID tracing for production-grade support",
             ].map((item) => (
               <div
-                className="rounded-3xl border border-white/10 bg-white/[0.06] p-5 text-slate-200 shadow-2xl shadow-cyan-950/20 backdrop-blur"
+                className="rounded-3xl border border-white/10 bg-white/6 p-5 text-slate-200 shadow-2xl shadow-cyan-950/20 backdrop-blur"
                 key={item}
               >
                 {item}

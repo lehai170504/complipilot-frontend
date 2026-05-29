@@ -7,6 +7,7 @@ import type {
   EvidenceType,
   SortDirection,
 } from "@/lib/api/api-types";
+import { FilterBar } from "@/components/layout/filter-bar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -48,115 +49,65 @@ export function EvidenceToolbar({
   canManageCompliance: boolean;
 }) {
   function updateValue(nextValue: Partial<EvidenceToolbarState>) {
-    onChange({
-      ...value,
-      ...nextValue,
-    });
+    onChange({ ...value, ...nextValue });
   }
 
   return (
-    <div className="rounded-3xl border bg-white p-4 shadow-sm">
-      <div className="grid gap-3 xl:grid-cols-[1fr_180px_180px_180px_150px_auto]">
-        <Input
-          placeholder="Search title, description, external URL..."
-          value={value.q}
-          onChange={(event) => updateValue({ q: event.target.value })}
-        />
-
-        <Select
-          value={value.evidenceType ?? ALL}
-          onValueChange={(nextValue) =>
-            updateValue({
-              evidenceType:
-                nextValue === ALL ? undefined : (nextValue as EvidenceType),
-            })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Evidence type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>All types</SelectItem>
-            {evidenceTypeOptions.map((type) => (
-              <SelectItem key={type} value={type}>
-                {evidenceTypeLabels[type]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={value.sourceType ?? ALL}
-          onValueChange={(nextValue) =>
-            updateValue({
-              sourceType:
-                nextValue === ALL
-                  ? undefined
-                  : (nextValue as EvidenceSourceType),
-            })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Source type" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value={ALL}>All sources</SelectItem>
-            {evidenceSourceTypeOptions.map((sourceType) => (
-              <SelectItem key={sourceType} value={sourceType}>
-                {evidenceSourceTypeLabels[sourceType]}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={value.sortBy}
-          onValueChange={(nextValue) =>
-            updateValue({
-              sortBy: nextValue as EvidenceToolbarState["sortBy"],
-            })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Sort by" />
-          </SelectTrigger>
-          <SelectContent>
-            {evidenceSortOptions.map((option) => (
-              <SelectItem key={option.value} value={option.value}>
-                {option.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-
-        <Select
-          value={value.sortDirection}
-          onValueChange={(nextValue) =>
-            updateValue({ sortDirection: nextValue as SortDirection })
-          }
-        >
-          <SelectTrigger>
-            <SelectValue placeholder="Direction" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="DESC">Desc</SelectItem>
-            <SelectItem value="ASC">Asc</SelectItem>
-          </SelectContent>
-        </Select>
-
-        {canManageCompliance ? (
-          <div className="flex flex-col gap-2 sm:flex-row xl:flex-col">
-            <Button onClick={onCreateFileClick} type="button">
+    <FilterBar
+      actions={
+        canManageCompliance ? (
+          <div className="flex gap-2">
+            <Button onClick={onCreateFileClick} size="sm" type="button">
               <UploadCloud className="mr-2 size-4" />
               Upload
             </Button>
-            <Button onClick={onCreateUrlClick} type="button" variant="outline">
+            <Button onClick={onCreateUrlClick} size="sm" type="button" variant="outline">
               <Link2 className="mr-2 size-4" />
               URL
             </Button>
           </div>
-        ) : null}
-      </div>
-    </div>
+        ) : undefined
+      }
+    >
+      <Input
+        className="min-w-[180px] flex-1 lg:max-w-[280px]"
+        placeholder="Search title, description, URL..."
+        value={value.q}
+        onChange={(e) => updateValue({ q: e.target.value })}
+      />
+      <Select
+        value={value.evidenceType ?? ALL}
+        onValueChange={(v) => updateValue({ evidenceType: v === ALL ? undefined : (v as EvidenceType) })}
+      >
+        <SelectTrigger className="min-w-[140px]"><SelectValue placeholder="Type" /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value={ALL}>All types</SelectItem>
+          {evidenceTypeOptions.map((t) => <SelectItem key={t} value={t}>{evidenceTypeLabels[t]}</SelectItem>)}
+        </SelectContent>
+      </Select>
+      <Select
+        value={value.sourceType ?? ALL}
+        onValueChange={(v) => updateValue({ sourceType: v === ALL ? undefined : (v as EvidenceSourceType) })}
+      >
+        <SelectTrigger className="min-w-[130px]"><SelectValue placeholder="Source" /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value={ALL}>All sources</SelectItem>
+          {evidenceSourceTypeOptions.map((s) => <SelectItem key={s} value={s}>{evidenceSourceTypeLabels[s]}</SelectItem>)}
+        </SelectContent>
+      </Select>
+      <Select value={value.sortBy} onValueChange={(v) => updateValue({ sortBy: v as EvidenceToolbarState["sortBy"] })}>
+        <SelectTrigger className="min-w-[130px]"><SelectValue placeholder="Sort" /></SelectTrigger>
+        <SelectContent>
+          {evidenceSortOptions.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+        </SelectContent>
+      </Select>
+      <Select value={value.sortDirection} onValueChange={(v) => updateValue({ sortDirection: v as SortDirection })}>
+        <SelectTrigger className="min-w-[90px]"><SelectValue placeholder="Dir" /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="DESC">Desc</SelectItem>
+          <SelectItem value="ASC">Asc</SelectItem>
+        </SelectContent>
+      </Select>
+    </FilterBar>
   );
 }

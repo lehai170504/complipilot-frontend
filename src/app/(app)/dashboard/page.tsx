@@ -105,7 +105,7 @@ export default function DashboardPage() {
               <Badge className="bg-cyan-300/15 text-cyan-200 hover:bg-cyan-300/15">
                 {canManageCompliance ? "Manager workspace" : "Member workspace"}
               </Badge>
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+              <h2 className="mt-4 max-w-3xl truncate text-3xl font-bold tracking-tight md:text-4xl">
                 Welcome back,{" "}
                 {currentUserQuery.data?.fullName ?? "compliance lead"}.
               </h2>
@@ -115,7 +115,7 @@ export default function DashboardPage() {
               </p>
             </div>
 
-            <div className="space-y-4 rounded-3xl border border-white/10 bg-white/[0.06] p-4">
+            <div className="space-y-4 rounded-3xl border border-white/10 bg-white/6 p-4">
               <div>
                 <p className="text-sm text-slate-400">Active organization</p>
                 <p className="mt-1 text-lg font-semibold">

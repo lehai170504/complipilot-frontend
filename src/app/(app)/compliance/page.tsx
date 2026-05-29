@@ -1,9 +1,11 @@
 "use client";
 
+import { useState } from "react";
 import {
   AlertTriangle,
   ClipboardCheck,
   FileClock,
+  Plus,
   ShieldCheck,
 } from "lucide-react";
 
@@ -11,6 +13,8 @@ import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { ComplianceItemCard } from "@/features/compliance/components/compliance-item-card";
+import { CreateComplianceItemDialog } from "@/features/compliance/components/create-compliance-item-dialog";
+import { FrameworksPanel } from "@/features/compliance/components/frameworks-panel";
 import { useComplianceItemsQuery } from "@/features/compliance/hooks/compliance-hooks";
 import { MetricCard } from "@/features/dashboard/components/metric-card";
 import { SeedDemoWorkspaceButton } from "@/features/dashboard/components/seed-demo-workspace-button";
@@ -24,12 +28,16 @@ export default function CompliancePage() {
   const complianceItemsQuery = useComplianceItemsQuery(organizationId);
   const complianceSummaryQuery = useComplianceSummaryQuery(organizationId);
 
+  const [isCreateItemDialogOpen, setIsCreateItemDialogOpen] = useState(false);
+
   const summary = complianceSummaryQuery.data;
   const items = complianceItemsQuery.data ?? [];
 
   const readyPercent =
     summary && summary.totalItems > 0
-      ? Math.round(((summary.compliant + summary.waived) / summary.totalItems) * 100)
+      ? Math.round(
+          ((summary.compliant + summary.waived) / summary.totalItems) * 100,
+        )
       : 0;
 
   return (
@@ -50,7 +58,17 @@ export default function CompliancePage() {
           </div>
 
           {canManageCompliance ? (
-            <SeedDemoWorkspaceButton organizationId={organizationId} />
+            <div className="flex flex-col gap-2 sm:flex-row">
+              <SeedDemoWorkspaceButton organizationId={organizationId} />
+              <Button
+                onClick={() => setIsCreateItemDialogOpen(true)}
+                variant="outline"
+                className="border-cyan-300/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+              >
+                <Plus className="mr-2 size-4" />
+                Create item
+              </Button>
+            </div>
           ) : null}
         </div>
       </section>
@@ -98,8 +116,8 @@ export default function CompliancePage() {
             <div className="max-w-2xl">
               <h3 className="text-xl font-semibold">No controls yet</h3>
               <p className="mt-2 text-muted-foreground">
-                Seed the security baseline to create demo compliance controls for
-                this workspace.
+                Seed the security baseline to create demo compliance controls
+                for this workspace.
               </p>
 
               {canManageCompliance ? (
@@ -126,6 +144,14 @@ export default function CompliancePage() {
           ))}
         </section>
       )}
+
+      <FrameworksPanel />
+
+      <CreateComplianceItemDialog
+        open={isCreateItemDialogOpen}
+        onOpenChange={setIsCreateItemDialogOpen}
+        organizationId={organizationId}
+      />
     </div>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
-import { CalendarDays, Save } from "lucide-react";
+import { CalendarDays, ExternalLink, Save } from "lucide-react";
+import Link from "next/link";
 import { useState } from "react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -17,6 +18,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ComplianceStatusBadge } from "@/features/compliance/components/compliance-status-badge";
 import {
+  allowedComplianceTransitions,
   complianceStatusLabels,
   complianceStatusOptions,
 } from "@/features/compliance/constants";
@@ -51,6 +53,9 @@ export function ComplianceItemCard({
 
   const hasChanges = status !== item.status || notes !== (item.notes ?? "");
 
+  const allowedNextStatuses =
+    allowedComplianceTransitions[item.status] ?? [];
+
   function handleSave() {
     updateMutation.mutate({
       itemId: item.id,
@@ -74,7 +79,7 @@ export function ComplianceItemCard({
                 <ComplianceStatusBadge status={item.status} />
               </div>
 
-              <h3 className="mt-3 text-lg font-semibold tracking-tight">
+              <h3 className="mt-3 truncate text-lg font-semibold tracking-tight">
                 {item.requirementTitle}
               </h3>
 
@@ -82,6 +87,14 @@ export function ComplianceItemCard({
                 <CalendarDays className="size-4" />
                 {formatDate(item.dueDate)}
               </div>
+
+              <Link
+                className="mt-2 inline-flex items-center text-sm font-medium text-cyan-700 hover:text-cyan-800"
+                href={`/compliance/${item.id}`}
+              >
+                View details &amp; evidence
+                <ExternalLink className="ml-1 size-3" />
+              </Link>
             </div>
 
             {canManageCompliance ? (
@@ -95,11 +108,16 @@ export function ComplianceItemCard({
                     <SelectValue placeholder="Select status" />
                   </SelectTrigger>
                   <SelectContent>
-                    {complianceStatusOptions.map((option) => (
-                      <SelectItem key={option} value={option}>
-                        {complianceStatusLabels[option]}
-                      </SelectItem>
-                    ))}
+                    {complianceStatusOptions
+                      .filter((option) =>
+                        option === item.status ||
+                        allowedNextStatuses.includes(option)
+                      )
+                      .map((option) => (
+                        <SelectItem key={option} value={option}>
+                          {complianceStatusLabels[option]}
+                        </SelectItem>
+                      ))}
                   </SelectContent>
                 </Select>
               </div>

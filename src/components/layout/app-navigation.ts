@@ -1,4 +1,5 @@
 import {
+  Building2,
   ClipboardCheck,
   FileCheck2,
   Gauge,
@@ -31,5 +32,10 @@ export const appNavigationItems = [
     title: "Audit",
     href: "/audit",
     icon: ScrollText,
+  },
+  {
+    title: "Workspaces",
+    href: "/workspaces",
+    icon: Building2,
   },
 ] as const;

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreateFileEvidenceDialog } from "@/features/evidence/components/create-file-evidence-dialog";
 import { CreateUrlEvidenceDialog } from "@/features/evidence/components/create-url-evidence-dialog";
+import { EditEvidenceDialog } from "@/features/evidence/components/edit-evidence-dialog";
 import { EvidenceCard } from "@/features/evidence/components/evidence-card";
 import {
   EvidenceToolbar,
@@ -15,6 +16,7 @@ import {
 } from "@/features/evidence/components/evidence-toolbar";
 import { useEvidenceQuery } from "@/features/evidence/hooks/evidence-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
+import type { EvidenceDocument } from "@/lib/api/api-types";
 
 export default function EvidencePage() {
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
@@ -22,6 +24,8 @@ export default function EvidencePage() {
   const [page, setPage] = useState(0);
   const [isCreateUrlDialogOpen, setIsCreateUrlDialogOpen] = useState(false);
   const [isCreateFileDialogOpen, setIsCreateFileDialogOpen] = useState(false);
+  const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
+  const [editingEvidence, setEditingEvidence] = useState<EvidenceDocument | null>(null);
   const [toolbarState, setToolbarState] = useState<EvidenceToolbarState>({
     q: "",
     evidenceType: undefined,
@@ -77,7 +81,7 @@ export default function EvidencePage() {
             </p>
           </div>
 
-          <div className="rounded-3xl border border-white/10 bg-white/[0.06] p-4">
+          <div className="rounded-3xl border border-white/10 bg-white/6 p-4">
             <p className="text-sm text-slate-400">Active evidence</p>
             <p className="mt-1 text-3xl font-bold">{totalItems}</p>
             <p className="mt-1 text-sm text-cyan-200">
@@ -138,6 +142,10 @@ export default function EvidencePage() {
               evidence={evidence}
               organizationId={organizationId}
               canManageCompliance={canManageCompliance}
+              onEdit={() => {
+                setEditingEvidence(evidence);
+                setIsEditDialogOpen(true);
+              }}
             />
           ))}
         </section>
@@ -176,6 +184,13 @@ export default function EvidencePage() {
         open={isCreateFileDialogOpen}
         onOpenChange={setIsCreateFileDialogOpen}
         organizationId={organizationId}
+      />
+
+      <EditEvidenceDialog
+        open={isEditDialogOpen}
+        onOpenChange={setIsEditDialogOpen}
+        organizationId={organizationId}
+        evidence={editingEvidence}
       />
     </div>
   );

@@ -17,3 +17,12 @@ export const complianceStatusLabels: Record<ComplianceStatus, string> = {
   NON_COMPLIANT: "Non-compliant",
   WAIVED: "Waived",
 };
+
+export const allowedComplianceTransitions: Record<ComplianceStatus, ComplianceStatus[]> = {
+  OPEN: ["IN_PROGRESS", "WAIVED"],
+  IN_PROGRESS: ["READY_FOR_REVIEW", "WAIVED"],
+  READY_FOR_REVIEW: ["IN_PROGRESS", "COMPLIANT", "NON_COMPLIANT", "WAIVED"],
+  NON_COMPLIANT: ["IN_PROGRESS", "WAIVED"],
+  COMPLIANT: ["IN_PROGRESS"],
+  WAIVED: ["OPEN"],
+};

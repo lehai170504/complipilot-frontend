@@ -39,7 +39,7 @@ export function WorkspaceSelector() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
-          className="h-auto w-full justify-between rounded-2xl border border-white/10 bg-white/[0.06] px-3 py-3 text-left text-white hover:bg-white/10 hover:text-white"
+          className="h-auto w-full justify-between rounded-2xl border border-white/10 bg-white/6 px-3 py-3 text-left text-white hover:bg-white/10 hover:text-white"
           variant="ghost"
         >
           <span className="flex min-w-0 items-center gap-3">

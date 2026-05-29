@@ -9,6 +9,7 @@ import {
   registerUser,
 } from "@/features/auth/api/auth-api";
 import type { LoginRequest, RegisterRequest } from "@/features/auth/types/auth-types";
+import { toast } from "@/lib/toast";
 
 export const authQueryKeys = {
   currentUser: ["auth", "currentUser"] as const,
@@ -38,8 +39,12 @@ export function useLoginMutation() {
   return useMutation({
     mutationFn: (request: LoginRequest) => loginUser(request),
     onSuccess: async () => {
+      toast.success("Signed in successfully");
       await queryClient.invalidateQueries({ queryKey: ["auth"] });
       router.push("/dashboard");
+    },
+    onError: () => {
+      toast.error("Login failed", { description: "Check your email and password." });
     },
   });
 }
@@ -57,8 +62,12 @@ export function useRegisterMutation() {
       });
     },
     onSuccess: async () => {
+      toast.success("Account created! Welcome to CompliPilot.");
       await queryClient.invalidateQueries({ queryKey: ["auth"] });
       router.push("/dashboard");
+    },
+    onError: () => {
+      toast.error("Registration failed", { description: "This email may already be in use." });
     },
   });
 }
@@ -70,6 +79,7 @@ export function useLogoutMutation() {
   return useMutation({
     mutationFn: logoutUser,
     onSuccess: async () => {
+      toast.success("Signed out");
       queryClient.clear();
       router.push("/login");
     },
