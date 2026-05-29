@@ -621,9 +621,40 @@
       "goDashboard": "Go to dashboard",
       "goEvidence": "Open evidence library",
       "dismiss": "I'll explore myself",
-      "dontShowAgain": "Don't show this again"
+      "dontShowAgain": "Don't show this again",
+      "back": "Back",
+      "next": "Next",
+      "finish": "Finish",
+      "stepCounter": "Step {current} of {total}"
     },
     "success": "Demo framework applied. Created {createdCount} controls, skipped {skippedCount}.",
-    "tip": "Recommended for first-time testing: seed demo workspace, then open Compliance and Evidence pages."
+    "tip": "Recommended for first-time testing: seed demo workspace, then open Compliance and Evidence pages.",
+    "slides": {
+      "welcome": {
+        "title": "Welcome to your compliance workspace.",
+        "description": "CompliPilot gives you one place to manage controls, evidence, tasks, and audit history.",
+        "highlight": "Recommended path: seed demo workspace, review Compliance, then upload and link Evidence."
+      },
+      "framework": {
+        "title": "Start with a framework.",
+        "description": "Apply a security baseline or create your own framework to generate compliance controls.",
+        "highlight": "Frameworks become the foundation for your controls and audit readiness."
+      },
+      "controls": {
+        "title": "Review and update controls.",
+        "description": "Track status, notes, due dates, and readiness for every compliance requirement.",
+        "highlight": "Controlled status transitions help keep the workflow consistent."
+      },
+      "evidence": {
+        "title": "Attach evidence to controls.",
+        "description": "Upload files using presigned URLs or add URL evidence, then link evidence to the right control.",
+        "highlight": "Evidence-first traceability makes audits easier to explain."
+      },
+      "audit": {
+        "title": "Keep every action traceable.",
+        "description": "Important actions are logged into the audit trail with searchable history.",
+        "highlight": "Use audit history to understand who did what and when."
+      }
+    }
   }
 }

@@ -621,9 +621,40 @@
       "goDashboard": "Vào dashboard",
       "goEvidence": "Mở thư viện bằng chứng",
       "dismiss": "Tôi tự khám phá",
-      "dontShowAgain": "Không hiển thị lại"
+      "dontShowAgain": "Không hiển thị lại",
+      "back": "Quay lại",
+      "next": "Tiếp",
+      "finish": "Hoàn tất",
+      "stepCounter": "Bước {current} trên {total}"
     },
     "success": "Đã áp dụng framework mẫu. Tạo {createdCount} controls, bỏ qua {skippedCount}.",
-    "tip": "Khuyến nghị khi test lần đầu: seed workspace mẫu, sau đó mở trang Compliance và Evidence."
+    "tip": "Khuyến nghị khi test lần đầu: seed workspace mẫu, sau đó mở trang Compliance và Evidence.",
+    "slides": {
+      "welcome": {
+        "title": "Chào mừng đến workspace tuân thủ của bạn.",
+        "description": "CompliPilot giúp bạn quản lý controls, bằng chứng, công việc và lịch sử kiểm toán trong một nơi duy nhất.",
+        "highlight": "Luồng khuyến nghị: seed workspace mẫu, rà soát Compliance, sau đó upload và liên kết Evidence."
+      },
+      "framework": {
+        "title": "Bắt đầu với framework.",
+        "description": "Áp dụng security baseline hoặc tự tạo framework để sinh ra các compliance controls.",
+        "highlight": "Framework là nền tảng cho controls và mức độ sẵn sàng audit."
+      },
+      "controls": {
+        "title": "Rà soát và cập nhật controls.",
+        "description": "Theo dõi trạng thái, ghi chú, deadline và mức độ sẵn sàng cho từng requirement.",
+        "highlight": "Status transition có kiểm soát giúp workflow nhất quán hơn."
+      },
+      "evidence": {
+        "title": "Gắn bằng chứng vào controls.",
+        "description": "Tải file bằng presigned URL hoặc thêm bằng chứng URL, sau đó liên kết vào đúng control.",
+        "highlight": "Traceability theo hướng evidence-first giúp giải trình audit dễ hơn."
+      },
+      "audit": {
+        "title": "Giữ mọi hành động có thể truy vết.",
+        "description": "Các hành động quan trọng được ghi vào audit trail với lịch sử có thể tìm kiếm.",
+        "highlight": "Dùng audit history để biết ai đã làm gì và vào lúc nào."
+      }
+    }
   }
 }
