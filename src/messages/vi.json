@@ -592,5 +592,38 @@
       "primary": "Tạo tài khoản",
       "secondary": "Đăng nhập"
     }
+  },
+  "onboarding": {
+    "eyebrow": "Chào mừng đến với CompliPilot",
+    "title": "Chọn cách bạn muốn bắt đầu.",
+    "description": "CompliPilot giúp bạn tổ chức controls, bằng chứng, công việc và lịch sử kiểm toán trong một workspace có thể truy vết.",
+    "steps": {
+      "framework": {
+        "title": "1. Áp dụng framework",
+        "description": "Bắt đầu với security baseline hoặc tự tạo compliance framework riêng."
+      },
+      "controls": {
+        "title": "2. Rà soát controls",
+        "description": "Cập nhật trạng thái, ghi chú, người phụ trách, deadline và mức độ sẵn sàng của từng control."
+      },
+      "evidence": {
+        "title": "3. Gắn bằng chứng",
+        "description": "Tải file qua presigned URL hoặc thêm bằng chứng URL bên ngoài."
+      },
+      "audit": {
+        "title": "4. Theo dõi audit history",
+        "description": "Mọi hành động quan trọng sẽ trở thành lịch sử audit có thể tìm kiếm."
+      }
+    },
+    "actions": {
+      "seedDemo": "Seed workspace mẫu",
+      "seeding": "Đang chuẩn bị dữ liệu mẫu...",
+      "goDashboard": "Vào dashboard",
+      "goEvidence": "Mở thư viện bằng chứng",
+      "dismiss": "Tôi tự khám phá",
+      "dontShowAgain": "Không hiển thị lại"
+    },
+    "success": "Đã áp dụng framework mẫu. Tạo {createdCount} controls, bỏ qua {skippedCount}.",
+    "tip": "Khuyến nghị khi test lần đầu: seed workspace mẫu, sau đó mở trang Compliance và Evidence."
   }
 }

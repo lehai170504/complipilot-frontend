@@ -592,5 +592,38 @@
       "primary": "Create account",
       "secondary": "Sign in"
     }
+  },
+  "onboarding": {
+    "eyebrow": "Welcome to CompliPilot",
+    "title": "Choose how you want to start.",
+    "description": "CompliPilot helps you organize controls, evidence, tasks, and audit history in one traceable workspace.",
+    "steps": {
+      "framework": {
+        "title": "1. Apply a framework",
+        "description": "Start with the security baseline or create your own compliance framework."
+      },
+      "controls": {
+        "title": "2. Review controls",
+        "description": "Update status, notes, owners, due dates, and readiness for every control."
+      },
+      "evidence": {
+        "title": "3. Attach evidence",
+        "description": "Upload files through presigned URLs or add external URL evidence."
+      },
+      "audit": {
+        "title": "4. Track audit history",
+        "description": "Every important action becomes searchable audit history."
+      }
+    },
+    "actions": {
+      "seedDemo": "Seed demo workspace",
+      "seeding": "Preparing demo...",
+      "goDashboard": "Go to dashboard",
+      "goEvidence": "Open evidence library",
+      "dismiss": "I'll explore myself",
+      "dontShowAgain": "Don't show this again"
+    },
+    "success": "Demo framework applied. Created {createdCount} controls, skipped {skippedCount}.",
+    "tip": "Recommended for first-time testing: seed demo workspace, then open Compliance and Evidence pages."
   }
 }

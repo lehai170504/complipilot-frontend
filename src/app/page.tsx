@@ -5,7 +5,6 @@ import {
   CheckCircle2,
   ClipboardCheck,
   FileCheck2,
-  Gauge,
   Languages,
   ListChecks,
   ScrollText,
