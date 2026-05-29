@@ -273,5 +273,144 @@
     "linkedAt": "Đã liên kết {date}",
     "noDueDate": "Chưa có hạn",
     "unknownSize": "Không rõ dung lượng"
+  },
+  "taskDialog": {
+    "title": "Tạo công việc tuân thủ",
+    "description": "Thêm đầu việc mới để theo dõi quá trình tuân thủ.",
+    "fields": {
+      "title": "Tiêu đề",
+      "description": "Mô tả",
+      "priority": "Độ ưu tiên",
+      "dueDate": "Ngày đến hạn"
+    },
+    "placeholders": {
+      "title": "Tải bằng chứng MFA"
+    },
+    "createTask": "Tạo công việc",
+    "creating": "Đang tạo..."
+  },
+  "taskCard": {
+    "fields": {
+      "title": "Tiêu đề",
+      "description": "Mô tả",
+      "status": "Trạng thái",
+      "priority": "Độ ưu tiên",
+      "dueDate": "Ngày đến hạn"
+    },
+    "noDueDate": "Chưa có hạn",
+    "due": "Hạn {date}",
+    "created": "Tạo lúc {date} bởi {email}",
+    "edit": "Sửa",
+    "delete": "Xóa",
+    "cancel": "Hủy",
+    "save": "Lưu",
+    "saving": "Đang lưu...",
+    "deleteConfirm": "Xóa \"{title}\"?",
+    "deleting": "Đang xóa...",
+    "confirm": "Xác nhận"
+  },
+  "evidenceLabels": {
+    "types": {
+      "POLICY": "Chính sách",
+      "PROCEDURE": "Quy trình",
+      "SCREENSHOT": "Ảnh chụp màn hình",
+      "REPORT": "Báo cáo",
+      "CONTRACT": "Hợp đồng",
+      "CERTIFICATE": "Chứng nhận",
+      "AUDIT_NOTE": "Ghi chú kiểm toán",
+      "OTHER": "Khác"
+    },
+    "sources": {
+      "FILE": "Tệp",
+      "URL": "URL",
+      "TEXT_NOTE": "Ghi chú"
+    },
+    "sort": {
+      "createdAt": "Ngày tạo",
+      "updatedAt": "Ngày cập nhật",
+      "title": "Tiêu đề",
+      "evidenceType": "Loại bằng chứng",
+      "sourceType": "Nguồn"
+    }
+  },
+  "evidenceToolbar": {
+    "upload": "Tải lên",
+    "url": "URL",
+    "searchPlaceholder": "Tìm tiêu đề, mô tả, URL...",
+    "type": "Loại",
+    "source": "Nguồn",
+    "sort": "Sắp xếp",
+    "direction": "Thứ tự",
+    "allTypes": "Tất cả loại",
+    "allSources": "Tất cả nguồn",
+    "desc": "Giảm dần",
+    "asc": "Tăng dần"
+  },
+  "evidenceCard": {
+    "noDescription": "Chưa có mô tả.",
+    "storedFile": "Bằng chứng dạng file đã lưu",
+    "unknownContentType": "Không rõ loại nội dung",
+    "unknownSize": "Không rõ dung lượng",
+    "objectKey": "Object key: {objectKey}",
+    "openExternal": "Mở bằng chứng bên ngoài",
+    "created": "Tạo lúc {date}",
+    "edit": "Sửa",
+    "download": "Tải xuống",
+    "preparing": "Đang chuẩn bị...",
+    "archive": "Lưu trữ",
+    "archiving": "Đang lưu trữ...",
+    "archiveConfirm": "Lưu trữ bằng chứng \"{title}\"? Bằng chứng này sẽ bị xóa khỏi danh sách đang hoạt động."
+  },
+  "evidenceFileDialog": {
+    "title": "Tải file bằng chứng",
+    "description": "Tải file qua presigned URL bảo mật, sau đó tạo metadata bằng chứng trong CompliPilot.",
+    "file": "File",
+    "chooseFile": "Chọn file bằng chứng",
+    "fileHelp": "PDF, hình ảnh, tài liệu hoặc báo cáo. Tối đa 10MB.",
+    "titleLabel": "Tiêu đề",
+    "titlePlaceholder": "Ảnh chụp MFA",
+    "type": "Loại bằng chứng",
+    "typePlaceholder": "Chọn loại bằng chứng",
+    "descriptionLabel": "Mô tả",
+    "descriptionPlaceholder": "Bằng chứng này chứng minh điều gì?",
+    "cancel": "Hủy",
+    "upload": "Tải bằng chứng lên",
+    "uploading": "Đang tải lên...",
+    "errors": {
+      "fileTooLarge": "Dung lượng file phải nhỏ hơn hoặc bằng 10MB.",
+      "chooseFile": "Vui lòng chọn file để tải lên.",
+      "missingOrganization": "Thiếu tổ chức đang hoạt động."
+    }
+  },
+  "evidenceUrlDialog": {
+    "title": "Thêm bằng chứng URL",
+    "description": "Tạo metadata bằng chứng cho một URL bên ngoài.",
+    "titleLabel": "Tiêu đề",
+    "type": "Loại bằng chứng",
+    "typePlaceholder": "Chọn loại bằng chứng",
+    "externalUrl": "URL bên ngoài",
+    "descriptionLabel": "Mô tả",
+    "cancel": "Hủy",
+    "create": "Tạo bằng chứng",
+    "creating": "Đang tạo..."
+  },
+  "evidenceEditDialog": {
+    "title": "Sửa bằng chứng",
+    "description": "Cập nhật metadata cho tài liệu bằng chứng này.",
+    "titleLabel": "Tiêu đề",
+    "type": "Loại bằng chứng",
+    "externalUrl": "URL bên ngoài",
+    "descriptionLabel": "Mô tả",
+    "cancel": "Hủy",
+    "save": "Lưu thay đổi",
+    "saving": "Đang lưu..."
+  },
+  "evidenceSelector": {
+    "title": "Liên kết bằng chứng",
+    "close": "Đóng",
+    "searchPlaceholder": "Tìm bằng chứng...",
+    "empty": "Không tìm thấy bằng chứng.",
+    "linked": "Đã liên kết",
+    "link": "Liên kết"
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { Link2, UploadCloud } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import type {
   EvidenceSourceType,
@@ -18,10 +19,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  evidenceSortOptions,
-  evidenceSourceTypeLabels,
   evidenceSourceTypeOptions,
-  evidenceTypeLabels,
   evidenceTypeOptions,
 } from "@/features/evidence/constants";
 
@@ -34,6 +32,14 @@ export type EvidenceToolbarState = {
   sortBy: "createdAt" | "updatedAt" | "title" | "evidenceType" | "sourceType";
   sortDirection: SortDirection;
 };
+
+const evidenceSortOptions = [
+  "createdAt",
+  "updatedAt",
+  "title",
+  "evidenceType",
+  "sourceType",
+] as const;
 
 export function EvidenceToolbar({
   value,
@@ -48,6 +54,11 @@ export function EvidenceToolbar({
   onCreateFileClick: () => void;
   canManageCompliance: boolean;
 }) {
+  const t = useTranslations("evidenceToolbar");
+  const tType = useTranslations("evidenceLabels.types");
+  const tSource = useTranslations("evidenceLabels.sources");
+  const tSort = useTranslations("evidenceLabels.sort");
+
   function updateValue(nextValue: Partial<EvidenceToolbarState>) {
     onChange({ ...value, ...nextValue });
   }
@@ -59,11 +70,16 @@ export function EvidenceToolbar({
           <div className="flex gap-2">
             <Button onClick={onCreateFileClick} size="sm" type="button">
               <UploadCloud className="mr-2 size-4" />
-              Upload
+              {t("upload")}
             </Button>
-            <Button onClick={onCreateUrlClick} size="sm" type="button" variant="outline">
+            <Button
+              onClick={onCreateUrlClick}
+              size="sm"
+              type="button"
+              variant="outline"
+            >
               <Link2 className="mr-2 size-4" />
-              URL
+              {t("url")}
             </Button>
           </div>
         ) : undefined
@@ -71,41 +87,89 @@ export function EvidenceToolbar({
     >
       <Input
         className="min-w-[180px] flex-1 lg:max-w-[280px]"
-        placeholder="Search title, description, URL..."
+        placeholder={t("searchPlaceholder")}
         value={value.q}
-        onChange={(e) => updateValue({ q: e.target.value })}
+        onChange={(event) => updateValue({ q: event.target.value })}
       />
+
       <Select
         value={value.evidenceType ?? ALL}
-        onValueChange={(v) => updateValue({ evidenceType: v === ALL ? undefined : (v as EvidenceType) })}
+        onValueChange={(nextValue) =>
+          updateValue({
+            evidenceType:
+              nextValue === ALL ? undefined : (nextValue as EvidenceType),
+          })
+        }
       >
-        <SelectTrigger className="min-w-[140px]"><SelectValue placeholder="Type" /></SelectTrigger>
+        <SelectTrigger className="min-w-[140px]">
+          <SelectValue placeholder={t("type")} />
+        </SelectTrigger>
         <SelectContent>
-          <SelectItem value={ALL}>All types</SelectItem>
-          {evidenceTypeOptions.map((t) => <SelectItem key={t} value={t}>{evidenceTypeLabels[t]}</SelectItem>)}
+          <SelectItem value={ALL}>{t("allTypes")}</SelectItem>
+          {evidenceTypeOptions.map((type) => (
+            <SelectItem key={type} value={type}>
+              {tType(type)}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
+
       <Select
         value={value.sourceType ?? ALL}
-        onValueChange={(v) => updateValue({ sourceType: v === ALL ? undefined : (v as EvidenceSourceType) })}
+        onValueChange={(nextValue) =>
+          updateValue({
+            sourceType:
+              nextValue === ALL
+                ? undefined
+                : (nextValue as EvidenceSourceType),
+          })
+        }
       >
-        <SelectTrigger className="min-w-[130px]"><SelectValue placeholder="Source" /></SelectTrigger>
+        <SelectTrigger className="min-w-[130px]">
+          <SelectValue placeholder={t("source")} />
+        </SelectTrigger>
         <SelectContent>
-          <SelectItem value={ALL}>All sources</SelectItem>
-          {evidenceSourceTypeOptions.map((s) => <SelectItem key={s} value={s}>{evidenceSourceTypeLabels[s]}</SelectItem>)}
+          <SelectItem value={ALL}>{t("allSources")}</SelectItem>
+          {evidenceSourceTypeOptions.map((sourceType) => (
+            <SelectItem key={sourceType} value={sourceType}>
+              {tSource(sourceType)}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
-      <Select value={value.sortBy} onValueChange={(v) => updateValue({ sortBy: v as EvidenceToolbarState["sortBy"] })}>
-        <SelectTrigger className="min-w-[130px]"><SelectValue placeholder="Sort" /></SelectTrigger>
+
+      <Select
+        value={value.sortBy}
+        onValueChange={(nextValue) =>
+          updateValue({
+            sortBy: nextValue as EvidenceToolbarState["sortBy"],
+          })
+        }
+      >
+        <SelectTrigger className="min-w-[130px]">
+          <SelectValue placeholder={t("sort")} />
+        </SelectTrigger>
         <SelectContent>
-          {evidenceSortOptions.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
+          {evidenceSortOptions.map((option) => (
+            <SelectItem key={option} value={option}>
+              {tSort(option)}
+            </SelectItem>
+          ))}
         </SelectContent>
       </Select>
-      <Select value={value.sortDirection} onValueChange={(v) => updateValue({ sortDirection: v as SortDirection })}>
-        <SelectTrigger className="min-w-[90px]"><SelectValue placeholder="Dir" /></SelectTrigger>
+
+      <Select
+        value={value.sortDirection}
+        onValueChange={(nextValue) =>
+          updateValue({ sortDirection: nextValue as SortDirection })
+        }
+      >
+        <SelectTrigger className="min-w-[90px]">
+          <SelectValue placeholder={t("direction")} />
+        </SelectTrigger>
         <SelectContent>
-          <SelectItem value="DESC">Desc</SelectItem>
-          <SelectItem value="ASC">Asc</SelectItem>
+          <SelectItem value="DESC">{t("desc")}</SelectItem>
+          <SelectItem value="ASC">{t("asc")}</SelectItem>
         </SelectContent>
       </Select>
     </FilterBar>

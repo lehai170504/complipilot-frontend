@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useLocale, useTranslations } from "next-intl";
 import {
   CalendarDays,
   CheckCircle2,
@@ -50,17 +51,18 @@ const taskPriorityOptions: ComplianceTaskPriority[] = [
   "CRITICAL",
 ];
 
-function formatDate(date: string | null) {
-  if (!date) return "No due date";
-  return new Intl.DateTimeFormat("en", {
+function formatDate(date: string | null, locale: string, noDueDate: string) {
+  if (!date) return noDueDate;
+
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
   }).format(new Date(date));
 }
 
-function formatDateTime(date: string) {
-  return new Intl.DateTimeFormat("en", {
+function formatDateTime(date: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -83,6 +85,10 @@ export function TaskCard({
   onStartEdit: () => void;
   onCancelEdit: () => void;
 }) {
+  const locale = useLocale();
+  const t = useTranslations("taskCard");
+  const tStatus = useTranslations("status");
+
   const updateMutation = useUpdateTaskMutation(organizationId);
   const deleteMutation = useDeleteTaskMutation(organizationId);
 
@@ -90,7 +96,7 @@ export function TaskCard({
   const [description, setDescription] = useState(task.description ?? "");
   const [status, setStatus] = useState<ComplianceTaskStatus>(task.status);
   const [priority, setPriority] = useState<ComplianceTaskPriority>(
-    task.priority
+    task.priority,
   );
   const [dueDate, setDueDate] = useState(task.dueDate ?? "");
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -107,7 +113,7 @@ export function TaskCard({
           dueDate: dueDate || null,
         },
       },
-      { onSuccess: () => onCancelEdit() }
+      { onSuccess: () => onCancelEdit() },
     );
   }
 
@@ -123,76 +129,84 @@ export function TaskCard({
         <CardContent className="p-5">
           <div className="space-y-4">
             <div className="space-y-2">
-              <Label>Title</Label>
+              <Label>{t("fields.title")}</Label>
               <Input
                 value={title}
-                onChange={(e) => setTitle(e.target.value)}
+                onChange={(event) => setTitle(event.target.value)}
                 required
               />
             </div>
+
             <div className="space-y-2">
-              <Label>Description</Label>
+              <Label>{t("fields.description")}</Label>
               <Textarea
                 value={description}
-                onChange={(e) => setDescription(e.target.value)}
+                onChange={(event) => setDescription(event.target.value)}
                 rows={3}
               />
             </div>
+
             <div className="grid gap-4 sm:grid-cols-3">
               <div className="space-y-2">
-                <Label>Status</Label>
+                <Label>{t("fields.status")}</Label>
                 <Select
                   value={status}
-                  onValueChange={(v) => setStatus(v as ComplianceTaskStatus)}
-                >
-                  <SelectTrigger>
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {taskStatusOptions.map((s) => (
-                      <SelectItem key={s} value={s}>
-                        {s.replaceAll("_", " ")}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-              <div className="space-y-2">
-                <Label>Priority</Label>
-                <Select
-                  value={priority}
-                  onValueChange={(v) =>
-                    setPriority(v as ComplianceTaskPriority)
+                  onValueChange={(value) =>
+                    setStatus(value as ComplianceTaskStatus)
                   }
                 >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {taskPriorityOptions.map((p) => (
-                      <SelectItem key={p} value={p}>
-                        {p}
+                    {taskStatusOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {tStatus(option)}
                       </SelectItem>
                     ))}
                   </SelectContent>
                 </Select>
               </div>
+
               <div className="space-y-2">
-                <Label>Due date</Label>
+                <Label>{t("fields.priority")}</Label>
+                <Select
+                  value={priority}
+                  onValueChange={(value) =>
+                    setPriority(value as ComplianceTaskPriority)
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {taskPriorityOptions.map((option) => (
+                      <SelectItem key={option} value={option}>
+                        {tStatus(option)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label>{t("fields.dueDate")}</Label>
                 <Input
                   type="date"
                   value={dueDate}
-                  onChange={(e) => setDueDate(e.target.value)}
+                  onChange={(event) => setDueDate(event.target.value)}
                 />
               </div>
             </div>
+
             {updateMutation.error ? (
               <ErrorAlert error={updateMutation.error} />
             ) : null}
+
             <div className="flex justify-end gap-2">
               <Button variant="outline" onClick={onCancelEdit} type="button">
                 <X className="mr-2 size-4" />
-                Cancel
+                {t("cancel")}
               </Button>
               <Button
                 onClick={handleSave}
@@ -200,7 +214,7 @@ export function TaskCard({
                 type="button"
               >
                 <Save className="mr-2 size-4" />
-                {updateMutation.isPending ? "Saving..." : "Save"}
+                {updateMutation.isPending ? t("saving") : t("save")}
               </Button>
             </div>
           </div>
@@ -239,6 +253,7 @@ export function TaskCard({
             <h3 className="mt-3 truncate text-lg font-semibold tracking-tight">
               {task.title}
             </h3>
+
             {task.description ? (
               <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-muted-foreground">
                 {task.description}
@@ -248,21 +263,27 @@ export function TaskCard({
             <div className="mt-3 flex flex-wrap items-center gap-3 text-sm text-muted-foreground">
               <span className="inline-flex items-center gap-1">
                 <CalendarDays className="size-4" />
-                Due {formatDate(task.dueDate)}
+                {t("due", {
+                  date: formatDate(task.dueDate, locale, t("noDueDate")),
+                })}
               </span>
               {task.assigneeEmail ? (
                 <Badge variant="secondary">{task.assigneeEmail}</Badge>
               ) : null}
             </div>
+
             <p className="mt-2 text-xs text-muted-foreground">
-              Created {formatDateTime(task.createdAt)} by {task.createdByEmail}
+              {t("created", {
+                date: formatDateTime(task.createdAt, locale),
+                email: task.createdByEmail,
+              })}
             </p>
           </div>
 
           {canManageCompliance ? (
             <div className="flex shrink-0 flex-col gap-2">
               <Button onClick={onStartEdit} size="sm" variant="outline">
-                Edit
+                {t("edit")}
               </Button>
               <Button
                 onClick={() => setShowDeleteConfirm(true)}
@@ -270,7 +291,7 @@ export function TaskCard({
                 variant="outline"
               >
                 <Trash2 className="mr-2 size-4" />
-                Delete
+                {t("delete")}
               </Button>
             </div>
           ) : null}
@@ -279,7 +300,7 @@ export function TaskCard({
         {showDeleteConfirm ? (
           <div className="border-t bg-red-50 p-4">
             <p className="text-sm font-medium text-red-800">
-              Delete &quot;{task.title}&quot;?
+              {t("deleteConfirm", { title: task.title })}
             </p>
             <div className="mt-3 flex gap-2">
               <Button
@@ -287,16 +308,17 @@ export function TaskCard({
                 disabled={deleteMutation.isPending}
                 size="sm"
               >
-                {deleteMutation.isPending ? "Deleting..." : "Confirm"}
+                {deleteMutation.isPending ? t("deleting") : t("confirm")}
               </Button>
               <Button
                 onClick={() => setShowDeleteConfirm(false)}
                 size="sm"
                 variant="outline"
               >
-                Cancel
+                {t("cancel")}
               </Button>
             </div>
+
             {deleteMutation.error ? (
               <div className="mt-2">
                 <ErrorAlert error={deleteMutation.error} />

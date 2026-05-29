@@ -1,6 +1,13 @@
 "use client";
 
-import { Archive, Download, ExternalLink, FileCheck2, Pencil } from "lucide-react";
+import {
+  Archive,
+  Download,
+  ExternalLink,
+  FileCheck2,
+  Pencil,
+} from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -15,8 +22,8 @@ import {
 } from "@/features/evidence/hooks/evidence-hooks";
 import type { EvidenceDocument } from "@/lib/api/api-types";
 
-function formatDateTime(date: string) {
-  return new Intl.DateTimeFormat("en", {
+function formatDateTime(date: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -25,9 +32,9 @@ function formatDateTime(date: string) {
   }).format(new Date(date));
 }
 
-function formatFileSize(size: number | null) {
+function formatFileSize(size: number | null, unknownSize: string) {
   if (!size) {
-    return "Unknown size";
+    return unknownSize;
   }
 
   if (size < 1024) {
@@ -52,13 +59,18 @@ export function EvidenceCard({
   canManageCompliance: boolean;
   onEdit?: () => void;
 }) {
+  const locale = useLocale();
+  const t = useTranslations("evidenceCard");
+
   const archiveMutation = useArchiveEvidenceMutation(organizationId);
   const downloadUrlMutation =
     useCreateEvidenceDownloadUrlMutation(organizationId);
 
   function handleArchive() {
     const confirmed = window.confirm(
-      `Archive evidence "${evidence.title}"? This will remove it from the active evidence list.`
+      t("archiveConfirm", {
+        title: evidence.title,
+      }),
     );
 
     if (!confirmed) {
@@ -92,20 +104,20 @@ export function EvidenceCard({
             </h3>
 
             <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-muted-foreground">
-              {evidence.description ?? "No description provided."}
+              {evidence.description ?? t("noDescription")}
             </p>
 
             {evidence.sourceType === "FILE" ? (
               <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm">
-                <p className="font-medium text-slate-700">
-                  Stored file evidence
-                </p>
+                <p className="font-medium text-slate-700">{t("storedFile")}</p>
                 <p className="mt-1 text-muted-foreground">
-                  {evidence.contentType ?? "Unknown content type"} ·{" "}
-                  {formatFileSize(evidence.fileSizeBytes)}
+                  {evidence.contentType ?? t("unknownContentType")} ·{" "}
+                  {formatFileSize(evidence.fileSizeBytes, t("unknownSize"))}
                 </p>
                 <p className="mt-1 max-w-full truncate text-xs text-muted-foreground">
-                  Object key: {evidence.fileObjectKey}
+                  {t("objectKey", {
+                    objectKey: evidence.fileObjectKey ?? "—",
+                  })}
                 </p>
               </div>
             ) : null}
@@ -117,13 +129,15 @@ export function EvidenceCard({
                 rel="noreferrer"
                 target="_blank"
               >
-                Open external evidence
+                {t("openExternal")}
                 <ExternalLink className="ml-2 size-4" />
               </a>
             ) : null}
 
             <p className="mt-4 text-xs text-muted-foreground">
-              Created {formatDateTime(evidence.createdAt)}
+              {t("created", {
+                date: formatDateTime(evidence.createdAt, locale),
+              })}
             </p>
           </div>
 
@@ -136,9 +150,10 @@ export function EvidenceCard({
                 variant="outline"
               >
                 <Pencil className="mr-2 size-4" />
-                Edit
+                {t("edit")}
               </Button>
             ) : null}
+
             {evidence.sourceType === "FILE" ? (
               <Button
                 disabled={downloadUrlMutation.isPending}
@@ -148,7 +163,7 @@ export function EvidenceCard({
                 variant="outline"
               >
                 <Download className="mr-2 size-4" />
-                {downloadUrlMutation.isPending ? "Preparing..." : "Download"}
+                {downloadUrlMutation.isPending ? t("preparing") : t("download")}
               </Button>
             ) : null}
 
@@ -161,7 +176,7 @@ export function EvidenceCard({
                 variant="outline"
               >
                 <Archive className="mr-2 size-4" />
-                {archiveMutation.isPending ? "Archiving..." : "Archive"}
+                {archiveMutation.isPending ? t("archiving") : t("archive")}
               </Button>
             ) : null}
           </div>

@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { FileUp, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -22,10 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  evidenceTypeLabels,
-  evidenceTypeOptions,
-} from "@/features/evidence/constants";
+import { evidenceTypeOptions } from "@/features/evidence/constants";
 import { useCreateFileEvidenceMutation } from "@/features/evidence/hooks/evidence-hooks";
 import type { EvidenceType } from "@/lib/api/api-types";
 
@@ -52,6 +50,9 @@ export function CreateFileEvidenceDialog({
   onOpenChange: (open: boolean) => void;
   organizationId: string | undefined;
 }) {
+  const t = useTranslations("evidenceFileDialog");
+  const tType = useTranslations("evidenceLabels.types");
+
   const createFileEvidenceMutation =
     useCreateFileEvidenceMutation(organizationId);
 
@@ -69,6 +70,14 @@ export function CreateFileEvidenceDialog({
     setClientError(null);
   }
 
+  function handleOpenChange(nextOpen: boolean) {
+    onOpenChange(nextOpen);
+
+    if (!nextOpen && !createFileEvidenceMutation.isPending) {
+      resetForm();
+    }
+  }
+
   function handleFileChange(selectedFile: File | null) {
     setClientError(null);
 
@@ -78,7 +87,7 @@ export function CreateFileEvidenceDialog({
     }
 
     if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
-      setClientError("File size must be 10MB or smaller.");
+      setClientError(t("errors.fileTooLarge"));
       setFile(null);
       return;
     }
@@ -96,12 +105,12 @@ export function CreateFileEvidenceDialog({
     setClientError(null);
 
     if (!file) {
-      setClientError("Please choose a file to upload.");
+      setClientError(t("errors.chooseFile"));
       return;
     }
 
     if (!organizationId) {
-      setClientError("Missing active organization.");
+      setClientError(t("errors.missingOrganization"));
       return;
     }
 
@@ -124,19 +133,16 @@ export function CreateFileEvidenceDialog({
   const isSubmitting = createFileEvidenceMutation.isPending;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Upload file evidence</DialogTitle>
-          <DialogDescription>
-            Upload a file through a secure presigned URL, then create evidence
-            metadata in CompliPilot.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Label htmlFor="evidence-file">File</Label>
+            <Label htmlFor="evidence-file">{t("file")}</Label>
 
             {!file ? (
               <label
@@ -146,15 +152,15 @@ export function CreateFileEvidenceDialog({
                 <div className="rounded-2xl bg-white p-3 text-cyan-700 shadow-sm">
                   <FileUp className="size-6" />
                 </div>
-                <p className="mt-3 font-medium">Choose evidence file</p>
+                <p className="mt-3 font-medium">{t("chooseFile")}</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  PDF, image, document, or report. Max 10MB.
+                  {t("fileHelp")}
                 </p>
               </label>
             ) : (
               <div className="flex items-center justify-between rounded-3xl border bg-slate-50 p-4">
-                <div>
-                  <p className="font-medium">{file.name}</p>
+                <div className="min-w-0">
+                  <p className="truncate font-medium">{file.name}</p>
                   <p className="mt-1 text-sm text-muted-foreground">
                     {file.type || "application/octet-stream"} ·{" "}
                     {formatFileSize(file.size)}
@@ -183,29 +189,29 @@ export function CreateFileEvidenceDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="file-evidence-title">Title</Label>
+            <Label htmlFor="file-evidence-title">{t("titleLabel")}</Label>
             <Input
               id="file-evidence-title"
               value={title}
               onChange={(event) => setTitle(event.target.value)}
-              placeholder="MFA screenshot"
+              placeholder={t("titlePlaceholder")}
               required
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="file-evidence-type">Evidence type</Label>
+            <Label htmlFor="file-evidence-type">{t("type")}</Label>
             <Select
               value={evidenceType}
               onValueChange={(value) => setEvidenceType(value as EvidenceType)}
             >
               <SelectTrigger id="file-evidence-type">
-                <SelectValue placeholder="Select evidence type" />
+                <SelectValue placeholder={t("typePlaceholder")} />
               </SelectTrigger>
               <SelectContent>
                 {evidenceTypeOptions.map((type) => (
                   <SelectItem key={type} value={type}>
-                    {evidenceTypeLabels[type]}
+                    {tType(type)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -213,12 +219,14 @@ export function CreateFileEvidenceDialog({
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="file-evidence-description">Description</Label>
+            <Label htmlFor="file-evidence-description">
+              {t("descriptionLabel")}
+            </Label>
             <Textarea
               id="file-evidence-description"
               value={description}
               onChange={(event) => setDescription(event.target.value)}
-              placeholder="What does this evidence prove?"
+              placeholder={t("descriptionPlaceholder")}
               rows={4}
             />
           </div>
@@ -237,13 +245,13 @@ export function CreateFileEvidenceDialog({
             <Button
               type="button"
               variant="outline"
-              onClick={() => onOpenChange(false)}
+              onClick={() => handleOpenChange(false)}
               disabled={isSubmitting}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button disabled={isSubmitting || !file} type="submit">
-              {isSubmitting ? "Uploading..." : "Upload evidence"}
+              {isSubmitting ? t("uploading") : t("upload")}
             </Button>
           </div>
         </form>

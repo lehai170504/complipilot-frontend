@@ -1,7 +1,8 @@
 "use client";
 
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -23,7 +24,10 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateTaskMutation } from "@/features/tasks/hooks/tasks-hooks";
-import { createTaskSchema, type CreateTaskFormData } from "@/lib/validation-schemas";
+import {
+  createTaskSchema,
+  type CreateTaskFormData,
+} from "@/lib/validation-schemas";
 
 const taskPriorityOptions = ["LOW", "MEDIUM", "HIGH", "CRITICAL"] as const;
 
@@ -36,6 +40,10 @@ export function CreateTaskDialog({
   onOpenChange: (open: boolean) => void;
   organizationId: string | undefined;
 }) {
+  const t = useTranslations("taskDialog");
+  const tStatus = useTranslations("status");
+  const tCommon = useTranslations("common");
+
   const createMutation = useCreateTaskMutation(organizationId);
 
   const {
@@ -46,8 +54,21 @@ export function CreateTaskDialog({
     formState: { errors, isSubmitting },
   } = useForm<CreateTaskFormData>({
     resolver: zodResolver(createTaskSchema),
-    defaultValues: { title: "", description: "", priority: "HIGH", dueDate: "" },
+    defaultValues: {
+      title: "",
+      description: "",
+      priority: "HIGH",
+      dueDate: "",
+    },
   });
+
+  function handleOpenChange(nextOpen: boolean) {
+    onOpenChange(nextOpen);
+
+    if (!nextOpen && !createMutation.isPending) {
+      reset();
+    }
+  }
 
   function onSubmit(data: CreateTaskFormData) {
     createMutation.mutate(
@@ -67,49 +88,82 @@ export function CreateTaskDialog({
   }
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Create compliance task</DialogTitle>
-          <DialogDescription>Add a new action item to track compliance work.</DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
+
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-2">
-            <Label htmlFor="task-title">Title</Label>
-            <Input id="task-title" {...register("title")} placeholder="Upload MFA evidence" />
-            {errors.title ? <p className="text-sm text-red-600">{errors.title.message}</p> : null}
+            <Label htmlFor="task-title">{t("fields.title")}</Label>
+            <Input
+              id="task-title"
+              {...register("title")}
+              placeholder={t("placeholders.title")}
+            />
+            {errors.title ? (
+              <p className="text-sm text-red-600">{errors.title.message}</p>
+            ) : null}
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="task-desc">Description</Label>
+            <Label htmlFor="task-desc">{t("fields.description")}</Label>
             <Textarea id="task-desc" {...register("description")} rows={3} />
-            {errors.description ? <p className="text-sm text-red-600">{errors.description.message}</p> : null}
+            {errors.description ? (
+              <p className="text-sm text-red-600">
+                {errors.description.message}
+              </p>
+            ) : null}
           </div>
+
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="space-y-2">
-              <Label>Priority</Label>
+              <Label>{t("fields.priority")}</Label>
               <Controller
                 name="priority"
                 control={control}
                 render={({ field }) => (
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
                     <SelectContent>
-                      {taskPriorityOptions.map((p) => <SelectItem key={p} value={p}>{p}</SelectItem>)}
+                      {taskPriorityOptions.map((priority) => (
+                        <SelectItem key={priority} value={priority}>
+                          {tStatus(priority)}
+                        </SelectItem>
+                      ))}
                     </SelectContent>
                   </Select>
                 )}
               />
             </div>
+
             <div className="space-y-2">
-              <Label>Due date</Label>
+              <Label>{t("fields.dueDate")}</Label>
               <Input type="date" {...register("dueDate")} />
             </div>
           </div>
-          {createMutation.error ? <ErrorAlert error={createMutation.error} /> : null}
+
+          {createMutation.error ? (
+            <ErrorAlert error={createMutation.error} />
+          ) : null}
+
           <div className="flex justify-end gap-3">
-            <Button type="button" variant="outline" onClick={() => onOpenChange(false)}>Cancel</Button>
-            <Button disabled={isSubmitting || createMutation.isPending} type="submit">
-              {createMutation.isPending ? "Creating..." : "Create task"}
+            <Button
+              type="button"
+              variant="outline"
+              onClick={() => handleOpenChange(false)}
+            >
+              {tCommon("cancel")}
+            </Button>
+            <Button
+              disabled={isSubmitting || createMutation.isPending}
+              type="submit"
+            >
+              {createMutation.isPending ? t("creating") : t("createTask")}
             </Button>
           </div>
         </form>

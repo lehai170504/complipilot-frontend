@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect } from "react";
-import { useForm, Controller } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -23,10 +24,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import {
-  evidenceTypeLabels,
-  evidenceTypeOptions,
-} from "@/features/evidence/constants";
+import { evidenceTypeOptions } from "@/features/evidence/constants";
 import { useUpdateEvidenceMutation } from "@/features/evidence/hooks/evidence-hooks";
 import {
   editEvidenceSchema,
@@ -45,6 +43,9 @@ export function EditEvidenceDialog({
   organizationId: string | undefined;
   evidence: EvidenceDocument | null;
 }) {
+  const t = useTranslations("evidenceEditDialog");
+  const tType = useTranslations("evidenceLabels.types");
+
   const updateMutation = useUpdateEvidenceMutation(organizationId);
 
   const {
@@ -68,47 +69,49 @@ export function EditEvidenceDialog({
     }
   }, [evidence, reset]);
 
-  useEffect(() => {
-    if (updateMutation.isSuccess) {
-      onOpenChange(false);
-    }
-  }, [updateMutation.isSuccess, onOpenChange]);
-
   function onSubmit(data: EditEvidenceFormData) {
     if (!evidence) return;
-    updateMutation.mutate({
-      evidenceId: evidence.id,
-      request: {
-        title: data.title.trim(),
-        description: data.description?.trim() || null,
-        evidenceType: data.evidenceType as EvidenceType,
-        externalUrl:
-          evidence.sourceType === "URL"
-            ? data.externalUrl?.trim() || null
-            : null,
+
+    updateMutation.mutate(
+      {
+        evidenceId: evidence.id,
+        request: {
+          title: data.title.trim(),
+          description: data.description?.trim() || null,
+          evidenceType: data.evidenceType as EvidenceType,
+          externalUrl:
+            evidence.sourceType === "URL"
+              ? data.externalUrl?.trim() || null
+              : null,
+        },
       },
-    });
+      {
+        onSuccess: () => {
+          onOpenChange(false);
+        },
+      },
+    );
   }
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Edit evidence</DialogTitle>
-          <DialogDescription>
-            Update metadata for this evidence document.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
+
         <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
           <div className="space-y-2">
-            <Label htmlFor="edit-evidence-title">Title</Label>
+            <Label htmlFor="edit-evidence-title">{t("titleLabel")}</Label>
             <Input id="edit-evidence-title" {...register("title")} />
             {errors.title ? (
               <p className="text-sm text-red-600">{errors.title.message}</p>
             ) : null}
           </div>
+
           <div className="space-y-2">
-            <Label htmlFor="edit-evidence-type">Evidence type</Label>
+            <Label htmlFor="edit-evidence-type">{t("type")}</Label>
             <Controller
               name="evidenceType"
               control={control}
@@ -118,9 +121,9 @@ export function EditEvidenceDialog({
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    {evidenceTypeOptions.map((t) => (
-                      <SelectItem key={t} value={t}>
-                        {evidenceTypeLabels[t]}
+                    {evidenceTypeOptions.map((type) => (
+                      <SelectItem key={type} value={type}>
+                        {tType(type)}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -128,9 +131,10 @@ export function EditEvidenceDialog({
               )}
             />
           </div>
+
           {evidence?.sourceType === "URL" ? (
             <div className="space-y-2">
-              <Label htmlFor="edit-external-url">External URL</Label>
+              <Label htmlFor="edit-external-url">{t("externalUrl")}</Label>
               <Input
                 id="edit-external-url"
                 type="url"
@@ -143,8 +147,9 @@ export function EditEvidenceDialog({
               ) : null}
             </div>
           ) : null}
+
           <div className="space-y-2">
-            <Label htmlFor="edit-evidence-desc">Description</Label>
+            <Label htmlFor="edit-evidence-desc">{t("descriptionLabel")}</Label>
             <Textarea
               id="edit-evidence-desc"
               {...register("description")}
@@ -156,22 +161,24 @@ export function EditEvidenceDialog({
               </p>
             ) : null}
           </div>
+
           {updateMutation.error ? (
             <ErrorAlert error={updateMutation.error} />
           ) : null}
+
           <div className="flex justify-end gap-3">
             <Button
               type="button"
               variant="outline"
               onClick={() => onOpenChange(false)}
             >
-              Cancel
+              {t("cancel")}
             </Button>
             <Button
               disabled={isSubmitting || updateMutation.isPending}
               type="submit"
             >
-              {updateMutation.isPending ? "Saving..." : "Save changes"}
+              {updateMutation.isPending ? t("saving") : t("save")}
             </Button>
           </div>
         </form>

@@ -273,5 +273,144 @@
     "linkedAt": "Linked {date}",
     "noDueDate": "No due date",
     "unknownSize": "Unknown size"
+  },
+  "taskDialog": {
+    "title": "Create compliance task",
+    "description": "Add a new action item to track compliance work.",
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "priority": "Priority",
+      "dueDate": "Due date"
+    },
+    "placeholders": {
+      "title": "Upload MFA evidence"
+    },
+    "createTask": "Create task",
+    "creating": "Creating..."
+  },
+  "taskCard": {
+    "fields": {
+      "title": "Title",
+      "description": "Description",
+      "status": "Status",
+      "priority": "Priority",
+      "dueDate": "Due date"
+    },
+    "noDueDate": "No due date",
+    "due": "Due {date}",
+    "created": "Created {date} by {email}",
+    "edit": "Edit",
+    "delete": "Delete",
+    "cancel": "Cancel",
+    "save": "Save",
+    "saving": "Saving...",
+    "deleteConfirm": "Delete \"{title}\"?",
+    "deleting": "Deleting...",
+    "confirm": "Confirm"
+  },
+  "evidenceLabels": {
+    "types": {
+      "POLICY": "Policy",
+      "PROCEDURE": "Procedure",
+      "SCREENSHOT": "Screenshot",
+      "REPORT": "Report",
+      "CONTRACT": "Contract",
+      "CERTIFICATE": "Certificate",
+      "AUDIT_NOTE": "Audit note",
+      "OTHER": "Other"
+    },
+    "sources": {
+      "FILE": "File",
+      "URL": "URL",
+      "TEXT_NOTE": "Text note"
+    },
+    "sort": {
+      "createdAt": "Created date",
+      "updatedAt": "Updated date",
+      "title": "Title",
+      "evidenceType": "Evidence type",
+      "sourceType": "Source type"
+    }
+  },
+  "evidenceToolbar": {
+    "upload": "Upload",
+    "url": "URL",
+    "searchPlaceholder": "Search title, description, URL...",
+    "type": "Type",
+    "source": "Source",
+    "sort": "Sort",
+    "direction": "Dir",
+    "allTypes": "All types",
+    "allSources": "All sources",
+    "desc": "Desc",
+    "asc": "Asc"
+  },
+  "evidenceCard": {
+    "noDescription": "No description provided.",
+    "storedFile": "Stored file evidence",
+    "unknownContentType": "Unknown content type",
+    "unknownSize": "Unknown size",
+    "objectKey": "Object key: {objectKey}",
+    "openExternal": "Open external evidence",
+    "created": "Created {date}",
+    "edit": "Edit",
+    "download": "Download",
+    "preparing": "Preparing...",
+    "archive": "Archive",
+    "archiving": "Archiving...",
+    "archiveConfirm": "Archive evidence \"{title}\"? This will remove it from the active evidence list."
+  },
+  "evidenceFileDialog": {
+    "title": "Upload file evidence",
+    "description": "Upload a file through a secure presigned URL, then create evidence metadata in CompliPilot.",
+    "file": "File",
+    "chooseFile": "Choose evidence file",
+    "fileHelp": "PDF, image, document, or report. Max 10MB.",
+    "titleLabel": "Title",
+    "titlePlaceholder": "MFA screenshot",
+    "type": "Evidence type",
+    "typePlaceholder": "Select evidence type",
+    "descriptionLabel": "Description",
+    "descriptionPlaceholder": "What does this evidence prove?",
+    "cancel": "Cancel",
+    "upload": "Upload evidence",
+    "uploading": "Uploading...",
+    "errors": {
+      "fileTooLarge": "File size must be 10MB or smaller.",
+      "chooseFile": "Please choose a file to upload.",
+      "missingOrganization": "Missing active organization."
+    }
+  },
+  "evidenceUrlDialog": {
+    "title": "Add URL evidence",
+    "description": "Create evidence metadata for an external URL.",
+    "titleLabel": "Title",
+    "type": "Evidence type",
+    "typePlaceholder": "Select evidence type",
+    "externalUrl": "External URL",
+    "descriptionLabel": "Description",
+    "cancel": "Cancel",
+    "create": "Create evidence",
+    "creating": "Creating..."
+  },
+  "evidenceEditDialog": {
+    "title": "Edit evidence",
+    "description": "Update metadata for this evidence document.",
+    "titleLabel": "Title",
+    "type": "Evidence type",
+    "externalUrl": "External URL",
+    "descriptionLabel": "Description",
+    "cancel": "Cancel",
+    "save": "Save changes",
+    "saving": "Saving..."
+  },
+  "evidenceSelector": {
+    "title": "Link evidence",
+    "close": "Close",
+    "searchPlaceholder": "Search evidence...",
+    "empty": "No evidence found.",
+    "linked": "Linked",
+    "link": "Link"
   }
 }

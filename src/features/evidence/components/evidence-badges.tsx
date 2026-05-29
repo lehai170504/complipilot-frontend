@@ -1,19 +1,28 @@
+import { useTranslations } from "next-intl";
+
 import type { EvidenceSourceType, EvidenceType } from "@/lib/api/api-types";
 import { Badge } from "@/components/ui/badge";
-import {
-  evidenceSourceTypeLabels,
-  evidenceTypeLabels,
-} from "@/features/evidence/constants";
 
 export function EvidenceTypeBadge({ type }: { type: EvidenceType }) {
+  const t = useTranslations("evidenceLabels.types");
+
   return (
-    <Badge className="bg-cyan-50 text-cyan-700 hover:bg-cyan-50" variant="secondary">
-      {evidenceTypeLabels[type]}
+    <Badge
+      className="bg-cyan-50 text-cyan-700 hover:bg-cyan-50"
+      variant="secondary"
+    >
+      {t(type)}
     </Badge>
   );
 }
 
-export function EvidenceSourceBadge({ sourceType }: { sourceType: EvidenceSourceType }) {
+export function EvidenceSourceBadge({
+  sourceType,
+}: {
+  sourceType: EvidenceSourceType;
+}) {
+  const t = useTranslations("evidenceLabels.sources");
+
   const className =
     sourceType === "URL"
       ? "bg-blue-50 text-blue-700 hover:bg-blue-50"
@@ -23,7 +32,7 @@ export function EvidenceSourceBadge({ sourceType }: { sourceType: EvidenceSource
 
   return (
     <Badge className={className} variant="secondary">
-      {evidenceSourceTypeLabels[sourceType]}
+      {t(sourceType)}
     </Badge>
   );
 }
