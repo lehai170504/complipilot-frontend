@@ -15,17 +15,19 @@ export const authQueryKeys = {
   organizations: ["auth", "organizations"] as const,
 };
 
-export function useCurrentUserQuery() {
+export function useCurrentUserQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: authQueryKeys.currentUser,
     queryFn: getCurrentUser,
+    enabled: options?.enabled ?? true,
   });
 }
 
-export function useMyOrganizationsQuery() {
+export function useMyOrganizationsQuery(options?: { enabled?: boolean }) {
   return useQuery({
     queryKey: authQueryKeys.organizations,
     queryFn: getMyOrganizations,
+    enabled: options?.enabled ?? true,
   });
 }
 
