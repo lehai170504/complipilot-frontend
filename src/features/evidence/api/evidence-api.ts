@@ -1,5 +1,6 @@
 import { apiClient } from "@/lib/api/api-client";
 import type {
+  ComplianceItemEvidenceLink,
   CreateEvidenceUploadUrlResponse,
   EvidenceDocument,
   EvidenceDownloadUrlResponse,
@@ -204,8 +205,8 @@ export async function linkEvidenceToComplianceItem(
   organizationId: string,
   itemId: string,
   evidenceDocumentId: string
-): Promise<import("@/lib/api/api-types").ComplianceItemEvidenceLink> {
-  return apiClient<import("@/lib/api/api-types").ComplianceItemEvidenceLink>(
+): Promise<ComplianceItemEvidenceLink> {
+  return apiClient<ComplianceItemEvidenceLink>(
     `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links`,
     {
       method: "POST",
@@ -217,8 +218,8 @@ export async function linkEvidenceToComplianceItem(
 export async function listEvidenceLinks(
   organizationId: string,
   itemId: string
-): Promise<import("@/lib/api/api-types").ComplianceItemEvidenceLink[]> {
-  return apiClient<import("@/lib/api/api-types").ComplianceItemEvidenceLink[]>(
+): Promise<ComplianceItemEvidenceLink[]> {
+  return apiClient<ComplianceItemEvidenceLink[]>(
     `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links`
   );
 }
