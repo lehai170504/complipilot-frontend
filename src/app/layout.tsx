@@ -1,19 +1,19 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "sonner";
 
 import { Providers } from "@/app/providers";
 
 import "./globals.css";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const jetBrainsMono = JetBrains_Mono({
+  variable: "--font-jetbrains-mono",
   subsets: ["latin"],
   display: "swap",
 });
@@ -44,17 +44,22 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full bg-background antialiased`}
+      className={`${inter.variable} ${jetBrainsMono.variable} h-full bg-background antialiased`}
       suppressHydrationWarning
     >
-      <body className="min-h-screen bg-background text-foreground">
+      <body className="min-h-screen bg-background text-foreground font-sans">
         <Providers>{children}</Providers>
         <Toaster
           position="top-right"
           richColors
           closeButton
           toastOptions={{
-            style: { borderRadius: "1rem", border: "1px solid oklch(0.88 0.01 248)" },
+            style: { 
+              borderRadius: "0.5rem", 
+              border: "1px solid var(--color-border)",
+              background: "var(--color-card)",
+              color: "var(--color-foreground)"
+            },
           }}
         />
       </body>

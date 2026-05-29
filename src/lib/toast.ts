@@ -21,15 +21,19 @@ export const toast = {
   },
 
   info(message: string, options?: ToastOptions) {
-    return sonnerToast(message, {
+    return sonnerToast.info(message, {
       duration: options?.duration ?? 3000,
       description: options?.description,
     });
   },
 
   promise<T>(
-    promise: Promise<T>,
-    messages: { loading: string; success: string; error: string }
+    promise: Promise<T> | (() => Promise<T>),
+    messages: {
+      loading: string;
+      success: string | ((data: T) => string);
+      error: string | ((error: unknown) => string);
+    }
   ) {
     return sonnerToast.promise(promise, {
       loading: messages.loading,
