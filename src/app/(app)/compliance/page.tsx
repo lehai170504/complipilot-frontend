@@ -8,6 +8,7 @@ import {
   Plus,
   ShieldCheck,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -15,13 +16,17 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ComplianceItemCard } from "@/features/compliance/components/compliance-item-card";
 import { CreateComplianceItemDialog } from "@/features/compliance/components/create-compliance-item-dialog";
 import { FrameworksPanel } from "@/features/compliance/components/frameworks-panel";
-import { useComplianceItemsQuery } from "@/features/compliance/hooks/compliance-hooks";
+import {
+  useComplianceItemsQuery,
+  useComplianceSummaryQuery,
+} from "@/features/compliance/hooks/compliance-hooks";
 import { MetricCard } from "@/features/dashboard/components/metric-card";
 import { SeedDemoWorkspaceButton } from "@/features/dashboard/components/seed-demo-workspace-button";
-import { useComplianceSummaryQuery } from "@/features/compliance/hooks/compliance-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 
 export default function CompliancePage() {
+  const t = useTranslations("compliancePage");
+
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
 
@@ -46,14 +51,13 @@ export default function CompliancePage() {
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-              Compliance controls
+              {t("heroEyebrow")}
             </p>
             <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-              Manage your control readiness from one workspace.
+              {t("heroTitle")}
             </h2>
             <p className="mt-3 max-w-2xl text-slate-300">
-              Review baseline requirements, update statuses, capture notes, and
-              prepare each control for evidence review.
+              {t("heroDescription")}
             </p>
           </div>
 
@@ -66,7 +70,7 @@ export default function CompliancePage() {
                 className="border-cyan-300/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
               >
                 <Plus className="mr-2 size-4" />
-                Create item
+                {t("createItem")}
               </Button>
             </div>
           ) : null}
@@ -75,27 +79,29 @@ export default function CompliancePage() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          title="Ready"
+          title={t("ready")}
           value={`${readyPercent}%`}
-          description={`${summary?.compliant ?? 0} compliant controls`}
+          description={t("readyDescription", {
+            count: summary?.compliant ?? 0,
+          })}
           icon={ShieldCheck}
         />
         <MetricCard
-          title="Total controls"
+          title={t("totalControls")}
           value={summary?.totalItems ?? 0}
-          description="Controls in active workspace"
+          description={t("totalControlsDescription")}
           icon={ClipboardCheck}
         />
         <MetricCard
-          title="Needs work"
+          title={t("needsWork")}
           value={(summary?.open ?? 0) + (summary?.inProgress ?? 0)}
-          description="Open or in progress"
+          description={t("needsWorkDescription")}
           icon={FileClock}
         />
         <MetricCard
-          title="Non-compliant"
+          title={t("nonCompliant")}
           value={summary?.nonCompliant ?? 0}
-          description="Controls requiring attention"
+          description={t("nonCompliantDescription")}
           icon={AlertTriangle}
         />
       </section>
@@ -107,17 +113,16 @@ export default function CompliancePage() {
       {complianceItemsQuery.isLoading ? (
         <Card>
           <CardContent className="p-8 text-muted-foreground">
-            Loading compliance controls...
+            {t("loading")}
           </CardContent>
         </Card>
       ) : items.length === 0 ? (
         <Card>
           <CardContent className="p-8">
             <div className="max-w-2xl">
-              <h3 className="text-xl font-semibold">No controls yet</h3>
+              <h3 className="text-xl font-semibold">{t("emptyTitle")}</h3>
               <p className="mt-2 text-muted-foreground">
-                Seed the security baseline to create demo compliance controls
-                for this workspace.
+                {t("emptyDescription")}
               </p>
 
               {canManageCompliance ? (
@@ -126,7 +131,7 @@ export default function CompliancePage() {
                 </div>
               ) : (
                 <Button className="mt-5" disabled>
-                  Ask an admin to apply a framework
+                  {t("askAdmin")}
                 </Button>
               )}
             </div>

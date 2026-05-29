@@ -10,6 +10,7 @@ import {
   Link2Off,
   Save,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -26,7 +27,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { ComplianceStatusBadge } from "@/features/compliance/components/compliance-status-badge";
 import {
   allowedComplianceTransitions,
-  complianceStatusLabels,
   complianceStatusOptions,
 } from "@/features/compliance/constants";
 import {
@@ -46,17 +46,18 @@ import {
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import type { ComplianceStatus } from "@/lib/api/api-types";
 
-function formatDate(date: string | null) {
-  if (!date) return "No due date";
-  return new Intl.DateTimeFormat("en", {
+function formatDate(date: string | null, locale: string, noDueDate: string) {
+  if (!date) return noDueDate;
+
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
   }).format(new Date(date));
 }
 
-function formatDateTime(date: string) {
-  return new Intl.DateTimeFormat("en", {
+function formatDateTime(date: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     hour: "2-digit",
@@ -64,10 +65,11 @@ function formatDateTime(date: string) {
   }).format(new Date(date));
 }
 
-function formatFileSize(size: number | null) {
-  if (!size) return "Unknown size";
+function formatFileSize(size: number | null, unknownSize: string) {
+  if (!size) return unknownSize;
   if (size < 1024) return `${size} B`;
   if (size < 1024 * 1024) return `${(size / 1024).toFixed(1)} KB`;
+
   return `${(size / 1024 / 1024).toFixed(1)} MB`;
 }
 
@@ -75,6 +77,10 @@ export default function ComplianceItemDetailPage() {
   const router = useRouter();
   const params = useParams<{ itemId: string }>();
   const itemId = params.itemId;
+
+  const locale = useLocale();
+  const t = useTranslations("complianceDetail");
+  const tStatus = useTranslations("status");
 
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
@@ -100,11 +106,12 @@ export default function ComplianceItemDetailPage() {
       (notes !== "" && notes !== (item.notes ?? "")));
 
   const allowedNextStatuses = item
-    ? allowedComplianceTransitions[item.status] ?? []
+    ? (allowedComplianceTransitions[item.status] ?? [])
     : [];
 
   function handleSave() {
     if (!item || !organizationId) return;
+
     updateMutation.mutate(
       {
         itemId: item.id,
@@ -113,7 +120,12 @@ export default function ComplianceItemDetailPage() {
           notes: notes.trim() || item.notes || null,
         },
       },
-      { onSuccess: () => setStatus(undefined) }
+      {
+        onSuccess: () => {
+          setStatus(undefined);
+          setNotes("");
+        },
+      },
     );
   }
 
@@ -130,7 +142,7 @@ export default function ComplianceItemDetailPage() {
   if (complianceItemsQuery.isLoading) {
     return (
       <div className="rounded-3xl border bg-white p-8 text-muted-foreground shadow-sm">
-        Loading control details...
+        {t("loading")}
       </div>
     );
   }
@@ -139,13 +151,13 @@ export default function ComplianceItemDetailPage() {
     return (
       <Card>
         <CardContent className="flex flex-col items-center justify-center p-10 text-center">
-          <h3 className="text-xl font-semibold">Control not found</h3>
+          <h3 className="text-xl font-semibold">{t("notFoundTitle")}</h3>
           <p className="mt-2 text-muted-foreground">
-            This compliance item does not exist or you do not have access.
+            {t("notFoundDescription")}
           </p>
           <Button className="mt-5" onClick={() => router.push("/compliance")}>
             <ArrowLeft className="mr-2 size-4" />
-            Back to compliance
+            {t("back")}
           </Button>
         </CardContent>
       </Card>
@@ -154,7 +166,7 @@ export default function ComplianceItemDetailPage() {
 
   const linkedEvidence = evidenceLinksQuery.data ?? [];
   const linkedEvidenceIds = new Set(
-    linkedEvidence.map((link) => link.evidence.id)
+    linkedEvidence.map((link) => link.evidence.id),
   );
 
   return (
@@ -165,7 +177,7 @@ export default function ComplianceItemDetailPage() {
         className="text-muted-foreground"
       >
         <ArrowLeft className="mr-2 size-4" />
-        Back to compliance
+        {t("back")}
       </Button>
 
       <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
@@ -181,7 +193,9 @@ export default function ComplianceItemDetailPage() {
           </h2>
           <div className="mt-3 flex items-center gap-2 text-slate-300">
             <CalendarDays className="size-4" />
-            Due {formatDate(item.dueDate)}
+            {t("due", {
+              date: formatDate(item.dueDate, locale, t("noDueDate")),
+            })}
           </div>
         </div>
       </section>
@@ -190,16 +204,16 @@ export default function ComplianceItemDetailPage() {
         <div className="space-y-6">
           <Card>
             <CardContent className="p-6">
-              <h3 className="text-lg font-semibold">Notes &amp; status</h3>
+              <h3 className="text-lg font-semibold">{t("notesStatus")}</h3>
 
               {canManageCompliance ? (
                 <div className="mt-4 space-y-4">
                   <div className="space-y-2">
-                    <Label>Status</Label>
+                    <Label>{t("status")}</Label>
                     <Select
                       value={effectiveStatus}
-                      onValueChange={(v) =>
-                        setStatus(v as ComplianceStatus)
+                      onValueChange={(value) =>
+                        setStatus(value as ComplianceStatus)
                       }
                     >
                       <SelectTrigger>
@@ -208,13 +222,13 @@ export default function ComplianceItemDetailPage() {
                       <SelectContent>
                         {complianceStatusOptions
                           .filter(
-                            (o) =>
-                              o === item.status ||
-                              allowedNextStatuses.includes(o)
+                            (option) =>
+                              option === item.status ||
+                              allowedNextStatuses.includes(option),
                           )
-                          .map((o) => (
-                            <SelectItem key={o} value={o}>
-                              {complianceStatusLabels[o]}
+                          .map((option) => (
+                            <SelectItem key={option} value={option}>
+                              {tStatus(option)}
                             </SelectItem>
                           ))}
                       </SelectContent>
@@ -222,11 +236,11 @@ export default function ComplianceItemDetailPage() {
                   </div>
 
                   <div className="space-y-2">
-                    <Label>Notes</Label>
+                    <Label>{t("notes")}</Label>
                     <Textarea
                       value={effectiveNotes}
-                      onChange={(e) => setNotes(e.target.value)}
-                      placeholder="Add compliance notes, evidence context..."
+                      onChange={(event) => setNotes(event.target.value)}
+                      placeholder={t("notesPlaceholder")}
                       rows={4}
                     />
                   </div>
@@ -241,14 +255,16 @@ export default function ComplianceItemDetailPage() {
                       onClick={handleSave}
                     >
                       <Save className="mr-2 size-4" />
-                      {updateMutation.isPending ? "Saving..." : "Save changes"}
+                      {updateMutation.isPending
+                        ? t("saving")
+                        : t("saveChanges")}
                     </Button>
                   </div>
                 </div>
               ) : (
                 <div className="mt-4">
                   <p className="text-sm text-muted-foreground">
-                    {item.notes ?? "No notes recorded for this control."}
+                    {item.notes ?? t("noNotes")}
                   </p>
                 </div>
               )}
@@ -259,7 +275,9 @@ export default function ComplianceItemDetailPage() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">
-                  Linked evidence ({linkedEvidence.length})
+                  {t("linkedEvidence", {
+                    count: linkedEvidence.length,
+                  })}
                 </h3>
 
                 {canManageCompliance ? (
@@ -269,18 +287,18 @@ export default function ComplianceItemDetailPage() {
                     size="sm"
                   >
                     <Link2 className="mr-2 size-4" />
-                    Link evidence
+                    {t("linkEvidence")}
                   </Button>
                 ) : null}
               </div>
 
               {evidenceLinksQuery.isLoading ? (
                 <p className="mt-4 text-sm text-muted-foreground">
-                  Loading linked evidence...
+                  {t("loadingLinkedEvidence")}
                 </p>
               ) : linkedEvidence.length === 0 ? (
                 <p className="mt-4 text-sm text-muted-foreground">
-                  No evidence linked to this control yet.
+                  {t("noLinkedEvidence")}
                 </p>
               ) : (
                 <div className="mt-4 space-y-3">
@@ -303,14 +321,16 @@ export default function ComplianceItemDetailPage() {
                             {link.evidence.title}
                           </h4>
                           <p className="mt-1 line-clamp-2 text-sm text-muted-foreground">
-                            {link.evidence.description ??
-                              "No description"}
+                            {link.evidence.description ?? t("noDescription")}
                           </p>
                           <div className="mt-2 flex flex-wrap items-center gap-3 text-xs text-muted-foreground">
                             {link.evidence.sourceType === "FILE" ? (
                               <span>
-                                {link.evidence.contentType ?? "Unknown"} ·{" "}
-                                {formatFileSize(link.evidence.fileSizeBytes)}
+                                {link.evidence.contentType ?? t("unknown")} ·{" "}
+                                {formatFileSize(
+                                  link.evidence.fileSizeBytes,
+                                  t("unknownSize"),
+                                )}
                               </span>
                             ) : null}
                             {link.evidence.externalUrl ? (
@@ -320,12 +340,14 @@ export default function ComplianceItemDetailPage() {
                                 target="_blank"
                                 rel="noreferrer"
                               >
-                                Open URL
+                                {t("openUrl")}
                                 <ExternalLink className="ml-1 size-3" />
                               </a>
                             ) : null}
                             <span>
-                              Linked {formatDateTime(link.linkedAt)}
+                              {t("linkedAt", {
+                                date: formatDateTime(link.linkedAt, locale),
+                              })}
                             </span>
                           </div>
                         </div>

@@ -146,25 +146,21 @@ export default function TasksPage() {
         <MetricCard
           title={t("totalTasks")}
           value={summary?.total ?? 0}
-          description={t("totalTasks")}
           icon={ListChecks}
         />
         <MetricCard
           title={t("open")}
           value={summary?.open ?? 0}
-          description={t("open")}
           icon={ListChecks}
         />
         <MetricCard
           title={t("inProgress")}
           value={summary?.inProgress ?? 0}
-          description={t("inProgress")}
           icon={ListChecks}
         />
         <MetricCard
           title={t("overdue")}
           value={summary?.overdue ?? 0}
-          description={t("overdue")}
           icon={ListChecks}
         />
       </section>

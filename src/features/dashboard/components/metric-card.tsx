@@ -10,7 +10,7 @@ export function MetricCard({
 }: {
   title: string;
   value: string | number;
-  description: string;
+  description?: string;
   icon: LucideIcon;
 }) {
   return (
