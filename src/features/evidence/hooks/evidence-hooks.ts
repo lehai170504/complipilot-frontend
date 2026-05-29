@@ -4,6 +4,7 @@ import {
   archiveEvidence,
   createEvidence,
   createFileEvidence,
+  createEvidenceDownloadUrl,
   listEvidence,
   type CreateEvidenceRequest,
   type CreateFileEvidenceRequest,
@@ -40,7 +41,7 @@ export function useCreateEvidenceMutation(organizationId: string | undefined) {
 }
 
 export function useCreateFileEvidenceMutation(
-  organizationId: string | undefined
+  organizationId: string | undefined,
 ) {
   const queryClient = useQueryClient();
 
@@ -53,6 +54,15 @@ export function useCreateFileEvidenceMutation(
         queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
       ]);
     },
+  });
+}
+
+export function useCreateEvidenceDownloadUrlMutation(
+  organizationId: string | undefined
+) {
+  return useMutation({
+    mutationFn: (evidenceId: string) =>
+      createEvidenceDownloadUrl(organizationId as string, evidenceId),
   });
 }
 

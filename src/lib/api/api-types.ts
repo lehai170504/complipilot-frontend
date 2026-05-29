@@ -209,3 +209,9 @@ export type CreateEvidenceUploadUrlResponse = {
   method: "PUT";
   expiresInMinutes: number;
 };
+
+export type EvidenceDownloadUrlResponse = {
+  downloadUrl: string;
+  method: "GET";
+  expiresInMinutes: number;
+};

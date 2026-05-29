@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api/api-client";
 import type {
   CreateEvidenceUploadUrlResponse,
   EvidenceDocument,
+  EvidenceDownloadUrlResponse,
   EvidenceSourceType,
   EvidenceType,
   PageResponse,
@@ -154,6 +155,18 @@ export async function createFileEvidence(
     contentType: request.file.type || "application/octet-stream",
     fileSizeBytes: request.file.size,
   });
+}
+
+export async function createEvidenceDownloadUrl(
+  organizationId: string,
+  evidenceId: string
+): Promise<EvidenceDownloadUrlResponse> {
+  return apiClient<EvidenceDownloadUrlResponse>(
+    `/api/v1/organizations/${organizationId}/evidence/${evidenceId}/download-url`,
+    {
+      method: "POST",
+    }
+  );
 }
 
 export async function archiveEvidence(

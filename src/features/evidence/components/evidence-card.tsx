@@ -9,7 +9,10 @@ import {
   EvidenceSourceBadge,
   EvidenceTypeBadge,
 } from "@/features/evidence/components/evidence-badges";
-import { useArchiveEvidenceMutation } from "@/features/evidence/hooks/evidence-hooks";
+import {
+  useArchiveEvidenceMutation,
+  useCreateEvidenceDownloadUrlMutation,
+} from "@/features/evidence/hooks/evidence-hooks";
 import type { EvidenceDocument } from "@/lib/api/api-types";
 
 function formatDateTime(date: string) {
@@ -48,6 +51,8 @@ export function EvidenceCard({
   canManageCompliance: boolean;
 }) {
   const archiveMutation = useArchiveEvidenceMutation(organizationId);
+  const downloadUrlMutation =
+    useCreateEvidenceDownloadUrlMutation(organizationId);
 
   function handleArchive() {
     const confirmed = window.confirm(
@@ -59,6 +64,12 @@ export function EvidenceCard({
     }
 
     archiveMutation.mutate(evidence.id);
+  }
+
+  async function handleDownload() {
+    const response = await downloadUrlMutation.mutateAsync(evidence.id);
+
+    window.open(response.downloadUrl, "_blank", "noopener,noreferrer");
   }
 
   return (
@@ -84,7 +95,9 @@ export function EvidenceCard({
 
             {evidence.sourceType === "FILE" ? (
               <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm">
-                <p className="font-medium text-slate-700">Stored file evidence</p>
+                <p className="font-medium text-slate-700">
+                  Stored file evidence
+                </p>
                 <p className="mt-1 text-muted-foreground">
                   {evidence.contentType ?? "Unknown content type"} ·{" "}
                   {formatFileSize(evidence.fileSizeBytes)}
@@ -114,9 +127,15 @@ export function EvidenceCard({
 
           <div className="flex shrink-0 flex-col gap-2">
             {evidence.sourceType === "FILE" ? (
-              <Button disabled size="sm" type="button" variant="outline">
+              <Button
+                disabled={downloadUrlMutation.isPending}
+                onClick={handleDownload}
+                size="sm"
+                type="button"
+                variant="outline"
+              >
                 <Download className="mr-2 size-4" />
-                Download soon
+                {downloadUrlMutation.isPending ? "Preparing..." : "Download"}
               </Button>
             ) : null}
 
@@ -134,6 +153,12 @@ export function EvidenceCard({
             ) : null}
           </div>
         </div>
+
+        {downloadUrlMutation.error ? (
+          <div className="border-t bg-red-50 p-5">
+            <ErrorAlert error={downloadUrlMutation.error} />
+          </div>
+        ) : null}
 
         {archiveMutation.error ? (
           <div className="border-t bg-red-50 p-5">
