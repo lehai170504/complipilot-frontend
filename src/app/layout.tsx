@@ -1,16 +1,10 @@
 import type { Metadata, Viewport } from "next";
-import { cookies } from "next/headers";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
+import { getLocale } from "next-intl/server";
 import { Toaster } from "sonner";
 
 import { Providers } from "@/app/providers";
-import {
-  defaultLocale,
-  isAppLocale,
-  localeCookieName,
-  type AppLocale,
-} from "@/i18n/config";
 
 import "./globals.css";
 
@@ -52,24 +46,12 @@ export const viewport: Viewport = {
   themeColor: "#020617",
 };
 
-async function getLocaleFromCookie(): Promise<AppLocale> {
-  const cookieStore = await cookies();
-  const locale = cookieStore.get(localeCookieName)?.value;
-
-  return isAppLocale(locale) ? locale : defaultLocale;
-}
-
-async function getMessages(locale: AppLocale) {
-  return (await import(`@/messages/${locale}.json`)).default;
-}
-
 export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const locale = await getLocaleFromCookie();
-  const messages = await getMessages(locale);
+  const locale = await getLocale();
 
   return (
     <html
@@ -78,7 +60,7 @@ export default async function RootLayout({
       suppressHydrationWarning
     >
       <body className="min-h-screen overflow-x-hidden bg-background font-sans text-foreground">
-        <NextIntlClientProvider locale={locale} messages={messages}>
+        <NextIntlClientProvider>
           <Providers>{children}</Providers>
         </NextIntlClientProvider>
 

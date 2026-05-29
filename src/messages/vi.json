@@ -43,6 +43,185 @@
     "ADMIN": "Quản trị viên",
     "COMPLIANCE_MANAGER": "Quản lý tuân thủ",
     "MEMBER": "Thành viên",
-    "AUDITOR": "Kiểm toán viên"
+    "AUDITOR": "Kiểm toán viên",
+    "OPEN": "Đang mở",
+    "IN_PROGRESS": "Đang xử lý",
+    "READY_FOR_REVIEW": "Sẵn sàng rà soát",
+    "COMPLIANT": "Đạt tuân thủ",
+    "NON_COMPLIANT": "Không đạt tuân thủ",
+    "WAIVED": "Được miễn trừ",
+    "DONE": "Hoàn tất",
+    "CANCELLED": "Đã hủy",
+    "LOW": "Thấp",
+    "MEDIUM": "Trung bình",
+    "HIGH": "Cao",
+    "CRITICAL": "Nghiêm trọng"
+  },
+
+  "audit": {
+    "heroEyebrow": "Nhật ký kiểm toán",
+    "heroTitle": "Theo dõi mọi hành động tuân thủ trong tổ chức.",
+    "heroDescription": "Tìm kiếm, lọc và sắp xếp các sự kiện kiểm toán để biết ai đã làm gì và vào thời điểm nào.",
+    "searchPlaceholder": "Tìm theo mô tả hoặc email người thực hiện...",
+    "filters": {
+      "action": "Hành động",
+      "resource": "Tài nguyên",
+      "sort": "Sắp xếp",
+      "direction": "Thứ tự",
+      "allActions": "Tất cả hành động",
+      "allResources": "Tất cả tài nguyên"
+    },
+    "sort": {
+      "timestamp": "Thời gian",
+      "action": "Hành động",
+      "resourceType": "Loại tài nguyên",
+      "actorEmail": "Email người thực hiện",
+      "newest": "Mới nhất",
+      "oldest": "Cũ nhất"
+    },
+    "state": {
+      "loading": "Đang tải nhật ký kiểm toán...",
+      "emptyTitle": "Chưa có sự kiện kiểm toán",
+      "emptyDescription": "Các sự kiện kiểm toán sẽ xuất hiện tại đây khi bạn thực hiện thao tác tuân thủ."
+    },
+    "pagination": {
+      "page": "Trang",
+      "of": "trên",
+      "events": "sự kiện",
+      "previous": "Trước",
+      "next": "Tiếp"
+    },
+    "actions": {
+      "COMPLIANCE_FRAMEWORK_APPLIED": "Đã áp dụng framework tuân thủ",
+      "COMPLIANCE_ITEM_CREATED": "Đã tạo control tuân thủ",
+      "COMPLIANCE_ITEM_UPDATED": "Đã cập nhật control tuân thủ",
+      "EVIDENCE_DOCUMENT_CREATED": "Đã tạo tài liệu bằng chứng",
+      "EVIDENCE_DOCUMENT_UPDATED": "Đã cập nhật tài liệu bằng chứng",
+      "EVIDENCE_DOCUMENT_ARCHIVED": "Đã lưu trữ tài liệu bằng chứng",
+      "EVIDENCE_LINK_CREATED": "Đã liên kết bằng chứng",
+      "EVIDENCE_LINK_DELETED": "Đã hủy liên kết bằng chứng",
+      "COMPLIANCE_TASK_CREATED": "Đã tạo công việc tuân thủ",
+      "COMPLIANCE_TASK_UPDATED": "Đã cập nhật công việc tuân thủ",
+      "COMPLIANCE_TASK_DELETED": "Đã xóa công việc tuân thủ"
+    },
+    "resourceTypes": {
+      "COMPLIANCE_FRAMEWORK": "Framework tuân thủ",
+      "COMPLIANCE_ITEM": "Control tuân thủ",
+      "EVIDENCE_DOCUMENT": "Tài liệu bằng chứng",
+      "EVIDENCE_LINK": "Liên kết bằng chứng",
+      "COMPLIANCE_TASK": "Công việc tuân thủ"
+    }
+  },
+
+  "common": {
+    "loading": "Đang tải...",
+    "cancel": "Hủy",
+    "previous": "Trước",
+    "next": "Tiếp",
+    "page": "Trang",
+    "of": "trên",
+    "items": "mục",
+    "create": "Tạo",
+    "creating": "Đang tạo...",
+    "active": "Đang hoạt động",
+    "current": "Hiện tại"
+  },
+  "pagination": {
+    "summary": "Trang {page} trên {totalPages} · {totalItems} mục"
+  },
+  "dashboard": {
+    "managerWorkspace": "Workspace quản lý",
+    "memberWorkspace": "Workspace thành viên",
+    "welcome": "Chào mừng trở lại, {name}.",
+    "fallbackName": "người phụ trách tuân thủ",
+    "description": "Theo dõi controls, mức độ sẵn sàng bằng chứng, công việc đang mở và hoạt động kiểm toán gần đây của tổ chức.",
+    "activeOrganization": "Tổ chức đang chọn",
+    "complianceReady": "Mức sẵn sàng tuân thủ",
+    "complianceReadyDescription": "{compliant} control đạt / {total} tổng",
+    "openTasks": "Công việc đang mở",
+    "openTasksDescription": "{overdue} công việc quá hạn",
+    "dueSoon": "Sắp đến hạn",
+    "dueSoonDescription": "Controls đến hạn trong 14 ngày tới",
+    "overdue": "Quá hạn",
+    "overdueDescription": "Controls đã quá hạn",
+    "openTasksTitle": "Công việc đang mở",
+    "loadingTasks": "Đang tải công việc...",
+    "noDescription": "Chưa có mô tả",
+    "due": "Hạn {date}",
+    "noOpenTasks": "Không có công việc đang mở trong workspace này.",
+    "complianceStatus": "Trạng thái tuân thủ",
+    "dueSoonControls": "Controls sắp đến hạn",
+    "loadingDueSoon": "Đang tải controls sắp đến hạn...",
+    "noDueSoon": "Không có control nào sắp đến hạn.",
+    "recentAuditActivity": "Hoạt động kiểm toán gần đây",
+    "loadingAuditEvents": "Đang tải sự kiện kiểm toán...",
+    "noAuditEvents": "Chưa có sự kiện kiểm toán."
+  },
+  "evidencePage": {
+    "heroEyebrow": "Thư viện bằng chứng",
+    "heroTitle": "Thu thập và rà soát bằng chứng để sẵn sàng kiểm toán.",
+    "heroDescription": "Tìm kiếm, lọc, sắp xếp, tạo, tải lên và lưu trữ bằng chứng cho tổ chức đang chọn.",
+    "activeEvidence": "Bằng chứng đang hoạt động",
+    "loadingWorkspace": "Đang tải workspace...",
+    "loading": "Đang tải bằng chứng...",
+    "emptyTitle": "Không tìm thấy bằng chứng",
+    "emptyDescription": "Thêm bằng chứng URL, tải file bằng chứng lên hoặc điều chỉnh bộ lọc/tìm kiếm.",
+    "uploadFile": "Tải file lên",
+    "addUrl": "Thêm URL"
+  },
+  "tasksPage": {
+    "heroEyebrow": "Công việc tuân thủ",
+    "heroTitle": "Theo dõi các đầu việc trong quy trình tuân thủ.",
+    "heroDescription": "Tạo, giao, lọc và hoàn tất công việc liên quan đến controls và mức độ sẵn sàng bằng chứng.",
+    "createTask": "Tạo công việc",
+    "totalTasks": "Tổng công việc",
+    "open": "Đang mở",
+    "inProgress": "Đang xử lý",
+    "done": "Hoàn tất",
+    "overdue": "Quá hạn",
+    "searchPlaceholder": "Tìm theo tiêu đề hoặc mô tả công việc...",
+    "allStatuses": "Tất cả trạng thái",
+    "allPriorities": "Tất cả độ ưu tiên",
+    "sortBy": "Sắp xếp theo",
+    "direction": "Thứ tự",
+    "desc": "Giảm dần",
+    "asc": "Tăng dần",
+    "loading": "Đang tải công việc...",
+    "emptyTitle": "Không tìm thấy công việc",
+    "emptyDescriptionManager": "Tạo công việc để bắt đầu theo dõi các đầu việc tuân thủ.",
+    "emptyDescriptionMember": "Chưa có công việc nào được giao.",
+    "createFirstTask": "Tạo công việc đầu tiên"
+  },
+  "workspacesPage": {
+    "heroEyebrow": "Workspaces",
+    "heroTitle": "Các tổ chức và không gian làm việc của bạn.",
+    "heroDescription": "Chuyển đổi giữa các tổ chức để quản lý tuân thủ trên nhiều workspace khác nhau.",
+    "loading": "Đang tải workspaces...",
+    "emptyTitle": "Chưa có workspace",
+    "emptyDescription": "Bạn chưa là thành viên của tổ chức nào. Hãy tạo tài khoản hoặc yêu cầu quản trị viên gửi lời mời.",
+    "switch": "Chuyển sang workspace này",
+    "current": "Workspace hiện tại",
+    "active": "Đang hoạt động"
+  },
+  "complianceCreate": {
+    "title": "Tạo control tuân thủ",
+    "description": "Chọn framework và requirement để tạo một control tuân thủ mới.",
+    "framework": "Framework",
+    "requirement": "Requirement",
+    "selectFramework": "Chọn framework...",
+    "selectRequirement": "Chọn requirement...",
+    "loadingFrameworks": "Đang tải frameworks...",
+    "noFrameworks": "Không có framework nào",
+    "loadingRequirements": "Đang tải requirements...",
+    "noRequirements": "Framework này chưa có requirement",
+    "createItem": "Tạo control"
+  },
+  "sortLabels": {
+    "createdAt": "Ngày tạo",
+    "updatedAt": "Ngày cập nhật",
+    "dueDate": "Ngày đến hạn",
+    "priority": "Độ ưu tiên",
+    "status": "Trạng thái",
+    "title": "Tiêu đề"
   }
 }

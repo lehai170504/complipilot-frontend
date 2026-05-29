@@ -43,6 +43,185 @@
     "ADMIN": "Admin",
     "COMPLIANCE_MANAGER": "Compliance manager",
     "MEMBER": "Member",
-    "AUDITOR": "Auditor"
+    "AUDITOR": "Auditor",
+    "OPEN": "Open",
+    "IN_PROGRESS": "In progress",
+    "READY_FOR_REVIEW": "Ready for review",
+    "COMPLIANT": "Compliant",
+    "NON_COMPLIANT": "Non-compliant",
+    "WAIVED": "Waived",
+    "DONE": "Done",
+    "CANCELLED": "Cancelled",
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "CRITICAL": "Critical"
+  },
+
+  "audit": {
+    "heroEyebrow": "Audit trail",
+    "heroTitle": "Monitor every compliance action in your organization.",
+    "heroDescription": "Search, filter, and sort through recent audit events to track who did what and when.",
+    "searchPlaceholder": "Search by summary or actor email...",
+    "filters": {
+      "action": "Action",
+      "resource": "Resource",
+      "sort": "Sort",
+      "direction": "Direction",
+      "allActions": "All actions",
+      "allResources": "All resources"
+    },
+    "sort": {
+      "timestamp": "Timestamp",
+      "action": "Action",
+      "resourceType": "Resource type",
+      "actorEmail": "Actor email",
+      "newest": "Newest",
+      "oldest": "Oldest"
+    },
+    "state": {
+      "loading": "Loading audit events...",
+      "emptyTitle": "No audit events yet",
+      "emptyDescription": "Audit events will appear here as you take compliance actions."
+    },
+    "pagination": {
+      "page": "Page",
+      "of": "of",
+      "events": "events",
+      "previous": "Previous",
+      "next": "Next"
+    },
+    "actions": {
+      "COMPLIANCE_FRAMEWORK_APPLIED": "Compliance framework applied",
+      "COMPLIANCE_ITEM_CREATED": "Compliance item created",
+      "COMPLIANCE_ITEM_UPDATED": "Compliance item updated",
+      "EVIDENCE_DOCUMENT_CREATED": "Evidence document created",
+      "EVIDENCE_DOCUMENT_UPDATED": "Evidence document updated",
+      "EVIDENCE_DOCUMENT_ARCHIVED": "Evidence document archived",
+      "EVIDENCE_LINK_CREATED": "Evidence link created",
+      "EVIDENCE_LINK_DELETED": "Evidence link deleted",
+      "COMPLIANCE_TASK_CREATED": "Compliance task created",
+      "COMPLIANCE_TASK_UPDATED": "Compliance task updated",
+      "COMPLIANCE_TASK_DELETED": "Compliance task deleted"
+    },
+    "resourceTypes": {
+      "COMPLIANCE_FRAMEWORK": "Compliance framework",
+      "COMPLIANCE_ITEM": "Compliance item",
+      "EVIDENCE_DOCUMENT": "Evidence document",
+      "EVIDENCE_LINK": "Evidence link",
+      "COMPLIANCE_TASK": "Compliance task"
+    }
+  },
+
+  "common": {
+    "loading": "Loading...",
+    "cancel": "Cancel",
+    "previous": "Previous",
+    "next": "Next",
+    "page": "Page",
+    "of": "of",
+    "items": "items",
+    "create": "Create",
+    "creating": "Creating...",
+    "active": "Active",
+    "current": "Current"
+  },
+  "pagination": {
+    "summary": "Page {page} of {totalPages} · {totalItems} items"
+  },
+  "dashboard": {
+    "managerWorkspace": "Manager workspace",
+    "memberWorkspace": "Member workspace",
+    "welcome": "Welcome back, {name}.",
+    "fallbackName": "compliance lead",
+    "description": "Monitor controls, evidence readiness, open tasks, and recent audit activity for your active organization.",
+    "activeOrganization": "Active organization",
+    "complianceReady": "Compliance ready",
+    "complianceReadyDescription": "{compliant} compliant / {total} total",
+    "openTasks": "Open tasks",
+    "openTasksDescription": "{overdue} overdue tasks",
+    "dueSoon": "Due soon",
+    "dueSoonDescription": "Controls due in the next 14 days",
+    "overdue": "Overdue",
+    "overdueDescription": "Controls past due date",
+    "openTasksTitle": "Open tasks",
+    "loadingTasks": "Loading tasks...",
+    "noDescription": "No description",
+    "due": "Due {date}",
+    "noOpenTasks": "No open tasks found for this workspace.",
+    "complianceStatus": "Compliance status",
+    "dueSoonControls": "Due soon controls",
+    "loadingDueSoon": "Loading due soon controls...",
+    "noDueSoon": "No controls due soon.",
+    "recentAuditActivity": "Recent audit activity",
+    "loadingAuditEvents": "Loading audit events...",
+    "noAuditEvents": "No audit events yet."
+  },
+  "evidencePage": {
+    "heroEyebrow": "Evidence library",
+    "heroTitle": "Collect and review evidence for audit readiness.",
+    "heroDescription": "Search, filter, sort, create, upload, and archive evidence documents for your active organization.",
+    "activeEvidence": "Active evidence",
+    "loadingWorkspace": "Loading workspace...",
+    "loading": "Loading evidence...",
+    "emptyTitle": "No evidence found",
+    "emptyDescription": "Add URL evidence, upload file evidence, or adjust filters/search to find existing evidence.",
+    "uploadFile": "Upload file",
+    "addUrl": "Add URL"
+  },
+  "tasksPage": {
+    "heroEyebrow": "Compliance tasks",
+    "heroTitle": "Track action items across compliance work.",
+    "heroDescription": "Create, assign, filter, and complete tasks linked to controls and evidence readiness.",
+    "createTask": "Create task",
+    "totalTasks": "Total tasks",
+    "open": "Open",
+    "inProgress": "In progress",
+    "done": "Done",
+    "overdue": "Overdue",
+    "searchPlaceholder": "Search task title or description...",
+    "allStatuses": "All statuses",
+    "allPriorities": "All priorities",
+    "sortBy": "Sort by",
+    "direction": "Direction",
+    "desc": "Desc",
+    "asc": "Asc",
+    "loading": "Loading tasks...",
+    "emptyTitle": "No tasks found",
+    "emptyDescriptionManager": "Create a task to start tracking compliance action items.",
+    "emptyDescriptionMember": "No tasks are assigned yet.",
+    "createFirstTask": "Create first task"
+  },
+  "workspacesPage": {
+    "heroEyebrow": "Workspaces",
+    "heroTitle": "Your organizations and workspaces.",
+    "heroDescription": "Switch between organizations to manage compliance across different workspaces.",
+    "loading": "Loading workspaces...",
+    "emptyTitle": "No workspaces yet",
+    "emptyDescription": "You are not a member of any organization yet. Create an account or ask an admin for an invitation.",
+    "switch": "Switch to this workspace",
+    "current": "Current workspace",
+    "active": "Active"
+  },
+  "complianceCreate": {
+    "title": "Create compliance item",
+    "description": "Select a framework and requirement to create a new compliance control.",
+    "framework": "Framework",
+    "requirement": "Requirement",
+    "selectFramework": "Select a framework...",
+    "selectRequirement": "Select a requirement...",
+    "loadingFrameworks": "Loading frameworks...",
+    "noFrameworks": "No frameworks available",
+    "loadingRequirements": "Loading requirements...",
+    "noRequirements": "No requirements in this framework",
+    "createItem": "Create item"
+  },
+  "sortLabels": {
+    "createdAt": "Created date",
+    "updatedAt": "Updated date",
+    "dueDate": "Due date",
+    "priority": "Priority",
+    "status": "Status",
+    "title": "Title"
   }
 }

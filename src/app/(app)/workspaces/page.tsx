@@ -1,6 +1,7 @@
 "use client";
 
 import { Building2, ShieldCheck } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,18 +16,21 @@ export default function WorkspacesPage() {
     changeActiveOrganization,
   } = useActiveOrganization();
 
+  const t = useTranslations("workspacesPage");
+  const tStatus = useTranslations("status");
+
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
         <div>
           <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-            Workspaces
+            {t("heroEyebrow")}
           </p>
           <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-            Your organizations and workspaces.
+            {t("heroTitle")}
           </h2>
           <p className="mt-3 max-w-2xl text-slate-300">
-            Switch between organizations to manage compliance across different workspaces.
+            {t("heroDescription")}
           </p>
         </div>
       </section>
@@ -34,7 +38,7 @@ export default function WorkspacesPage() {
       {isLoading ? (
         <Card>
           <CardContent className="p-8 text-muted-foreground">
-            Loading workspaces...
+            {t("loading")}
           </CardContent>
         </Card>
       ) : organizations.length === 0 ? (
@@ -43,9 +47,9 @@ export default function WorkspacesPage() {
             <div className="rounded-3xl bg-slate-950 p-4 text-cyan-300">
               <Building2 className="size-8" />
             </div>
-            <h3 className="mt-5 text-xl font-semibold">No workspaces yet</h3>
+            <h3 className="mt-5 text-xl font-semibold">{t("emptyTitle")}</h3>
             <p className="mt-2 max-w-md text-muted-foreground">
-              You are not a member of any organization yet. Create an account or ask an admin for an invitation.
+              {t("emptyDescription")}
             </p>
           </CardContent>
         </Card>
@@ -78,6 +82,7 @@ export default function WorkspacesPage() {
                           <Building2 className="size-6" />
                         )}
                       </div>
+
                       <div>
                         <h3 className="text-lg font-semibold tracking-tight">
                           {org.organizationName}
@@ -91,14 +96,16 @@ export default function WorkspacesPage() {
                             }
                             variant="secondary"
                           >
-                            {org.role}
+                            {tStatus(org.role)}
                           </Badge>
+
                           <span className="text-xs text-muted-foreground">
-                            {org.status}
+                            {tStatus(org.status)}
                           </span>
+
                           {isActive ? (
                             <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
-                              Active
+                              {t("active")}
                             </span>
                           ) : null}
                         </div>
@@ -107,14 +114,16 @@ export default function WorkspacesPage() {
 
                     {!isActive ? (
                       <Button
-                        onClick={() => changeActiveOrganization(org.organizationId)}
+                        onClick={() =>
+                          changeActiveOrganization(org.organizationId)
+                        }
                         variant="outline"
                       >
-                        Switch to this workspace
+                        {t("switch")}
                       </Button>
                     ) : (
                       <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
-                        Current workspace
+                        {t("current")}
                       </Badge>
                     )}
                   </div>

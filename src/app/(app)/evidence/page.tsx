@@ -2,6 +2,7 @@
 
 import { useMemo, useState } from "react";
 import { FileCheck2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -19,13 +20,18 @@ import { useActiveOrganization } from "@/features/organizations/hooks/organizati
 import type { EvidenceDocument } from "@/lib/api/api-types";
 
 export default function EvidencePage() {
+  const t = useTranslations("evidencePage");
+  const tPagination = useTranslations("pagination");
+  const tCommon = useTranslations("common");
+
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
 
   const [page, setPage] = useState(0);
   const [isCreateUrlDialogOpen, setIsCreateUrlDialogOpen] = useState(false);
   const [isCreateFileDialogOpen, setIsCreateFileDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
-  const [editingEvidence, setEditingEvidence] = useState<EvidenceDocument | null>(null);
+  const [editingEvidence, setEditingEvidence] =
+    useState<EvidenceDocument | null>(null);
   const [toolbarState, setToolbarState] = useState<EvidenceToolbarState>({
     q: "",
     evidenceType: undefined,
@@ -70,22 +76,21 @@ export default function EvidencePage() {
         <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-              Evidence library
+              {t("heroEyebrow")}
             </p>
             <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-              Collect and review evidence for audit readiness.
+              {t("heroTitle")}
             </h2>
             <p className="mt-3 max-w-2xl text-slate-300">
-              Search, filter, sort, create, upload, and archive evidence
-              documents for your active organization.
+              {t("heroDescription")}
             </p>
           </div>
 
           <div className="rounded-3xl border border-white/10 bg-white/6 p-4">
-            <p className="text-sm text-slate-400">Active evidence</p>
+            <p className="text-sm text-slate-400">{t("activeEvidence")}</p>
             <p className="mt-1 text-3xl font-bold">{totalItems}</p>
             <p className="mt-1 text-sm text-cyan-200">
-              {activeOrganization?.organizationName ?? "Loading workspace..."}
+              {activeOrganization?.organizationName ?? t("loadingWorkspace")}
             </p>
           </div>
         </div>
@@ -104,7 +109,7 @@ export default function EvidencePage() {
       {evidenceQuery.isLoading ? (
         <Card>
           <CardContent className="p-8 text-muted-foreground">
-            Loading evidence...
+            {t("loading")}
           </CardContent>
         </Card>
       ) : evidenceItems.length === 0 ? (
@@ -113,22 +118,21 @@ export default function EvidencePage() {
             <div className="rounded-3xl bg-slate-950 p-4 text-cyan-300">
               <FileCheck2 className="size-8" />
             </div>
-            <h3 className="mt-5 text-xl font-semibold">No evidence found</h3>
+            <h3 className="mt-5 text-xl font-semibold">{t("emptyTitle")}</h3>
             <p className="mt-2 max-w-md text-muted-foreground">
-              Add URL evidence, upload file evidence, or adjust filters/search
-              to find existing evidence.
+              {t("emptyDescription")}
             </p>
 
             {canManageCompliance ? (
               <div className="mt-5 flex flex-col gap-2 sm:flex-row">
                 <Button onClick={() => setIsCreateFileDialogOpen(true)}>
-                  Upload file
+                  {t("uploadFile")}
                 </Button>
                 <Button
                   onClick={() => setIsCreateUrlDialogOpen(true)}
                   variant="outline"
                 >
-                  Add URL
+                  {t("addUrl")}
                 </Button>
               </div>
             ) : null}
@@ -153,23 +157,29 @@ export default function EvidencePage() {
 
       <div className="flex items-center justify-between rounded-3xl border bg-white p-4 shadow-sm">
         <p className="text-sm text-muted-foreground">
-          Page {page + 1} of {Math.max(totalPages, 1)} · {totalItems} items
+          {tPagination("summary", {
+            page: page + 1,
+            totalPages: Math.max(totalPages, 1),
+            totalItems,
+          })}
         </p>
 
         <div className="flex gap-2">
           <Button
             disabled={page <= 0 || evidenceQuery.isFetching}
-            onClick={() => setPage((currentPage) => Math.max(currentPage - 1, 0))}
+            onClick={() =>
+              setPage((currentPage) => Math.max(currentPage - 1, 0))
+            }
             variant="outline"
           >
-            Previous
+            {tCommon("previous")}
           </Button>
           <Button
             disabled={page + 1 >= totalPages || evidenceQuery.isFetching}
             onClick={() => setPage((currentPage) => currentPage + 1)}
             variant="outline"
           >
-            Next
+            {tCommon("next")}
           </Button>
         </div>
       </div>

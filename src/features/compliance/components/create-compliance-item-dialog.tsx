@@ -2,6 +2,7 @@
 
 import { FormEvent, useState } from "react";
 import { Plus } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -35,6 +36,9 @@ export function CreateComplianceItemDialog({
   onOpenChange: (open: boolean) => void;
   organizationId: string | undefined;
 }) {
+  const t = useTranslations("complianceCreate");
+  const tCommon = useTranslations("common");
+
   const createMutation = useCreateComplianceItemMutation(organizationId);
   const frameworksQuery = useFrameworksQuery();
 
@@ -42,7 +46,7 @@ export function CreateComplianceItemDialog({
   const [selectedRequirementId, setSelectedRequirementId] = useState("");
 
   const requirementsQuery = useRequirementsQuery(
-    selectedFrameworkId || undefined,
+    selectedFrameworkId || undefined
   );
 
   const frameworks = frameworksQuery.data ?? [];
@@ -77,7 +81,7 @@ export function CreateComplianceItemDialog({
           onOpenChange(false);
           resetForm();
         },
-      },
+      }
     );
   }
 
@@ -85,16 +89,13 @@ export function CreateComplianceItemDialog({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="sm:max-w-xl">
         <DialogHeader>
-          <DialogTitle>Create compliance item</DialogTitle>
-          <DialogDescription>
-            Select a framework and requirement to create a new compliance
-            control.
-          </DialogDescription>
+          <DialogTitle>{t("title")}</DialogTitle>
+          <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
         <form className="space-y-5" onSubmit={handleSubmit}>
           <div className="space-y-2">
-            <Label>Framework</Label>
+            <Label>{t("framework")}</Label>
             <Select
               value={selectedFrameworkId}
               onValueChange={(value) => {
@@ -103,16 +104,16 @@ export function CreateComplianceItemDialog({
               }}
             >
               <SelectTrigger>
-                <SelectValue placeholder="Select a framework..." />
+                <SelectValue placeholder={t("selectFramework")} />
               </SelectTrigger>
               <SelectContent>
                 {frameworksQuery.isLoading ? (
                   <SelectItem value="loading" disabled>
-                    Loading frameworks...
+                    {t("loadingFrameworks")}
                   </SelectItem>
                 ) : frameworks.length === 0 ? (
                   <SelectItem value="none" disabled>
-                    No frameworks available
+                    {t("noFrameworks")}
                   </SelectItem>
                 ) : (
                   frameworks.map((framework) => (
@@ -127,22 +128,22 @@ export function CreateComplianceItemDialog({
 
           {selectedFrameworkId ? (
             <div className="space-y-2">
-              <Label>Requirement</Label>
+              <Label>{t("requirement")}</Label>
               <Select
                 value={selectedRequirementId}
                 onValueChange={setSelectedRequirementId}
               >
                 <SelectTrigger>
-                  <SelectValue placeholder="Select a requirement..." />
+                  <SelectValue placeholder={t("selectRequirement")} />
                 </SelectTrigger>
                 <SelectContent>
                   {requirementsQuery.isLoading ? (
                     <SelectItem value="loading" disabled>
-                      Loading requirements...
+                      {t("loadingRequirements")}
                     </SelectItem>
                   ) : requirements.length === 0 ? (
                     <SelectItem value="none" disabled>
-                      No requirements in this framework
+                      {t("noRequirements")}
                     </SelectItem>
                   ) : (
                     requirements.map((requirement) => (
@@ -167,14 +168,14 @@ export function CreateComplianceItemDialog({
               onClick={() => handleOpenChange(false)}
               disabled={createMutation.isPending}
             >
-              Cancel
+              {tCommon("cancel")}
             </Button>
             <Button
               disabled={!selectedRequirementId || createMutation.isPending}
               type="submit"
             >
               <Plus className="mr-2 size-4" />
-              {createMutation.isPending ? "Creating..." : "Create item"}
+              {createMutation.isPending ? tCommon("creating") : t("createItem")}
             </Button>
           </div>
         </form>
