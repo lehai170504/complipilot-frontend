@@ -155,7 +155,15 @@
     "noDueSoon": "No controls due soon.",
     "recentAuditActivity": "Recent audit activity",
     "loadingAuditEvents": "Loading audit events...",
-    "noAuditEvents": "No audit events yet."
+    "noAuditEvents": "No audit events yet.",
+    "statusBreakdown": {
+      "open": "Open",
+      "inProgress": "In progress",
+      "readyForReview": "Ready for review",
+      "compliant": "Compliant",
+      "nonCompliant": "Non-compliant",
+      "waived": "Waived"
+    }
   },
   "evidencePage": {
     "heroEyebrow": "Evidence library",

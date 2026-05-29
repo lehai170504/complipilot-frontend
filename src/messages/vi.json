@@ -155,7 +155,15 @@
     "noDueSoon": "Không có control nào sắp đến hạn.",
     "recentAuditActivity": "Hoạt động kiểm toán gần đây",
     "loadingAuditEvents": "Đang tải sự kiện kiểm toán...",
-    "noAuditEvents": "Chưa có sự kiện kiểm toán."
+    "noAuditEvents": "Chưa có sự kiện kiểm toán.",
+    "statusBreakdown": {
+      "open": "Đang mở",
+      "inProgress": "Đang xử lý",
+      "readyForReview": "Sẵn sàng rà soát",
+      "compliant": "Đạt tuân thủ",
+      "nonCompliant": "Không đạt tuân thủ",
+      "waived": "Được miễn trừ"
+    }
   },
   "evidencePage": {
     "heroEyebrow": "Thư viện bằng chứng",

@@ -7,12 +7,14 @@ import {
   ListChecks,
   ScrollText,
 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { DashboardEmptyState } from "@/features/dashboard/components/dashboard-empty-state";
 import { MetricCard } from "@/features/dashboard/components/metric-card";
 import { StatusPill } from "@/features/dashboard/components/status-pill";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { SeedDemoWorkspaceButton } from "@/features/dashboard/components/seed-demo-workspace-button";
 import { useCurrentUserQuery } from "@/features/auth/hooks/auth-hooks";
 import {
   useComplianceSummaryQuery,
@@ -25,7 +27,6 @@ import {
   useTasksQuery,
 } from "@/features/tasks/hooks/tasks-hooks";
 import { useAuditEventsQuery } from "@/features/audit/hooks/audit-hooks";
-import { SeedDemoWorkspaceButton } from "@/features/dashboard/components/seed-demo-workspace-button";
 
 function formatDate(date: string | null) {
   if (!date) return "No due date";
@@ -47,6 +48,8 @@ function formatDateTime(date: string) {
 }
 
 export default function DashboardPage() {
+  const t = useTranslations("dashboard");
+
   const currentUserQuery = useCurrentUserQuery();
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
 
@@ -103,21 +106,25 @@ export default function DashboardPage() {
           <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
             <div>
               <Badge className="bg-cyan-300/15 text-cyan-200 hover:bg-cyan-300/15">
-                {canManageCompliance ? "Manager workspace" : "Member workspace"}
+                {canManageCompliance
+                  ? t("managerWorkspace")
+                  : t("memberWorkspace")}
               </Badge>
-              <h2 className="mt-4 max-w-3xl truncate text-3xl font-bold tracking-tight md:text-4xl">
-                Welcome back,{" "}
-                {currentUserQuery.data?.fullName ?? "compliance lead"}.
+              <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+                {t("welcome", {
+                  name: currentUserQuery.data?.fullName ?? t("fallbackName"),
+                })}
               </h2>
               <p className="mt-3 max-w-2xl text-slate-300">
-                Monitor controls, evidence readiness, open tasks, and recent
-                audit activity for your active organization.
+                {t("description")}
               </p>
             </div>
 
             <div className="space-y-4 rounded-3xl border border-white/10 bg-white/6 p-4">
               <div>
-                <p className="text-sm text-slate-400">Active organization</p>
+                <p className="text-sm text-slate-400">
+                  {t("activeOrganization")}
+                </p>
                 <p className="mt-1 text-lg font-semibold">
                   {activeOrganization?.organizationName ?? "Loading..."}
                 </p>
@@ -136,32 +143,35 @@ export default function DashboardPage() {
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
-          title="Compliance ready"
+          title={t("complianceReady")}
           value={`${complianceReadyPercent}%`}
-          description={`${complianceSummary?.compliant ?? 0} compliant / ${
-            complianceSummary?.totalItems ?? 0
-          } total`}
+          description={t("complianceReadyDescription", {
+            compliant: complianceSummary?.compliant ?? 0,
+            total: complianceSummary?.totalItems ?? 0,
+          })}
           icon={ClipboardCheck}
         />
 
         <MetricCard
-          title="Open tasks"
+          title={t("openTasks")}
           value={taskSummary?.open ?? 0}
-          description={`${taskSummary?.overdue ?? 0} overdue tasks`}
+          description={t("openTasksDescription", {
+            overdue: taskSummary?.overdue ?? 0,
+          })}
           icon={ListChecks}
         />
 
         <MetricCard
-          title="Due soon"
+          title={t("dueSoon")}
           value={dueSoonQuery.data?.length ?? 0}
-          description="Controls due in the next 14 days"
+          description={t("dueSoonDescription")}
           icon={FileClock}
         />
 
         <MetricCard
-          title="Overdue"
+          title={t("overdue")}
           value={overdueQuery.data?.length ?? 0}
-          description="Controls past due date"
+          description={t("overdueDescription")}
           icon={AlertTriangle}
         />
       </section>
@@ -169,11 +179,13 @@ export default function DashboardPage() {
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
         <Card>
           <CardHeader>
-            <CardTitle>Open tasks</CardTitle>
+            <CardTitle>{t("openTasksTitle")}</CardTitle>
           </CardHeader>
           <CardContent>
             {openTasksQuery.isLoading ? (
-              <p className="text-sm text-muted-foreground">Loading tasks...</p>
+              <p className="text-sm text-muted-foreground">
+                {t("loadingTasks")}
+              </p>
             ) : openTasksQuery.data?.items.length ? (
               <div className="space-y-3">
                 {openTasksQuery.data.items.map((task) => (
@@ -185,7 +197,7 @@ export default function DashboardPage() {
                       <div>
                         <p className="font-semibold">{task.title}</p>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          {task.description ?? "No description"}
+                          {task.description ?? t("noDescription")}
                         </p>
                       </div>
 
@@ -194,29 +206,45 @@ export default function DashboardPage() {
 
                     <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                       <StatusPill status={task.status} />
-                      <span>Due {formatDate(task.dueDate)}</span>
+                      <span>
+                        {t("due", {
+                          date: formatDate(task.dueDate),
+                        })}
+                      </span>
                     </div>
                   </div>
                 ))}
               </div>
             ) : (
-              <DashboardEmptyState message="No open tasks found for this workspace." />
+              <DashboardEmptyState message={t("noOpenTasks")} />
             )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Compliance status</CardTitle>
+            <CardTitle>{t("complianceStatus")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
             {[
-              ["Open", complianceSummary?.open ?? 0],
-              ["In progress", complianceSummary?.inProgress ?? 0],
-              ["Ready for review", complianceSummary?.readyForReview ?? 0],
-              ["Compliant", complianceSummary?.compliant ?? 0],
-              ["Non-compliant", complianceSummary?.nonCompliant ?? 0],
-              ["Waived", complianceSummary?.waived ?? 0],
+              [t("statusBreakdown.open"), complianceSummary?.open ?? 0],
+              [
+                t("statusBreakdown.inProgress"),
+                complianceSummary?.inProgress ?? 0,
+              ],
+              [
+                t("statusBreakdown.readyForReview"),
+                complianceSummary?.readyForReview ?? 0,
+              ],
+              [
+                t("statusBreakdown.compliant"),
+                complianceSummary?.compliant ?? 0,
+              ],
+              [
+                t("statusBreakdown.nonCompliant"),
+                complianceSummary?.nonCompliant ?? 0,
+              ],
+              [t("statusBreakdown.waived"), complianceSummary?.waived ?? 0],
             ].map(([label, value]) => (
               <div
                 className="flex items-center justify-between rounded-2xl border bg-slate-50 px-4 py-3"
@@ -233,12 +261,12 @@ export default function DashboardPage() {
       <section className="grid gap-6 xl:grid-cols-2">
         <Card>
           <CardHeader>
-            <CardTitle>Due soon controls</CardTitle>
+            <CardTitle>{t("dueSoonControls")}</CardTitle>
           </CardHeader>
           <CardContent>
             {dueSoonQuery.isLoading ? (
               <p className="text-sm text-muted-foreground">
-                Loading due soon controls...
+                {t("loadingDueSoon")}
               </p>
             ) : dueSoonQuery.data?.length ? (
               <div className="space-y-3">
@@ -253,7 +281,9 @@ export default function DashboardPage() {
                           {item.requirementCode} · {item.requirementTitle}
                         </p>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          Due {formatDate(item.dueDate)}
+                          {t("due", {
+                            date: formatDate(item.dueDate),
+                          })}
                         </p>
                       </div>
                       <StatusPill status={item.status} />
@@ -262,19 +292,19 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <DashboardEmptyState message="No controls due soon." />
+              <DashboardEmptyState message={t("noDueSoon")} />
             )}
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader>
-            <CardTitle>Recent audit activity</CardTitle>
+            <CardTitle>{t("recentAuditActivity")}</CardTitle>
           </CardHeader>
           <CardContent>
             {auditEventsQuery.isLoading ? (
               <p className="text-sm text-muted-foreground">
-                Loading audit events...
+                {t("loadingAuditEvents")}
               </p>
             ) : auditEventsQuery.data?.items.length ? (
               <div className="space-y-3">
@@ -302,7 +332,7 @@ export default function DashboardPage() {
                 ))}
               </div>
             ) : (
-              <DashboardEmptyState message="No audit events yet." />
+              <DashboardEmptyState message={t("noAuditEvents")} />
             )}
           </CardContent>
         </Card>
