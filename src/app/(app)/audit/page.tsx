@@ -60,7 +60,7 @@ type AuditSortBy = "createdAt" | "action" | "resourceType" | "actorEmail";
 
 export default function AuditPage() {
   const t = useTranslations("audit");
-  const { activeOrganization } = useActiveOrganization();
+  const { activeOrganization, canViewAudit } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
 
   const [page, setPage] = useState(0);
@@ -96,13 +96,23 @@ export default function AuditPage() {
       resourceTypeFilter,
       sortBy,
       sortDirection,
-    ]
+    ],
   );
 
   const auditQuery = useAuditEventsQuery(params);
   const events = auditQuery.data?.items ?? [];
   const totalPages = auditQuery.data?.totalPages ?? 0;
   const totalItems = auditQuery.data?.totalItems ?? 0;
+
+  if (!canViewAudit) {
+    return (
+      <Card>
+        <CardContent className="p-8 text-muted-foreground">
+          You do not have permission to view audit events.
+        </CardContent>
+      </Card>
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -113,9 +123,7 @@ export default function AuditPage() {
         <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
           {t("heroTitle")}
         </h2>
-        <p className="mt-3 max-w-2xl text-slate-300">
-          {t("heroDescription")}
-        </p>
+        <p className="mt-3 max-w-2xl text-slate-300">{t("heroDescription")}</p>
       </section>
 
       <FilterBar>
@@ -232,14 +240,15 @@ export default function AuditPage() {
       <div className="flex items-center justify-between rounded-3xl border bg-white p-4 shadow-sm">
         <p className="text-sm text-muted-foreground">
           {t("pagination.page")} {page + 1} {t("pagination.of")}{" "}
-          {Math.max(totalPages, 1)} · {totalItems}{" "}
-          {t("pagination.events")}
+          {Math.max(totalPages, 1)} · {totalItems} {t("pagination.events")}
         </p>
 
         <div className="flex gap-2">
           <Button
             disabled={page <= 0 || auditQuery.isFetching}
-            onClick={() => setPage((currentPage) => Math.max(currentPage - 1, 0))}
+            onClick={() =>
+              setPage((currentPage) => Math.max(currentPage - 1, 0))
+            }
             variant="outline"
           >
             {t("pagination.previous")}

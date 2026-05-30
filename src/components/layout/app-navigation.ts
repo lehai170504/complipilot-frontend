@@ -7,35 +7,43 @@ import {
   ScrollText,
 } from "lucide-react";
 
+export type AppNavigationPermission = "all" | "canViewAudit";
+
 export const appNavigationItems = [
   {
     labelKey: "dashboard",
     href: "/dashboard",
     icon: Gauge,
+    permission: "all",
   },
   {
     labelKey: "compliance",
     href: "/compliance",
     icon: ClipboardCheck,
+    permission: "all",
   },
   {
     labelKey: "evidence",
     href: "/evidence",
     icon: FileCheck2,
+    permission: "all",
   },
   {
     labelKey: "tasks",
     href: "/tasks",
     icon: ListChecks,
+    permission: "all",
   },
   {
     labelKey: "audit",
     href: "/audit",
     icon: ScrollText,
+    permission: "canViewAudit",
   },
   {
     labelKey: "workspaces",
     href: "/workspaces",
     icon: Building2,
+    permission: "all",
   },
 ] as const;

@@ -8,21 +8,35 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { appNavigationItems } from "@/components/layout/app-navigation";
 import { WorkspaceSelector } from "@/components/layout/workspace-selector";
+import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 
 export function AppSidebar() {
   const pathname = usePathname();
+
   const tBrand = useTranslations("brand");
   const tNavigation = useTranslations("navigation");
   const tSidebar = useTranslations("sidebar");
+
+  const { canViewAudit } = useActiveOrganization();
+
+  const visibleNavigationItems = appNavigationItems.filter((item) => {
+    if (item.permission === "canViewAudit") {
+      return canViewAudit;
+    }
+
+    return true;
+  });
 
   return (
     <aside className="hidden h-screen w-72 shrink-0 overflow-hidden border-r border-white/6 bg-slate-950 text-white lg:flex lg:flex-col">
       <div className="relative p-5">
         <div className="absolute -right-16 -top-16 size-32 rounded-full bg-cyan-400/10 blur-3xl" />
+
         <Link className="relative flex items-center gap-3" href="/dashboard">
           <div className="flex size-10 items-center justify-center rounded-xl bg-linear-to-br from-cyan-400/20 to-cyan-600/20 text-cyan-300 ring-1 ring-cyan-300/20">
             <ShieldCheck className="size-5" />
           </div>
+
           <div>
             <p className="text-base font-bold tracking-tight">
               {tBrand("name")}
@@ -39,7 +53,7 @@ export function AppSidebar() {
       </div>
 
       <nav className="mt-6 flex-1 space-y-1 overflow-y-auto px-3 pb-4">
-        {appNavigationItems.map((item) => {
+        {visibleNavigationItems.map((item) => {
           const isActive =
             pathname === item.href || pathname.startsWith(`${item.href}/`);
 
@@ -48,7 +62,7 @@ export function AppSidebar() {
               className={cn(
                 "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-400 transition-all hover:bg-white/5 hover:text-white",
                 isActive &&
-                  "bg-linear-to-r from-cyan-400/10 to-cyan-600/5 text-cyan-100 ring-1 ring-cyan-300/10"
+                  "bg-linear-to-r from-cyan-400/10 to-cyan-600/5 text-cyan-100 ring-1 ring-cyan-300/10",
               )}
               href={item.href}
               key={item.href}
@@ -56,7 +70,7 @@ export function AppSidebar() {
               <item.icon
                 className={cn(
                   "size-4",
-                  isActive ? "text-cyan-300" : "text-slate-500"
+                  isActive ? "text-cyan-300" : "text-slate-500",
                 )}
               />
               {tNavigation(item.labelKey)}

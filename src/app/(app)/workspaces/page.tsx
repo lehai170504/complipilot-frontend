@@ -136,10 +136,12 @@ export default function WorkspacesPage() {
         </section>
       )}
 
-      <OrganizationMembersPanel
-        organizationId={activeOrganization?.organizationId}
-        canManageMembers={canManageMembers}
-      />
+      {canManageMembers ? (
+        <OrganizationMembersPanel
+          organizationId={activeOrganization?.organizationId}
+          canManageMembers={canManageMembers}
+        />
+      ) : null}
     </div>
   );
 }
