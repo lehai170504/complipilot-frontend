@@ -13,6 +13,7 @@ import {
   type CreateEvidenceRequest,
   type CreateFileEvidenceRequest,
   type ListEvidenceParams,
+  analyzeEvidenceWithAi,
 } from "@/features/evidence/api/evidence-api";
 import type { UpdateEvidenceDocumentRequest } from "@/lib/api/api-types";
 import { toast } from "@/lib/toast";
@@ -98,7 +99,7 @@ export function useUpdateEvidenceMutation(organizationId: string | undefined) {
 }
 
 export function useCreateEvidenceDownloadUrlMutation(
-  organizationId: string | undefined
+  organizationId: string | undefined,
 ) {
   return useMutation({
     mutationFn: (evidenceId: string) =>
@@ -127,7 +128,7 @@ export function useArchiveEvidenceMutation(organizationId: string | undefined) {
 
 export function useEvidenceLinksQuery(
   organizationId: string | undefined,
-  itemId: string | undefined
+  itemId: string | undefined,
 ) {
   return useQuery({
     queryKey: evidenceQueryKeys.links(organizationId, itemId),
@@ -139,7 +140,7 @@ export function useEvidenceLinksQuery(
 
 export function useLinkEvidenceMutation(
   organizationId: string | undefined,
-  itemId: string | undefined
+  itemId: string | undefined,
 ) {
   const queryClient = useQueryClient();
 
@@ -148,7 +149,7 @@ export function useLinkEvidenceMutation(
       linkEvidenceToComplianceItem(
         organizationId as string,
         itemId as string,
-        evidenceDocumentId
+        evidenceDocumentId,
       ),
     onSuccess: async () => {
       toast.success("Evidence linked");
@@ -167,7 +168,7 @@ export function useLinkEvidenceMutation(
 
 export function useUnlinkEvidenceMutation(
   organizationId: string | undefined,
-  itemId: string | undefined
+  itemId: string | undefined,
 ) {
   const queryClient = useQueryClient();
 
@@ -176,7 +177,7 @@ export function useUnlinkEvidenceMutation(
       unlinkEvidence(
         organizationId as string,
         itemId as string,
-        evidenceDocumentId
+        evidenceDocumentId,
       ),
     onSuccess: async () => {
       toast.success("Evidence unlinked");
@@ -189,6 +190,20 @@ export function useUnlinkEvidenceMutation(
     },
     onError: () => {
       toast.error("Failed to unlink evidence");
+    },
+  });
+}
+
+export function useAnalyzeEvidenceWithAiMutation(
+  organizationId: string | undefined,
+) {
+  return useMutation({
+    mutationFn: (evidenceId: string) => {
+      if (!organizationId) {
+        throw new Error("Missing active organization.");
+      }
+
+      return analyzeEvidenceWithAi(organizationId, evidenceId);
     },
   });
 }

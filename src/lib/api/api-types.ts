@@ -249,3 +249,13 @@ export type CreateComplianceTaskRequest = {
   priority?: ComplianceTaskPriority | null;
   dueDate?: string | null;
 };
+
+
+export type EvidenceAiAnalysisResponse = {
+  summary: string;
+  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  confidence: number;
+  findings: string[];
+  missingInformation: string[];
+  suggestedActions: string[];
+};

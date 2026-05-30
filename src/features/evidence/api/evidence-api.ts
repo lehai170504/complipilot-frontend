@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api/api-client";
 import type {
   ComplianceItemEvidenceLink,
   CreateEvidenceUploadUrlResponse,
+  EvidenceAiAnalysisResponse,
   EvidenceDocument,
   EvidenceDownloadUrlResponse,
   EvidenceSourceType,
@@ -82,44 +83,44 @@ function buildEvidenceQuery(params: ListEvidenceParams): string {
 }
 
 export async function listEvidence(
-  params: ListEvidenceParams
+  params: ListEvidenceParams,
 ): Promise<PageResponse<EvidenceDocument>> {
   const query = buildEvidenceQuery(params);
 
   return apiClient<PageResponse<EvidenceDocument>>(
-    `/api/v1/organizations/${params.organizationId}/evidence?${query}`
+    `/api/v1/organizations/${params.organizationId}/evidence?${query}`,
   );
 }
 
 export async function createEvidence(
   organizationId: string,
-  request: CreateEvidenceRequest
+  request: CreateEvidenceRequest,
 ): Promise<EvidenceDocument> {
   return apiClient<EvidenceDocument>(
     `/api/v1/organizations/${organizationId}/evidence`,
     {
       method: "POST",
       body: JSON.stringify(request),
-    }
+    },
   );
 }
 
 export async function createEvidenceUploadUrl(
   organizationId: string,
-  request: CreateEvidenceUploadUrlRequest
+  request: CreateEvidenceUploadUrlRequest,
 ): Promise<CreateEvidenceUploadUrlResponse> {
   return apiClient<CreateEvidenceUploadUrlResponse>(
     `/api/v1/organizations/${organizationId}/evidence/upload-url`,
     {
       method: "POST",
       body: JSON.stringify(request),
-    }
+    },
   );
 }
 
 export async function uploadFileToPresignedUrl(
   uploadUrl: string,
-  file: File
+  file: File,
 ): Promise<void> {
   const response = await fetch(uploadUrl, {
     method: "PUT",
@@ -136,7 +137,7 @@ export async function uploadFileToPresignedUrl(
 
 export async function createFileEvidence(
   organizationId: string,
-  request: CreateFileEvidenceRequest
+  request: CreateFileEvidenceRequest,
 ): Promise<EvidenceDocument> {
   const uploadUrlResponse = await createEvidenceUploadUrl(organizationId, {
     filename: request.file.name,
@@ -160,13 +161,13 @@ export async function createFileEvidence(
 
 export async function createEvidenceDownloadUrl(
   organizationId: string,
-  evidenceId: string
+  evidenceId: string,
 ): Promise<EvidenceDownloadUrlResponse> {
   return apiClient<EvidenceDownloadUrlResponse>(
     `/api/v1/organizations/${organizationId}/evidence/${evidenceId}/download-url`,
     {
       method: "POST",
-    }
+    },
   );
 }
 
@@ -178,61 +179,73 @@ export async function updateEvidence(
     description?: string | null;
     evidenceType: EvidenceType;
     externalUrl?: string | null;
-  }
+  },
 ): Promise<EvidenceDocument> {
   return apiClient<EvidenceDocument>(
     `/api/v1/organizations/${organizationId}/evidence/${evidenceId}`,
     {
       method: "PATCH",
       body: JSON.stringify(request),
-    }
+    },
   );
 }
 
 export async function archiveEvidence(
   organizationId: string,
-  evidenceId: string
+  evidenceId: string,
 ): Promise<void> {
   return apiClient<void>(
     `/api/v1/organizations/${organizationId}/evidence/${evidenceId}`,
     {
       method: "DELETE",
-    }
+    },
   );
 }
 
 export async function linkEvidenceToComplianceItem(
   organizationId: string,
   itemId: string,
-  evidenceDocumentId: string
+  evidenceDocumentId: string,
 ): Promise<ComplianceItemEvidenceLink> {
   return apiClient<ComplianceItemEvidenceLink>(
     `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links`,
     {
       method: "POST",
       body: JSON.stringify({ evidenceDocumentId }),
-    }
+    },
   );
 }
 
 export async function listEvidenceLinks(
   organizationId: string,
-  itemId: string
+  itemId: string,
 ): Promise<ComplianceItemEvidenceLink[]> {
   return apiClient<ComplianceItemEvidenceLink[]>(
-    `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links`
+    `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links`,
   );
 }
 
 export async function unlinkEvidence(
   organizationId: string,
   itemId: string,
-  evidenceDocumentId: string
+  evidenceDocumentId: string,
 ): Promise<void> {
   return apiClient<void>(
     `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/evidence-links/${evidenceDocumentId}`,
     {
       method: "DELETE",
-    }
+    },
+  );
+}
+
+export async function analyzeEvidenceWithAi(
+  organizationId: string,
+  evidenceId: string,
+): Promise<EvidenceAiAnalysisResponse> {
+  return apiClient<EvidenceAiAnalysisResponse>(
+    `/api/v1/organizations/${organizationId}/evidence/${evidenceId}/ai/analyze`,
+    {
+      method: "POST",
+    },
   );
 }

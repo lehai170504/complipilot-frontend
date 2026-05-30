@@ -6,7 +6,11 @@ import {
   ExternalLink,
   FileCheck2,
   Pencil,
+  Sparkles,
+  X,
 } from "lucide-react";
+
+import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -19,8 +23,10 @@ import {
 import {
   useArchiveEvidenceMutation,
   useCreateEvidenceDownloadUrlMutation,
+  useAnalyzeEvidenceWithAiMutation,
 } from "@/features/evidence/hooks/evidence-hooks";
 import type { EvidenceDocument } from "@/lib/api/api-types";
+import { EvidenceAiAnalysisPanel } from "@/features/evidence/components/evidence-ai-analysis-panel";
 
 function formatDateTime(date: string, locale: string) {
   return new Intl.DateTimeFormat(locale, {
@@ -66,6 +72,9 @@ export function EvidenceCard({
   const downloadUrlMutation =
     useCreateEvidenceDownloadUrlMutation(organizationId);
 
+  const analyzeMutation = useAnalyzeEvidenceWithAiMutation(organizationId);
+  const [isAnalysisVisible, setIsAnalysisVisible] = useState(false);
+
   function handleArchive() {
     const confirmed = window.confirm(
       t("archiveConfirm", {
@@ -84,6 +93,11 @@ export function EvidenceCard({
     const response = await downloadUrlMutation.mutateAsync(evidence.id);
 
     window.open(response.downloadUrl, "_blank", "noopener,noreferrer");
+  }
+
+  function handleAnalyze() {
+    setIsAnalysisVisible(true);
+    analyzeMutation.mutate(evidence.id);
   }
 
   return (
@@ -154,6 +168,17 @@ export function EvidenceCard({
               </Button>
             ) : null}
 
+            <Button
+              disabled={analyzeMutation.isPending}
+              onClick={handleAnalyze}
+              size="sm"
+              type="button"
+              variant="outline"
+            >
+              <Sparkles className="mr-2 size-4" />
+              {analyzeMutation.isPending ? "Analyzing..." : "Analyze"}
+            </Button>
+
             {evidence.sourceType === "FILE" ? (
               <Button
                 disabled={downloadUrlMutation.isPending}
@@ -191,6 +216,49 @@ export function EvidenceCard({
         {archiveMutation.error ? (
           <div className="border-t bg-red-50 p-5">
             <ErrorAlert error={archiveMutation.error} />
+          </div>
+        ) : null}
+
+        {analyzeMutation.data && isAnalysisVisible ? (
+          <div className="border-t bg-white p-5">
+            <div className="mb-3 flex items-center justify-between gap-3">
+              <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                <Sparkles className="size-4 text-cyan-700" />
+                AI analysis result
+              </div>
+
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsAnalysisVisible(false)}
+                className="text-slate-500 hover:text-slate-700"
+              >
+                <X className="mr-2 size-4" />
+                Close
+              </Button>
+            </div>
+
+            <EvidenceAiAnalysisPanel analysis={analyzeMutation.data} />
+          </div>
+        ) : null}
+
+        {analyzeMutation.error && isAnalysisVisible ? (
+          <div className="border-t bg-red-50 p-5">
+            <div className="mb-3 flex justify-end">
+              <Button
+                type="button"
+                size="sm"
+                variant="ghost"
+                onClick={() => setIsAnalysisVisible(false)}
+                className="text-slate-500 hover:text-slate-700"
+              >
+                <X className="mr-2 size-4" />
+                Close
+              </Button>
+            </div>
+
+            <ErrorAlert error={analyzeMutation.error} />
           </div>
         ) : null}
       </CardContent>
