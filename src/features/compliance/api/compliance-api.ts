@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api/api-client";
 import type {
   ApplyFrameworkResponse,
   CompanyComplianceItem,
+  ComplianceEvidenceSuggestionResponse,
   ComplianceStatus,
   ComplianceSummaryResponse,
   FrameworkResponse,
@@ -40,7 +41,7 @@ export async function seedSecurityBaselineFramework(): Promise<FrameworkResponse
     "/api/v1/compliance/frameworks/seed/security-baseline",
     {
       method: "POST",
-    }
+    },
   );
 }
 
@@ -49,7 +50,7 @@ export async function listFrameworks(): Promise<FrameworkResponse[]> {
 }
 
 export async function createFramework(
-  request: CreateFrameworkRequest
+  request: CreateFrameworkRequest,
 ): Promise<FrameworkResponse> {
   return apiClient<FrameworkResponse>("/api/v1/compliance/frameworks", {
     method: "POST",
@@ -58,23 +59,23 @@ export async function createFramework(
 }
 
 export async function listRequirements(
-  frameworkId: string
+  frameworkId: string,
 ): Promise<RequirementResponse[]> {
   return apiClient<RequirementResponse[]>(
-    `/api/v1/compliance/frameworks/${frameworkId}/requirements`
+    `/api/v1/compliance/frameworks/${frameworkId}/requirements`,
   );
 }
 
 export async function createRequirement(
   frameworkId: string,
-  request: CreateRequirementRequest
+  request: CreateRequirementRequest,
 ): Promise<RequirementResponse> {
   return apiClient<RequirementResponse>(
     `/api/v1/compliance/frameworks/${frameworkId}/requirements`,
     {
       method: "POST",
       body: JSON.stringify(request),
-    }
+    },
   );
 }
 
@@ -82,18 +83,18 @@ export async function createRequirement(
 
 export async function applyFrameworkToOrganization(
   organizationId: string,
-  frameworkId: string
+  frameworkId: string,
 ): Promise<ApplyFrameworkResponse> {
   return apiClient<ApplyFrameworkResponse>(
     `/api/v1/organizations/${organizationId}/compliance-frameworks/${frameworkId}/apply`,
     {
       method: "POST",
-    }
+    },
   );
 }
 
 export async function seedDemoWorkspace(
-  organizationId: string
+  organizationId: string,
 ): Promise<ApplyFrameworkResponse> {
   const framework = await seedSecurityBaselineFramework();
 
@@ -101,60 +102,72 @@ export async function seedDemoWorkspace(
 }
 
 export async function getComplianceSummary(
-  organizationId: string
+  organizationId: string,
 ): Promise<ComplianceSummaryResponse> {
   return apiClient<ComplianceSummaryResponse>(
-    `/api/v1/organizations/${organizationId}/compliance-summary`
+    `/api/v1/organizations/${organizationId}/compliance-summary`,
   );
 }
 
 export async function listComplianceItems(
-  organizationId: string
+  organizationId: string,
 ): Promise<CompanyComplianceItem[]> {
   return apiClient<CompanyComplianceItem[]>(
-    `/api/v1/organizations/${organizationId}/compliance-items`
+    `/api/v1/organizations/${organizationId}/compliance-items`,
   );
 }
 
 export async function getDueSoonComplianceItems(
-  organizationId: string
+  organizationId: string,
 ): Promise<CompanyComplianceItem[]> {
   return apiClient<CompanyComplianceItem[]>(
-    `/api/v1/organizations/${organizationId}/compliance-items/due-soon`
+    `/api/v1/organizations/${organizationId}/compliance-items/due-soon`,
   );
 }
 
 export async function getOverdueComplianceItems(
-  organizationId: string
+  organizationId: string,
 ): Promise<CompanyComplianceItem[]> {
   return apiClient<CompanyComplianceItem[]>(
-    `/api/v1/organizations/${organizationId}/compliance-items/overdue`
+    `/api/v1/organizations/${organizationId}/compliance-items/overdue`,
   );
 }
 
 export async function createComplianceItem(
   organizationId: string,
-  request: CreateComplianceItemRequest
+  request: CreateComplianceItemRequest,
 ): Promise<CompanyComplianceItem> {
   return apiClient<CompanyComplianceItem>(
     `/api/v1/organizations/${organizationId}/compliance-items`,
     {
       method: "POST",
       body: JSON.stringify(request),
-    }
+    },
   );
 }
 
 export async function updateComplianceItem(
   organizationId: string,
   itemId: string,
-  request: UpdateComplianceItemRequest
+  request: UpdateComplianceItemRequest,
 ): Promise<CompanyComplianceItem> {
   return apiClient<CompanyComplianceItem>(
     `/api/v1/organizations/${organizationId}/compliance-items/${itemId}`,
     {
       method: "PATCH",
       body: JSON.stringify(request),
-    }
+    },
+  );
+}
+
+export async function suggestMissingEvidenceWithAi(
+  organizationId: string,
+  itemId: string,
+): Promise<ComplianceEvidenceSuggestionResponse> {
+  return apiClient<ComplianceEvidenceSuggestionResponse>(
+    `/api/v1/organizations/${organizationId}/compliance-items/${itemId}/ai/suggest-evidence`,
+    {
+      method: "POST",
+    },
   );
 }

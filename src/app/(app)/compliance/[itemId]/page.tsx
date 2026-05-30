@@ -9,6 +9,8 @@ import {
   Link2,
   Link2Off,
   Save,
+  Sparkles,
+  X,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -44,6 +46,8 @@ import {
   useUnlinkEvidenceMutation,
 } from "@/features/evidence/hooks/evidence-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
+import { ComplianceAiSuggestionPanel } from "@/features/compliance/components/compliance-ai-suggestion-panel";
+import { useSuggestMissingEvidenceWithAiMutation } from "@/features/compliance/hooks/compliance-hooks";
 import type { ComplianceStatus } from "@/lib/api/api-types";
 
 function formatDate(date: string | null, locale: string, noDueDate: string) {
@@ -84,6 +88,9 @@ export default function ComplianceItemDetailPage() {
 
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
+  const [isAiSuggestionVisible, setIsAiSuggestionVisible] = useState(false);
+  const suggestEvidenceMutation =
+    useSuggestMissingEvidenceWithAiMutation(organizationId);
 
   const complianceItemsQuery = useComplianceItemsQuery(organizationId);
   const updateMutation = useUpdateComplianceItemMutation(organizationId);
@@ -127,6 +134,15 @@ export default function ComplianceItemDetailPage() {
         },
       },
     );
+  }
+
+  function handleSuggestEvidence() {
+    if (!itemId) {
+      return;
+    }
+
+    setIsAiSuggestionVisible(true);
+    suggestEvidenceMutation.mutate(itemId);
   }
 
   function handleLink(evidenceDocumentId: string) {
@@ -181,24 +197,109 @@ export default function ComplianceItemDetailPage() {
       </Button>
 
       <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div>
-          <div className="flex flex-wrap items-center gap-2">
-            <span className="rounded-full bg-cyan-300/15 px-3 py-1 text-xs font-semibold text-cyan-200">
-              {item.requirementCode}
-            </span>
-            <ComplianceStatusBadge status={item.status} />
+        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-start">
+          <div>
+            <div className="flex flex-wrap items-center gap-2">
+              <span className="rounded-full bg-cyan-300/15 px-3 py-1 text-xs font-semibold text-cyan-200">
+                {item.requirementCode}
+              </span>
+              <ComplianceStatusBadge status={item.status} />
+            </div>
+
+            <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+              {item.requirementTitle}
+            </h2>
+
+            <div className="mt-3 flex items-center gap-2 text-slate-300">
+              <CalendarDays className="size-4" />
+              {t("due", {
+                date: formatDate(item.dueDate, locale, t("noDueDate")),
+              })}
+            </div>
           </div>
-          <h2 className="mt-4 max-w-3xl truncate text-3xl font-bold tracking-tight md:text-4xl">
-            {item.requirementTitle}
-          </h2>
-          <div className="mt-3 flex items-center gap-2 text-slate-300">
-            <CalendarDays className="size-4" />
-            {t("due", {
-              date: formatDate(item.dueDate, locale, t("noDueDate")),
-            })}
+
+          <div className="flex shrink-0 flex-col gap-2 sm:flex-row lg:flex-col">
+            <Button
+              type="button"
+              onClick={handleSuggestEvidence}
+              disabled={suggestEvidenceMutation.isPending}
+              className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+            >
+              <Sparkles className="mr-2 size-4" />
+              {suggestEvidenceMutation.isPending
+                ? "Analyzing..."
+                : suggestEvidenceMutation.data
+                  ? "Re-run AI"
+                  : "AI suggest evidence"}
+            </Button>
+
+            {suggestEvidenceMutation.data && !isAiSuggestionVisible ? (
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() => setIsAiSuggestionVisible(true)}
+                className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+              >
+                View suggestion
+              </Button>
+            ) : null}
           </div>
         </div>
       </section>
+
+      {suggestEvidenceMutation.data && isAiSuggestionVisible ? (
+        <section className="rounded-[2rem] border border-cyan-200 bg-white p-4 shadow-sm">
+          <div className="mb-4 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2">
+              <div className="flex size-9 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                <Sparkles className="size-4" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-slate-950">
+                  AI evidence recommendation
+                </h3>
+                <p className="text-sm text-muted-foreground">
+                  Coverage, missing evidence, and next actions for this control.
+                </p>
+              </div>
+            </div>
+
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => setIsAiSuggestionVisible(false)}
+              className="text-slate-500 hover:text-slate-700"
+            >
+              <X className="mr-2 size-4" />
+              Close
+            </Button>
+          </div>
+
+          <ComplianceAiSuggestionPanel
+            suggestion={suggestEvidenceMutation.data}
+          />
+        </section>
+      ) : null}
+
+      {suggestEvidenceMutation.error && isAiSuggestionVisible ? (
+        <section className="rounded-[2rem] border border-red-200 bg-red-50 p-5 shadow-sm">
+          <div className="mb-3 flex justify-end">
+            <Button
+              type="button"
+              size="sm"
+              variant="ghost"
+              onClick={() => setIsAiSuggestionVisible(false)}
+              className="text-slate-500 hover:text-slate-700"
+            >
+              <X className="mr-2 size-4" />
+              Close
+            </Button>
+          </div>
+
+          <ErrorAlert error={suggestEvidenceMutation.error} />
+        </section>
+      ) : null}
 
       <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
         <div className="space-y-6">

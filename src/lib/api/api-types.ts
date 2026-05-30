@@ -258,3 +258,14 @@ export type EvidenceAiAnalysisResponse = {
   analyzedByEmail: string;
   analyzedAt: string;
 };
+
+export type ComplianceEvidenceSuggestionResponse = {
+  summary: string;
+  coverageLevel: "NONE" | "WEAK" | "PARTIAL" | "STRONG";
+  riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
+  confidence: number;
+  existingEvidenceAssessment: string[];
+  missingEvidence: string[];
+  suggestedActions: string[];
+  reviewerNote: string;
+};

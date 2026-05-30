@@ -11,6 +11,7 @@ import {
   listFrameworks,
   listRequirements,
   seedDemoWorkspace,
+  suggestMissingEvidenceWithAi,
   updateComplianceItem,
   type CreateComplianceItemRequest,
   type CreateFrameworkRequest,
@@ -51,7 +52,7 @@ export function useComplianceItemsQuery(organizationId: string | undefined) {
 }
 
 export function useDueSoonComplianceItemsQuery(
-  organizationId: string | undefined
+  organizationId: string | undefined,
 ) {
   return useQuery({
     queryKey: complianceQueryKeys.dueSoon(organizationId),
@@ -61,7 +62,7 @@ export function useDueSoonComplianceItemsQuery(
 }
 
 export function useOverdueComplianceItemsQuery(
-  organizationId: string | undefined
+  organizationId: string | undefined,
 ) {
   return useQuery({
     queryKey: complianceQueryKeys.overdue(organizationId),
@@ -106,7 +107,9 @@ export function useSeedDemoWorkspaceMutation() {
   });
 }
 
-export function useUpdateComplianceItemMutation(organizationId: string | undefined) {
+export function useUpdateComplianceItemMutation(
+  organizationId: string | undefined,
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -141,7 +144,9 @@ export function useUpdateComplianceItemMutation(organizationId: string | undefin
   });
 }
 
-export function useCreateComplianceItemMutation(organizationId: string | undefined) {
+export function useCreateComplianceItemMutation(
+  organizationId: string | undefined,
+) {
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -191,6 +196,20 @@ export function useCreateRequirementMutation(frameworkId: string | undefined) {
     },
     onError: () => {
       toast.error("Failed to create requirement");
+    },
+  });
+}
+
+export function useSuggestMissingEvidenceWithAiMutation(
+  organizationId: string | undefined,
+) {
+  return useMutation({
+    mutationFn: (itemId: string) => {
+      if (!organizationId) {
+        throw new Error("Missing active organization.");
+      }
+
+      return suggestMissingEvidenceWithAi(organizationId, itemId);
     },
   });
 }
