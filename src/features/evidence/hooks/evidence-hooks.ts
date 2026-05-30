@@ -14,6 +14,7 @@ import {
   type CreateFileEvidenceRequest,
   type ListEvidenceParams,
   analyzeEvidenceWithAi,
+  getLatestEvidenceAiAnalysis,
 } from "@/features/evidence/api/evidence-api";
 import type { UpdateEvidenceDocumentRequest } from "@/lib/api/api-types";
 import { toast } from "@/lib/toast";
@@ -197,6 +198,8 @@ export function useUnlinkEvidenceMutation(
 export function useAnalyzeEvidenceWithAiMutation(
   organizationId: string | undefined,
 ) {
+  const queryClient = useQueryClient();
+
   return useMutation({
     mutationFn: (evidenceId: string) => {
       if (!organizationId) {
@@ -205,5 +208,29 @@ export function useAnalyzeEvidenceWithAiMutation(
 
       return analyzeEvidenceWithAi(organizationId, evidenceId);
     },
+    onSuccess: (data, evidenceId) => {
+      queryClient.setQueryData(
+        ["evidence-ai-analysis", organizationId, evidenceId, "latest"],
+        data,
+      );
+    },
+  });
+}
+
+export function useLatestEvidenceAiAnalysisQuery(
+  organizationId: string | undefined,
+  evidenceId: string | undefined,
+) {
+  return useQuery({
+    queryKey: ["evidence-ai-analysis", organizationId, evidenceId, "latest"],
+    queryFn: () => {
+      if (!organizationId || !evidenceId) {
+        throw new Error("Missing organization or evidence.");
+      }
+
+      return getLatestEvidenceAiAnalysis(organizationId, evidenceId);
+    },
+    enabled: Boolean(organizationId && evidenceId),
+    retry: false,
   });
 }

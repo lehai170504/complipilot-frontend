@@ -38,6 +38,21 @@ export function EvidenceAiAnalysisPanel({
               <p className="mt-1 text-sm leading-6 text-slate-700">
                 {analysis.summary}
               </p>
+              {analysis.analyzedAt ? (
+                <p className="mt-2 text-xs text-slate-500">
+                  Analyzed{" "}
+                  {new Intl.DateTimeFormat("en", {
+                    month: "short",
+                    day: "numeric",
+                    year: "numeric",
+                    hour: "2-digit",
+                    minute: "2-digit",
+                  }).format(new Date(analysis.analyzedAt))}
+                  {analysis.analyzedByEmail
+                    ? ` by ${analysis.analyzedByEmail}`
+                    : ""}
+                </p>
+              ) : null}
             </div>
           </div>
 

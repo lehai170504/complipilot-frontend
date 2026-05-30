@@ -89,11 +89,7 @@ export type ComplianceTaskStatus =
   | "DONE"
   | "CANCELLED";
 
-export type ComplianceTaskPriority =
-  | "LOW"
-  | "MEDIUM"
-  | "HIGH"
-  | "CRITICAL";
+export type ComplianceTaskPriority = "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
 
 export type ComplianceTask = {
   id: string;
@@ -250,12 +246,15 @@ export type CreateComplianceTaskRequest = {
   dueDate?: string | null;
 };
 
-
 export type EvidenceAiAnalysisResponse = {
+  id: string;
+  evidenceId: string;
   summary: string;
   riskLevel: "LOW" | "MEDIUM" | "HIGH" | "CRITICAL";
   confidence: number;
   findings: string[];
   missingInformation: string[];
   suggestedActions: string[];
+  analyzedByEmail: string;
+  analyzedAt: string;
 };

@@ -24,6 +24,7 @@ import {
   useArchiveEvidenceMutation,
   useCreateEvidenceDownloadUrlMutation,
   useAnalyzeEvidenceWithAiMutation,
+  useLatestEvidenceAiAnalysisQuery,
 } from "@/features/evidence/hooks/evidence-hooks";
 import type { EvidenceDocument } from "@/lib/api/api-types";
 import { EvidenceAiAnalysisPanel } from "@/features/evidence/components/evidence-ai-analysis-panel";
@@ -73,7 +74,12 @@ export function EvidenceCard({
     useCreateEvidenceDownloadUrlMutation(organizationId);
 
   const analyzeMutation = useAnalyzeEvidenceWithAiMutation(organizationId);
+  const latestAnalysisQuery = useLatestEvidenceAiAnalysisQuery(
+    organizationId,
+    evidence.id,
+  );
   const [isAnalysisVisible, setIsAnalysisVisible] = useState(false);
+  const analysis = analyzeMutation.data ?? latestAnalysisQuery.data;
 
   function handleArchive() {
     const confirmed = window.confirm(
@@ -99,7 +105,6 @@ export function EvidenceCard({
     setIsAnalysisVisible(true);
     analyzeMutation.mutate(evidence.id);
   }
-
   return (
     <Card className="overflow-hidden">
       <CardContent className="p-0">
@@ -176,8 +181,23 @@ export function EvidenceCard({
               variant="outline"
             >
               <Sparkles className="mr-2 size-4" />
-              {analyzeMutation.isPending ? "Analyzing..." : "Analyze"}
+              {analyzeMutation.isPending
+                ? "Analyzing..."
+                : analysis
+                  ? "Re-analyze"
+                  : "Analyze"}
             </Button>
+
+            {analysis && !isAnalysisVisible ? (
+              <Button
+                onClick={() => setIsAnalysisVisible(true)}
+                size="sm"
+                type="button"
+                variant="ghost"
+              >
+                View latest
+              </Button>
+            ) : null}
 
             {evidence.sourceType === "FILE" ? (
               <Button
@@ -219,7 +239,7 @@ export function EvidenceCard({
           </div>
         ) : null}
 
-        {analyzeMutation.data && isAnalysisVisible ? (
+        {analysis && isAnalysisVisible ? (
           <div className="border-t bg-white p-5">
             <div className="mb-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
@@ -239,7 +259,7 @@ export function EvidenceCard({
               </Button>
             </div>
 
-            <EvidenceAiAnalysisPanel analysis={analyzeMutation.data} />
+            <EvidenceAiAnalysisPanel analysis={analysis} />
           </div>
         ) : null}
 
