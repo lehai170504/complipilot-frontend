@@ -656,5 +656,34 @@
         "highlight": "Dùng audit history để biết ai đã làm gì và vào lúc nào."
       }
     }
+  },
+  "members": {
+    "title": "Thành viên tổ chức",
+    "description": "Quản lý người dùng, vai trò và trạng thái truy cập trong workspace.",
+    "addMember": "Thêm thành viên",
+    "loading": "Đang tải thành viên...",
+    "empty": "Chưa có thành viên.",
+    "columns": {
+      "member": "Thành viên",
+      "role": "Vai trò",
+      "status": "Trạng thái",
+      "actions": "Hành động"
+    },
+    "dialog": {
+      "title": "Thêm thành viên tổ chức",
+      "description": "Tạo hoặc thêm người dùng vào tổ chức này với vai trò được chọn.",
+      "create": "Thêm thành viên"
+    },
+    "fields": {
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "password": "Mật khẩu",
+      "role": "Vai trò"
+    },
+    "seed": {
+      "button": "Seed tài khoản demo",
+      "seeding": "Đang tạo tài khoản demo...",
+      "success": "Đã tạo {createdUsers} users, tạo {createdMemberships} memberships, cập nhật {updatedMemberships} memberships."
+    }
   }
 }

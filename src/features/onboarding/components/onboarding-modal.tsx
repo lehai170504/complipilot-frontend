@@ -96,11 +96,6 @@ export function OnboardingModal({
     setActiveIndex((current) => Math.max(current - 1, 0));
   }
 
-  function handleGoDashboard() {
-    onOpenChange(false);
-    router.push("/dashboard");
-  }
-
   function handleGoEvidence() {
     onOpenChange(false);
     router.push("/evidence");
@@ -210,16 +205,6 @@ export function OnboardingModal({
           </aside>
 
           <section className="relative flex flex-col bg-white">
-            <Button
-              type="button"
-              size="icon"
-              variant="ghost"
-              className="absolute right-4 top-4 z-10 hidden text-slate-400 hover:text-slate-700 lg:inline-flex"
-              onClick={() => onOpenChange(false)}
-            >
-              <X className="size-5" />
-            </Button>
-
             <div className="flex flex-1 flex-col justify-between p-6 md:p-8">
               <div>
                 <div className="flex items-center justify-between gap-4 pr-10">

@@ -32,7 +32,7 @@ export function useActiveOrganization() {
     const selectedOrganization = selectedOrganizationId
       ? organizations.find(
           (organization) =>
-            organization.organizationId === selectedOrganizationId
+            organization.organizationId === selectedOrganizationId,
         )
       : null;
 
@@ -41,7 +41,7 @@ export function useActiveOrganization() {
 
   function changeActiveOrganization(organizationId: string) {
     const organization = organizationsQuery.data?.find(
-      (item) => item.organizationId === organizationId
+      (item) => item.organizationId === organizationId,
     );
 
     if (!organization) {
@@ -52,15 +52,30 @@ export function useActiveOrganization() {
     setSelectedOrganizationId(organization.organizationId);
   }
 
+  const canManageMembers = useMemo(() => {
+    if (!activeOrganization) {
+      return false;
+    }
+
+    return ["OWNER", "ADMIN"].includes(activeOrganization.role);
+  }, [activeOrganization]);
+
+  const canSeedDemoUsers = activeOrganization?.role === "OWNER";
+
   const canManageCompliance = useMemo(() => {
     if (!activeOrganization) {
       return false;
     }
 
     return ["OWNER", "ADMIN", "COMPLIANCE_MANAGER"].includes(
-      activeOrganization.role
+      activeOrganization.role,
     );
   }, [activeOrganization]);
+
+  const canManageEvidence = canManageCompliance;
+  const canManageTasks = canManageCompliance;
+  const canViewAudit = Boolean(activeOrganization);
+  const isReadOnly = activeOrganization?.role === "AUDITOR";
 
   return {
     activeOrganization,
@@ -69,5 +84,11 @@ export function useActiveOrganization() {
     error: organizationsQuery.error,
     changeActiveOrganization,
     canManageCompliance,
+    canManageEvidence,
+    canManageTasks,
+    canManageMembers,
+    canSeedDemoUsers,
+    canViewAudit,
+    isReadOnly,
   };
 }

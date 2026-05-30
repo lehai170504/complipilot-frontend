@@ -656,5 +656,34 @@
         "highlight": "Use audit history to understand who did what and when."
       }
     }
+  },
+  "members": {
+    "title": "Organization members",
+    "description": "Manage workspace users, roles, and access status.",
+    "addMember": "Add member",
+    "loading": "Loading members...",
+    "empty": "No members found.",
+    "columns": {
+      "member": "Member",
+      "role": "Role",
+      "status": "Status",
+      "actions": "Actions"
+    },
+    "dialog": {
+      "title": "Add organization member",
+      "description": "Create or add a user to this organization with a selected role.",
+      "create": "Add member"
+    },
+    "fields": {
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "role": "Role"
+    },
+    "seed": {
+      "button": "Seed demo users",
+      "seeding": "Creating demo users...",
+      "success": "Created {createdUsers} users, created {createdMemberships} memberships, updated {updatedMemberships} memberships."
+    }
   }
 }

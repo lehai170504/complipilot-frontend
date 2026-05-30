@@ -6,6 +6,7 @@ import { useTranslations } from "next-intl";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { OrganizationMembersPanel } from "@/features/organizations/components/organization-members-panel";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 
 export default function WorkspacesPage() {
@@ -14,6 +15,7 @@ export default function WorkspacesPage() {
     organizations,
     isLoading,
     changeActiveOrganization,
+    canManageMembers,
   } = useActiveOrganization();
 
   const t = useTranslations("workspacesPage");
@@ -133,6 +135,11 @@ export default function WorkspacesPage() {
           })}
         </section>
       )}
+
+      <OrganizationMembersPanel
+        organizationId={activeOrganization?.organizationId}
+        canManageMembers={canManageMembers}
+      />
     </div>
   );
 }
