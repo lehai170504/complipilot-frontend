@@ -1,7 +1,7 @@
 {
   "brand": {
     "name": "CompliPilot",
-    "shortDescription": "Compliance OS"
+    "shortDescription": "AI Compliance & Evidence OS"
   },
   "navigation": {
     "dashboard": "Dashboard",
@@ -13,13 +13,13 @@
   },
   "topbar": {
     "workspace": "Workspace",
-    "title": "Compliance Command",
-    "searchPlaceholder": "Search controls, evidence, tasks...",
+    "title": "Compliance Workspace",
+    "searchPlaceholder": "Search controls, evidence, tasks, and audit activity...",
     "loadingUser": "Loading..."
   },
   "sidebar": {
-    "mvpTitle": "Audit-ready MVP",
-    "mvpDescription": "Controls, evidence, tasks, and audit history are wired to the backend."
+    "mvpTitle": "Audit-ready workspace",
+    "mvpDescription": "Manage controls, evidence, tasks, and audit history in one traceable compliance workflow."
   },
   "workspace": {
     "noWorkspace": "No workspace",
@@ -57,7 +57,6 @@
     "HIGH": "High",
     "CRITICAL": "Critical"
   },
-
   "audit": {
     "heroEyebrow": "Audit trail",
     "heroTitle": "Monitor every compliance action in your organization.",
@@ -112,7 +111,6 @@
       "COMPLIANCE_TASK": "Compliance task"
     }
   },
-
   "common": {
     "loading": "Loading...",
     "cancel": "Cancel",
@@ -497,7 +495,7 @@
     "signIn": "Sign in"
   },
   "landing": {
-    "brandSubtitle": "Compliance OS",
+    "brandSubtitle": "AI Compliance & Evidence OS",
     "nav": {
       "features": "Features",
       "workflow": "Workflow",
@@ -507,112 +505,112 @@
     },
     "hero": {
       "eyebrow": "AI Compliance & Evidence OS",
-      "title": "Turn compliance into a clear operating system.",
-      "description": "Manage controls, evidence, tasks, frameworks, and audit history in one workspace built for trust, speed, and audit readiness.",
+      "title": "Run compliance operations with evidence-first traceability.",
+      "description": "CompliPilot helps teams manage controls, evidence, tasks, frameworks, AI reviews, and audit history in one workspace built for audit readiness.",
       "primaryCta": "Start demo workspace",
       "secondaryCta": "Sign in"
     },
     "stats": {
       "modulesValue": "5",
-      "modulesLabel": "Compliance modules",
+      "modulesLabel": "Core compliance modules",
       "endpointsValue": "33+",
-      "endpointsLabel": "Backend API endpoints",
+      "endpointsLabel": "Operational API workflows",
       "coverageValue": "100%",
-      "coverageLabel": "Audit traceability flow"
+      "coverageLabel": "Traceable evidence flow"
     },
     "preview": {
       "eyebrow": "Platform capabilities",
-      "title": "What is inside",
-      "badge": "MVP ready",
-      "ctaTitle": "Ready to start?",
-      "ctaDescription": "Create a workspace, seed the security baseline, and go from zero to audit-ready in minutes.",
+      "title": "What CompliPilot covers",
+      "badge": "Audit-ready MVP",
+      "ctaTitle": "Ready to review evidence?",
+      "ctaDescription": "Create a workspace, apply a baseline framework, link evidence to controls, and use AI to identify gaps before audit review.",
       "cta": "Get started"
     },
     "highlights": {
       "controls": {
-        "title": "Compliance Controls",
-        "description": "Track requirements, update statuses with enforced workflow transitions, and manage due dates."
+        "title": "Control Readiness",
+        "description": "Track requirements, update control status, capture notes, and monitor due dates across the compliance lifecycle."
       },
       "evidence": {
-        "title": "Evidence Management",
-        "description": "Upload files via presigned URLs, link URL evidence, and build audit-ready traceability."
+        "title": "Evidence Operations",
+        "description": "Upload files through presigned URLs, add URL evidence, link evidence to controls, and keep audit-ready traceability."
       },
       "tasks": {
-        "title": "Task Tracking",
-        "description": "Create, assign, prioritize, search, sort, and resolve compliance action items."
+        "title": "Compliance Task Management",
+        "description": "Create, assign, prioritize, search, sort, and resolve action items related to controls and evidence gaps."
       },
       "audit": {
         "title": "Audit Trail",
-        "description": "Every compliance action is logged so teams can filter, search, and review the full history."
+        "description": "Capture key compliance actions so teams can review who changed what, when, and in which workspace."
       },
       "frameworks": {
         "title": "Framework Library",
-        "description": "Seed security baselines or build custom frameworks with requirements and categories."
+        "description": "Apply a security baseline or create custom frameworks with structured requirements and categories."
       }
     },
     "workflow": {
       "eyebrow": "Operating model",
-      "title": "From framework to audit-ready evidence.",
-      "description": "CompliPilot connects the daily compliance workflow into one traceable system.",
+      "title": "From framework requirements to audit-ready evidence.",
+      "description": "CompliPilot connects controls, evidence, tasks, AI review, and audit history into one traceable workflow.",
       "steps": {
         "framework": {
-          "title": "Apply framework",
-          "description": "Start from a security baseline or create custom controls."
+          "title": "Apply a framework",
+          "description": "Start from a security baseline or create custom compliance requirements."
         },
         "control": {
-          "title": "Manage controls",
-          "description": "Update status, notes, due dates, and readiness."
+          "title": "Review controls",
+          "description": "Update status, notes, due dates, and readiness for each requirement."
         },
         "evidence": {
           "title": "Attach evidence",
-          "description": "Upload files or link URL evidence to controls."
+          "description": "Upload files or link external URLs, then connect evidence to the right control."
         },
         "audit": {
-          "title": "Review audit trail",
-          "description": "Every key action becomes searchable audit history."
+          "title": "Review audit history",
+          "description": "Keep critical compliance actions searchable and traceable for audit preparation."
         }
       }
     },
     "modules": {
       "eyebrow": "Product modules",
-      "title": "Everything needed for a practical compliance MVP.",
-      "description": "The app is structured around clear modules so the frontend, backend, and future AI service can evolve cleanly.",
+      "title": "A practical compliance workspace for control and evidence review.",
+      "description": "CompliPilot is organized around clear modules so compliance workflows, backend services, and AI-assisted reviews can evolve cleanly.",
       "items": {
-        "auth": "Cookie-based auth flow with protected workspace routes",
-        "dashboard": "Compliance dashboard with readiness metrics",
-        "evidence": "Evidence library with upload, download, archive, and linking",
-        "tasks": "Task tracking with filters, priorities, and status flow",
-        "audit": "Audit trail with search, filters, sort, and request tracing",
-        "i18n": "English and Vietnamese interface foundation"
+        "auth": "Secure authentication with protected organization workspaces",
+        "dashboard": "Readiness dashboard with control, task, and evidence metrics",
+        "evidence": "Evidence library with upload, download, archive, linking, AI analysis, and history",
+        "tasks": "Task tracking with filters, priorities, ownership, and status flow",
+        "audit": "Audit trail with search, filters, sorting, and request tracing",
+        "i18n": "English and Vietnamese interface for practical demo and review"
       }
     },
     "finalCta": {
-      "title": "Build compliance evidence without losing context.",
-      "description": "Start with a workspace, seed baseline controls, upload evidence, and keep every action traceable.",
+      "title": "Keep compliance evidence reviewable, traceable, and audit-ready.",
+      "description": "Start with a workspace, apply baseline controls, upload evidence, use AI to detect gaps, and keep every important action recorded.",
       "primary": "Create account",
       "secondary": "Sign in"
     }
   },
   "onboarding": {
     "eyebrow": "Welcome to CompliPilot",
-    "title": "Choose how you want to start.",
-    "description": "CompliPilot helps you organize controls, evidence, tasks, and audit history in one traceable workspace.",
+    "title": "Set up your compliance workspace.",
+    "description": "CompliPilot helps you manage controls, evidence, tasks, AI review, and audit history in one traceable workspace.",
     "steps": {
       "framework": {
         "title": "1. Apply a framework",
-        "description": "Start with the security baseline or create your own compliance framework."
+        "description": "Start with the security baseline or create a custom framework for your organization."
       },
       "controls": {
         "title": "2. Review controls",
-        "description": "Update status, notes, owners, due dates, and readiness for every control."
+        "description": "Update status, notes, due dates, and readiness for every compliance requirement."
       },
       "evidence": {
         "title": "3. Attach evidence",
-        "description": "Upload files through presigned URLs or add external URL evidence."
+        "description": "Upload files through presigned URLs or add external URL evidence, then link it to the right control."
       },
       "audit": {
         "title": "4. Track audit history",
-        "description": "Every important action becomes searchable audit history."
+        "description": "Key compliance actions are recorded so teams can review who did what and when."
       }
     },
     "actions": {
@@ -628,32 +626,32 @@
       "stepCounter": "Step {current} of {total}"
     },
     "success": "Demo framework applied. Created {createdCount} controls, skipped {skippedCount}.",
-    "tip": "Recommended for first-time testing: seed demo workspace, then open Compliance and Evidence pages.",
+    "tip": "Recommended first run: seed a demo workspace, review Compliance, upload Evidence, then try AI analysis.",
     "slides": {
       "welcome": {
         "title": "Welcome to your compliance workspace.",
-        "description": "CompliPilot gives you one place to manage controls, evidence, tasks, and audit history.",
-        "highlight": "Recommended path: seed demo workspace, review Compliance, then upload and link Evidence."
+        "description": "CompliPilot brings controls, evidence, tasks, AI review, and audit history into one workspace.",
+        "highlight": "Recommended path: seed demo data, review controls, upload evidence, then run AI evidence analysis."
       },
       "framework": {
         "title": "Start with a framework.",
-        "description": "Apply a security baseline or create your own framework to generate compliance controls.",
-        "highlight": "Frameworks become the foundation for your controls and audit readiness."
+        "description": "Apply a security baseline or create a custom framework to generate structured compliance controls.",
+        "highlight": "Frameworks define what needs to be reviewed, evidenced, and tracked."
       },
       "controls": {
         "title": "Review and update controls.",
         "description": "Track status, notes, due dates, and readiness for every compliance requirement.",
-        "highlight": "Controlled status transitions help keep the workflow consistent."
+        "highlight": "Controlled status transitions help keep reviews consistent."
       },
       "evidence": {
         "title": "Attach evidence to controls.",
-        "description": "Upload files using presigned URLs or add URL evidence, then link evidence to the right control.",
-        "highlight": "Evidence-first traceability makes audits easier to explain."
+        "description": "Upload files or add URL evidence, then link each item to the relevant control.",
+        "highlight": "Evidence-first traceability makes audit review easier to explain."
       },
       "audit": {
-        "title": "Keep every action traceable.",
-        "description": "Important actions are logged into the audit trail with searchable history.",
-        "highlight": "Use audit history to understand who did what and when."
+        "title": "Keep actions traceable.",
+        "description": "Important changes are recorded in the audit trail with searchable history.",
+        "highlight": "Audit history helps teams understand who did what, when, and why."
       }
     }
   },
@@ -688,16 +686,16 @@
   },
   "ai": {
     "actions": {
-      "analyze": "Analyze",
-      "analyzing": "Analyzing...",
-      "reanalyze": "Re-analyze",
-      "viewLatest": "View latest",
-      "history": "History",
+      "analyze": "Analyze evidence",
+      "analyzing": "Analyzing evidence...",
+      "reanalyze": "Re-analyze evidence",
+      "viewLatest": "View latest analysis",
+      "history": "Analysis history",
       "close": "Close",
-      "suggestEvidence": "AI suggest evidence",
-      "suggestingEvidence": "Analyzing evidence...",
-      "rerunSuggestion": "Re-run AI",
-      "viewSuggestion": "View suggestion"
+      "suggestEvidence": "Suggest missing evidence",
+      "suggestingEvidence": "Reviewing evidence coverage...",
+      "rerunSuggestion": "Re-run evidence review",
+      "viewSuggestion": "View recommendation"
     },
     "riskLevels": {
       "LOW": "Low",
@@ -706,35 +704,35 @@
       "CRITICAL": "Critical"
     },
     "coverageLevels": {
-      "NONE": "None",
+      "NONE": "No coverage",
       "WEAK": "Weak",
       "PARTIAL": "Partial",
       "STRONG": "Strong"
     },
     "evidenceAnalysis": {
-      "title": "AI evidence analysis",
-      "resultTitle": "AI analysis result",
-      "findings": "Findings",
+      "title": "AI evidence review",
+      "resultTitle": "AI evidence review result",
+      "findings": "Review findings",
       "missingInformation": "Missing information",
-      "suggestedActions": "Suggested actions",
+      "suggestedActions": "Recommended next actions",
       "risk": "{risk} risk",
       "confidence": "{confidence}% confidence",
-      "analyzedAt": "Analyzed {date}",
+      "analyzedAt": "Reviewed {date}",
       "analyzedBy": "by {email}"
     },
     "evidenceHistory": {
-      "title": "AI analysis history",
-      "description": "Latest saved AI analysis records for this evidence.",
-      "loading": "Loading AI history...",
-      "empty": "No AI analysis history yet."
+      "title": "AI evidence review history",
+      "description": "Saved AI review results for this evidence item.",
+      "loading": "Loading review history...",
+      "empty": "No AI review history yet."
     },
     "complianceSuggestion": {
       "title": "AI evidence recommendation",
-      "subtitle": "Coverage, missing evidence, and next actions for this control.",
-      "panelTitle": "AI evidence suggestion",
+      "subtitle": "Evidence coverage, missing proof, and next actions for this control.",
+      "panelTitle": "AI evidence coverage review",
       "existingEvidenceAssessment": "Existing evidence assessment",
       "missingEvidence": "Missing evidence",
-      "suggestedActions": "Suggested actions",
+      "suggestedActions": "Recommended next actions",
       "coverage": "{coverage} coverage",
       "risk": "{risk} risk",
       "confidence": "{confidence}% confidence"

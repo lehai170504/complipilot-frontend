@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ListChecks } from "lucide-react";
+import { ListChecks, Plus } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -136,6 +136,7 @@ export default function TasksPage() {
               className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
               onClick={() => setIsCreateDialogOpen(true)}
             >
+              <Plus className="h-4 w-4" />
               {t("createTask")}
             </Button>
           ) : null}
@@ -274,6 +275,7 @@ export default function TasksPage() {
                 className="mt-5"
                 onClick={() => setIsCreateDialogOpen(true)}
               >
+                <Plus className="h-4 w-4" />
                 {t("createFirstTask")}
               </Button>
             ) : null}

@@ -7,6 +7,7 @@ import {
   ExternalLink,
   FileCheck2,
   History,
+  MoreHorizontal,
   Pencil,
   Sparkles,
   X,
@@ -16,6 +17,13 @@ import { useLocale, useTranslations } from "next-intl";
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import {
   EvidenceSourceBadge,
   EvidenceTypeBadge,
@@ -104,7 +112,6 @@ export function EvidenceCard({
 
   async function handleDownload() {
     const response = await downloadUrlMutation.mutateAsync(evidence.id);
-
     window.open(response.downloadUrl, "_blank", "noopener,noreferrer");
   }
 
@@ -171,82 +178,87 @@ export function EvidenceCard({
               </p>
             </div>
 
-            <div className="flex shrink-0 flex-col gap-2">
-              {canManageCompliance ? (
+            {/* Khung chứa các nút hành động (Đã được cấu trúc lại) */}
+            <div className="flex shrink-0 items-start gap-2">
+              <div className="flex flex-col gap-2 sm:flex-row">
+                {evidence.sourceType === "FILE" ? (
+                  <Button
+                    disabled={downloadUrlMutation.isPending}
+                    onClick={handleDownload}
+                    size="sm"
+                    type="button"
+                    variant="outline"
+                  >
+                    <Download className="mr-2 size-4" />
+                    {downloadUrlMutation.isPending
+                      ? t("preparing")
+                      : t("download")}
+                  </Button>
+                ) : null}
+
                 <Button
-                  onClick={onEdit}
+                  disabled={analyzeMutation.isPending}
+                  onClick={handleAnalyze}
                   size="sm"
                   type="button"
                   variant="outline"
                 >
-                  <Pencil className="mr-2 size-4" />
-                  {t("edit")}
+                  <Sparkles className="mr-2 size-4" />
+                  {analyzeMutation.isPending
+                    ? tAiActions("analyzing")
+                    : analysis
+                      ? tAiActions("reanalyze")
+                      : tAiActions("analyze")}
                 </Button>
-              ) : null}
 
-              <Button
-                disabled={analyzeMutation.isPending}
-                onClick={handleAnalyze}
-                size="sm"
-                type="button"
-                variant="outline"
-              >
-                <Sparkles className="mr-2 size-4" />
-                {analyzeMutation.isPending
-                  ? tAiActions("analyzing")
-                  : analysis
-                    ? tAiActions("reanalyze")
-                    : tAiActions("analyze")}
-              </Button>
+                {analysis && !isAnalysisVisible ? (
+                  <Button
+                    onClick={() => setIsAnalysisVisible(true)}
+                    size="sm"
+                    type="button"
+                    variant="ghost"
+                  >
+                    {tAiActions("viewLatest")}
+                  </Button>
+                ) : null}
+              </div>
 
-              {analysis && !isAnalysisVisible ? (
-                <Button
-                  onClick={() => setIsAnalysisVisible(true)}
-                  size="sm"
-                  type="button"
-                  variant="ghost"
-                >
-                  {tAiActions("viewLatest")}
-                </Button>
-              ) : null}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="sm" className="px-2">
+                    <MoreHorizontal className="size-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {canManageCompliance ? (
+                    <DropdownMenuItem onClick={onEdit}>
+                      <Pencil className="mr-2 size-4" />
+                      {t("edit")}
+                    </DropdownMenuItem>
+                  ) : null}
 
-              <Button
-                onClick={() => setIsHistoryOpen(true)}
-                size="sm"
-                type="button"
-                variant="ghost"
-              >
-                <History className="mr-2 size-4" />
-                {tAiActions("history")}
-              </Button>
+                  <DropdownMenuItem onClick={() => setIsHistoryOpen(true)}>
+                    <History className="mr-2 size-4" />
+                    {tAiActions("history")}
+                  </DropdownMenuItem>
 
-              {evidence.sourceType === "FILE" ? (
-                <Button
-                  disabled={downloadUrlMutation.isPending}
-                  onClick={handleDownload}
-                  size="sm"
-                  type="button"
-                  variant="outline"
-                >
-                  <Download className="mr-2 size-4" />
-                  {downloadUrlMutation.isPending
-                    ? t("preparing")
-                    : t("download")}
-                </Button>
-              ) : null}
-
-              {canManageCompliance ? (
-                <Button
-                  disabled={archiveMutation.isPending}
-                  onClick={handleArchive}
-                  size="sm"
-                  type="button"
-                  variant="outline"
-                >
-                  <Archive className="mr-2 size-4" />
-                  {archiveMutation.isPending ? t("archiving") : t("archive")}
-                </Button>
-              ) : null}
+                  {canManageCompliance ? (
+                    <>
+                      <DropdownMenuSeparator />
+                      <DropdownMenuItem
+                        className="text-red-600 focus:bg-red-50 focus:text-red-600"
+                        onClick={handleArchive}
+                        disabled={archiveMutation.isPending}
+                      >
+                        <Archive className="mr-2 size-4" />
+                        {archiveMutation.isPending
+                          ? t("archiving")
+                          : t("archive")}
+                      </DropdownMenuItem>
+                    </>
+                  ) : null}
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
 

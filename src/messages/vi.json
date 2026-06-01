@@ -1,7 +1,7 @@
 {
   "brand": {
     "name": "CompliPilot",
-    "shortDescription": "Hệ điều hành tuân thủ"
+    "shortDescription": "AI Compliance & Evidence OS"
   },
   "navigation": {
     "dashboard": "Bảng điều khiển",
@@ -13,13 +13,13 @@
   },
   "topbar": {
     "workspace": "Không gian làm việc",
-    "title": "Trung tâm điều phối tuân thủ",
-    "searchPlaceholder": "Tìm controls, bằng chứng, công việc...",
+    "title": "Không gian vận hành tuân thủ",
+    "searchPlaceholder": "Tìm control, bằng chứng, công việc và hoạt động kiểm toán...",
     "loadingUser": "Đang tải..."
   },
   "sidebar": {
-    "mvpTitle": "MVP sẵn sàng kiểm toán",
-    "mvpDescription": "Controls, bằng chứng, công việc và nhật ký kiểm toán đã được kết nối với backend."
+    "mvpTitle": "Workspace sẵn sàng kiểm toán",
+    "mvpDescription": "Quản lý control, bằng chứng, công việc và lịch sử kiểm toán trong một quy trình tuân thủ có thể truy vết."
   },
   "workspace": {
     "noWorkspace": "Chưa có workspace",
@@ -57,7 +57,6 @@
     "HIGH": "Cao",
     "CRITICAL": "Nghiêm trọng"
   },
-
   "audit": {
     "heroEyebrow": "Nhật ký kiểm toán",
     "heroTitle": "Theo dõi mọi hành động tuân thủ trong tổ chức.",
@@ -112,7 +111,6 @@
       "COMPLIANCE_TASK": "Công việc tuân thủ"
     }
   },
-
   "common": {
     "loading": "Đang tải...",
     "cancel": "Hủy",
@@ -497,7 +495,7 @@
     "signIn": "Đăng nhập"
   },
   "landing": {
-    "brandSubtitle": "Hệ điều hành tuân thủ",
+    "brandSubtitle": "AI Compliance & Evidence OS",
     "nav": {
       "features": "Tính năng",
       "workflow": "Quy trình",
@@ -507,112 +505,112 @@
     },
     "hero": {
       "eyebrow": "AI Compliance & Evidence OS",
-      "title": "Biến quy trình tuân thủ thành một hệ điều hành rõ ràng.",
-      "description": "Quản lý controls, bằng chứng, công việc, frameworks và lịch sử kiểm toán trong một workspace được xây dựng cho sự tin cậy, tốc độ và sẵn sàng audit.",
+      "title": "Vận hành tuân thủ theo hướng evidence-first và có thể truy vết.",
+      "description": "CompliPilot giúp đội ngũ quản lý control, bằng chứng, công việc, framework, rà soát bằng AI và lịch sử kiểm toán trong một workspace sẵn sàng audit.",
       "primaryCta": "Bắt đầu workspace mẫu",
       "secondaryCta": "Đăng nhập"
     },
     "stats": {
       "modulesValue": "5",
-      "modulesLabel": "Modules tuân thủ",
+      "modulesLabel": "Modules tuân thủ cốt lõi",
       "endpointsValue": "33+",
-      "endpointsLabel": "Backend API endpoints",
+      "endpointsLabel": "Luồng API vận hành",
       "coverageValue": "100%",
-      "coverageLabel": "Luồng truy vết audit"
+      "coverageLabel": "Luồng bằng chứng có thể truy vết"
     },
     "preview": {
       "eyebrow": "Năng lực nền tảng",
-      "title": "Bên trong có gì",
-      "badge": "MVP sẵn sàng",
-      "ctaTitle": "Sẵn sàng bắt đầu?",
-      "ctaDescription": "Tạo workspace, seed security baseline và đi từ con số 0 đến audit-ready chỉ trong vài phút.",
+      "title": "CompliPilot hỗ trợ những gì",
+      "badge": "MVP sẵn sàng kiểm toán",
+      "ctaTitle": "Sẵn sàng rà soát bằng chứng?",
+      "ctaDescription": "Tạo workspace, áp dụng baseline framework, liên kết bằng chứng vào control và dùng AI để phát hiện khoảng trống trước khi audit.",
       "cta": "Bắt đầu"
     },
     "highlights": {
       "controls": {
-        "title": "Compliance Controls",
-        "description": "Theo dõi requirements, cập nhật trạng thái theo workflow được kiểm soát và quản lý ngày đến hạn."
+        "title": "Mức độ sẵn sàng của control",
+        "description": "Theo dõi requirement, cập nhật trạng thái control, ghi chú và ngày đến hạn trong vòng đời tuân thủ."
       },
       "evidence": {
-        "title": "Quản lý bằng chứng",
-        "description": "Tải file qua presigned URL, liên kết bằng chứng URL và xây dựng khả năng truy vết sẵn sàng audit."
+        "title": "Vận hành bằng chứng",
+        "description": "Tải file qua presigned URL, thêm bằng chứng URL, liên kết bằng chứng với control và giữ truy vết sẵn sàng audit."
       },
       "tasks": {
-        "title": "Theo dõi công việc",
-        "description": "Tạo, giao, ưu tiên, tìm kiếm, sắp xếp và hoàn tất các đầu việc tuân thủ."
+        "title": "Quản lý công việc tuân thủ",
+        "description": "Tạo, giao, ưu tiên, tìm kiếm, sắp xếp và xử lý các đầu việc liên quan đến control và khoảng trống bằng chứng."
       },
       "audit": {
-        "title": "Audit Trail",
-        "description": "Mọi hành động tuân thủ đều được ghi lại để đội ngũ có thể lọc, tìm kiếm và rà soát lịch sử."
+        "title": "Audit trail",
+        "description": "Ghi lại các hành động tuân thủ quan trọng để đội ngũ biết ai đã thay đổi gì, khi nào và trong workspace nào."
       },
       "frameworks": {
-        "title": "Thư viện Framework",
-        "description": "Seed security baseline hoặc tạo framework tùy chỉnh với requirements và categories."
+        "title": "Thư viện framework",
+        "description": "Áp dụng security baseline hoặc tạo framework tùy chỉnh với requirement và danh mục rõ ràng."
       }
     },
     "workflow": {
       "eyebrow": "Mô hình vận hành",
-      "title": "Từ framework đến bằng chứng sẵn sàng kiểm toán.",
-      "description": "CompliPilot kết nối công việc tuân thủ hằng ngày thành một hệ thống có thể truy vết.",
+      "title": "Từ requirement trong framework đến bằng chứng sẵn sàng kiểm toán.",
+      "description": "CompliPilot kết nối control, bằng chứng, công việc, rà soát bằng AI và lịch sử kiểm toán thành một workflow có thể truy vết.",
       "steps": {
         "framework": {
           "title": "Áp dụng framework",
-          "description": "Bắt đầu từ security baseline hoặc tạo controls tùy chỉnh."
+          "description": "Bắt đầu từ security baseline hoặc tạo requirement tuân thủ tùy chỉnh."
         },
         "control": {
-          "title": "Quản lý controls",
-          "description": "Cập nhật trạng thái, ghi chú, ngày đến hạn và mức độ sẵn sàng."
+          "title": "Rà soát control",
+          "description": "Cập nhật trạng thái, ghi chú, ngày đến hạn và mức độ sẵn sàng cho từng requirement."
         },
         "evidence": {
           "title": "Gắn bằng chứng",
-          "description": "Tải file hoặc liên kết bằng chứng URL vào controls."
+          "description": "Tải file hoặc liên kết URL bên ngoài, sau đó gắn bằng chứng vào đúng control."
         },
         "audit": {
-          "title": "Rà soát audit trail",
-          "description": "Mọi hành động quan trọng trở thành lịch sử audit có thể tìm kiếm."
+          "title": "Rà soát lịch sử kiểm toán",
+          "description": "Giữ các hành động tuân thủ quan trọng ở dạng có thể tìm kiếm và truy vết."
         }
       }
     },
     "modules": {
       "eyebrow": "Product modules",
-      "title": "Đủ các phần cần thiết cho một compliance MVP thực tế.",
-      "description": "Ứng dụng được chia theo module rõ ràng để frontend, backend và AI service tương lai có thể phát triển sạch hơn.",
+      "title": "Một workspace thực tế cho rà soát control và bằng chứng.",
+      "description": "CompliPilot được chia theo module rõ ràng để workflow tuân thủ, backend services và AI-assisted review có thể mở rộng sạch hơn.",
       "items": {
-        "auth": "Auth bằng cookie với protected workspace routes",
-        "dashboard": "Dashboard compliance với readiness metrics",
-        "evidence": "Thư viện bằng chứng với upload, download, archive và linking",
-        "tasks": "Task tracking với filters, priorities và status flow",
-        "audit": "Audit trail với search, filters, sort và request tracing",
-        "i18n": "Nền tảng giao diện tiếng Anh và tiếng Việt"
+        "auth": "Xác thực an toàn với workspace tổ chức được bảo vệ",
+        "dashboard": "Dashboard readiness với chỉ số control, công việc và bằng chứng",
+        "evidence": "Thư viện bằng chứng với upload, download, archive, linking, AI analysis và history",
+        "tasks": "Theo dõi công việc với bộ lọc, độ ưu tiên, người phụ trách và status flow",
+        "audit": "Audit trail với tìm kiếm, lọc, sắp xếp và request tracing",
+        "i18n": "Giao diện tiếng Anh và tiếng Việt cho demo và rà soát thực tế"
       }
     },
     "finalCta": {
-      "title": "Xây dựng bằng chứng tuân thủ mà không mất ngữ cảnh.",
-      "description": "Bắt đầu với workspace, seed baseline controls, tải bằng chứng lên và giữ mọi hành động có thể truy vết.",
+      "title": "Giữ quá trình rà soát bằng chứng rõ ràng, có thể truy vết và sẵn sàng audit.",
+      "description": "Bắt đầu với workspace, áp dụng baseline control, tải bằng chứng, dùng AI để phát hiện khoảng trống và lưu lại mọi hành động quan trọng.",
       "primary": "Tạo tài khoản",
       "secondary": "Đăng nhập"
     }
   },
   "onboarding": {
     "eyebrow": "Chào mừng đến với CompliPilot",
-    "title": "Chọn cách bạn muốn bắt đầu.",
-    "description": "CompliPilot giúp bạn tổ chức controls, bằng chứng, công việc và lịch sử kiểm toán trong một workspace có thể truy vết.",
+    "title": "Thiết lập workspace tuân thủ của bạn.",
+    "description": "CompliPilot giúp bạn quản lý control, bằng chứng, công việc, rà soát bằng AI và lịch sử kiểm toán trong một workspace có thể truy vết.",
     "steps": {
       "framework": {
         "title": "1. Áp dụng framework",
-        "description": "Bắt đầu với security baseline hoặc tự tạo compliance framework riêng."
+        "description": "Bắt đầu với security baseline hoặc tạo framework tùy chỉnh cho tổ chức."
       },
       "controls": {
-        "title": "2. Rà soát controls",
-        "description": "Cập nhật trạng thái, ghi chú, người phụ trách, deadline và mức độ sẵn sàng của từng control."
+        "title": "2. Rà soát control",
+        "description": "Cập nhật trạng thái, ghi chú, deadline và mức độ sẵn sàng cho từng requirement."
       },
       "evidence": {
         "title": "3. Gắn bằng chứng",
-        "description": "Tải file qua presigned URL hoặc thêm bằng chứng URL bên ngoài."
+        "description": "Tải file qua presigned URL hoặc thêm URL bằng chứng bên ngoài, rồi liên kết vào đúng control."
       },
       "audit": {
-        "title": "4. Theo dõi audit history",
-        "description": "Mọi hành động quan trọng sẽ trở thành lịch sử audit có thể tìm kiếm."
+        "title": "4. Theo dõi lịch sử kiểm toán",
+        "description": "Các hành động tuân thủ quan trọng được ghi lại để đội ngũ biết ai đã làm gì và khi nào."
       }
     },
     "actions": {
@@ -627,33 +625,33 @@
       "finish": "Hoàn tất",
       "stepCounter": "Bước {current} trên {total}"
     },
-    "success": "Đã áp dụng framework mẫu. Tạo {createdCount} controls, bỏ qua {skippedCount}.",
-    "tip": "Khuyến nghị khi test lần đầu: seed workspace mẫu, sau đó mở trang Compliance và Evidence.",
+    "success": "Đã áp dụng framework mẫu. Tạo {createdCount} control, bỏ qua {skippedCount}.",
+    "tip": "Gợi ý lần chạy đầu: seed dữ liệu mẫu, rà soát Compliance, tải Evidence, sau đó thử AI analysis.",
     "slides": {
       "welcome": {
         "title": "Chào mừng đến workspace tuân thủ của bạn.",
-        "description": "CompliPilot giúp bạn quản lý controls, bằng chứng, công việc và lịch sử kiểm toán trong một nơi duy nhất.",
-        "highlight": "Luồng khuyến nghị: seed workspace mẫu, rà soát Compliance, sau đó upload và liên kết Evidence."
+        "description": "CompliPilot đưa control, bằng chứng, công việc, AI review và audit history vào một workspace duy nhất.",
+        "highlight": "Luồng khuyến nghị: seed dữ liệu mẫu, rà soát control, tải bằng chứng, sau đó chạy AI evidence analysis."
       },
       "framework": {
         "title": "Bắt đầu với framework.",
-        "description": "Áp dụng security baseline hoặc tự tạo framework để sinh ra các compliance controls.",
-        "highlight": "Framework là nền tảng cho controls và mức độ sẵn sàng audit."
+        "description": "Áp dụng security baseline hoặc tạo framework tùy chỉnh để sinh ra các compliance control có cấu trúc.",
+        "highlight": "Framework xác định những gì cần được rà soát, chứng minh bằng bằng chứng và theo dõi."
       },
       "controls": {
-        "title": "Rà soát và cập nhật controls.",
+        "title": "Rà soát và cập nhật control.",
         "description": "Theo dõi trạng thái, ghi chú, deadline và mức độ sẵn sàng cho từng requirement.",
-        "highlight": "Status transition có kiểm soát giúp workflow nhất quán hơn."
+        "highlight": "Status transition có kiểm soát giúp quá trình review nhất quán hơn."
       },
       "evidence": {
-        "title": "Gắn bằng chứng vào controls.",
-        "description": "Tải file bằng presigned URL hoặc thêm bằng chứng URL, sau đó liên kết vào đúng control.",
-        "highlight": "Traceability theo hướng evidence-first giúp giải trình audit dễ hơn."
+        "title": "Gắn bằng chứng vào control.",
+        "description": "Tải file hoặc thêm URL bằng chứng, sau đó liên kết từng bằng chứng vào control phù hợp.",
+        "highlight": "Traceability theo hướng evidence-first giúp giải trình audit rõ ràng hơn."
       },
       "audit": {
         "title": "Giữ mọi hành động có thể truy vết.",
-        "description": "Các hành động quan trọng được ghi vào audit trail với lịch sử có thể tìm kiếm.",
-        "highlight": "Dùng audit history để biết ai đã làm gì và vào lúc nào."
+        "description": "Các thay đổi quan trọng được ghi vào audit trail với lịch sử có thể tìm kiếm.",
+        "highlight": "Audit history giúp đội ngũ biết ai đã làm gì, khi nào và vì sao."
       }
     }
   },
@@ -688,16 +686,16 @@
   },
   "ai": {
     "actions": {
-      "analyze": "Phân tích",
-      "analyzing": "Đang phân tích...",
-      "reanalyze": "Phân tích lại",
-      "viewLatest": "Xem phân tích mới nhất",
-      "history": "Lịch sử",
+      "analyze": "Rà soát bằng chứng",
+      "analyzing": "Đang rà soát bằng chứng...",
+      "reanalyze": "Rà soát lại bằng chứng",
+      "viewLatest": "Xem lần rà soát mới nhất",
+      "history": "Lịch sử rà soát",
       "close": "Đóng",
-      "suggestEvidence": "AI gợi ý bằng chứng",
-      "suggestingEvidence": "Đang phân tích bằng chứng...",
-      "rerunSuggestion": "Chạy lại AI",
-      "viewSuggestion": "Xem gợi ý"
+      "suggestEvidence": "Gợi ý bằng chứng còn thiếu",
+      "suggestingEvidence": "Đang rà soát mức độ bao phủ bằng chứng...",
+      "rerunSuggestion": "Chạy lại rà soát bằng chứng",
+      "viewSuggestion": "Xem khuyến nghị"
     },
     "riskLevels": {
       "LOW": "Thấp",
@@ -712,29 +710,29 @@
       "STRONG": "Tốt"
     },
     "evidenceAnalysis": {
-      "title": "Phân tích bằng chứng bằng AI",
-      "resultTitle": "Kết quả phân tích AI",
-      "findings": "Nhận định",
+      "title": "Rà soát bằng chứng bằng AI",
+      "resultTitle": "Kết quả rà soát bằng chứng",
+      "findings": "Nhận định rà soát",
       "missingInformation": "Thông tin còn thiếu",
-      "suggestedActions": "Hành động đề xuất",
+      "suggestedActions": "Hành động khuyến nghị",
       "risk": "Rủi ro {risk}",
       "confidence": "Độ tin cậy {confidence}%",
-      "analyzedAt": "Đã phân tích lúc {date}",
+      "analyzedAt": "Đã rà soát lúc {date}",
       "analyzedBy": "bởi {email}"
     },
     "evidenceHistory": {
-      "title": "Lịch sử phân tích AI",
-      "description": "Các kết quả phân tích AI đã lưu gần nhất cho bằng chứng này.",
-      "loading": "Đang tải lịch sử AI...",
-      "empty": "Chưa có lịch sử phân tích AI."
+      "title": "Lịch sử rà soát bằng chứng bằng AI",
+      "description": "Các kết quả AI review đã lưu cho bằng chứng này.",
+      "loading": "Đang tải lịch sử rà soát...",
+      "empty": "Chưa có lịch sử rà soát bằng AI."
     },
     "complianceSuggestion": {
-      "title": "Gợi ý bằng chứng bằng AI",
+      "title": "Khuyến nghị bằng chứng bằng AI",
       "subtitle": "Đánh giá mức độ bao phủ, bằng chứng còn thiếu và hành động tiếp theo cho control này.",
-      "panelTitle": "Gợi ý bằng chứng AI",
+      "panelTitle": "Rà soát mức độ bao phủ bằng chứng",
       "existingEvidenceAssessment": "Đánh giá bằng chứng hiện có",
       "missingEvidence": "Bằng chứng còn thiếu",
-      "suggestedActions": "Hành động đề xuất",
+      "suggestedActions": "Hành động khuyến nghị",
       "coverage": "Mức bao phủ {coverage}",
       "risk": "Rủi ro {risk}",
       "confidence": "Độ tin cậy {confidence}%"
