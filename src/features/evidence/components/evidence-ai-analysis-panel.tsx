@@ -3,6 +3,7 @@ import { AlertTriangle, CheckCircle2, Lightbulb, Sparkles } from "lucide-react";
 import type { EvidenceAiAnalysisResponse } from "@/lib/api/api-types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { useLocale, useTranslations } from "next-intl";
 
 const riskClassNameMap: Record<
   EvidenceAiAnalysisResponse["riskLevel"],
@@ -14,15 +15,14 @@ const riskClassNameMap: Record<
   CRITICAL: "bg-red-100 text-red-800 hover:bg-red-100",
 };
 
-function formatConfidence(confidence: number) {
-  return `${Math.round(confidence * 100)}%`;
-}
-
 export function EvidenceAiAnalysisPanel({
   analysis,
 }: {
   analysis: EvidenceAiAnalysisResponse;
 }) {
+  const t = useTranslations("ai.evidenceAnalysis");
+  const locale = useLocale();
+
   return (
     <Card className="border-cyan-200 bg-cyan-50/60">
       <CardContent className="space-y-4 p-5">
@@ -32,24 +32,23 @@ export function EvidenceAiAnalysisPanel({
               <Sparkles className="size-5" />
             </div>
             <div>
-              <p className="font-semibold text-slate-950">
-                AI evidence analysis
-              </p>
+              <p className="font-semibold text-slate-950">{t("title")}</p>
               <p className="mt-1 text-sm leading-6 text-slate-700">
                 {analysis.summary}
               </p>
               {analysis.analyzedAt ? (
                 <p className="mt-2 text-xs text-slate-500">
-                  Analyzed{" "}
-                  {new Intl.DateTimeFormat("en", {
-                    month: "short",
-                    day: "numeric",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  }).format(new Date(analysis.analyzedAt))}
+                  {t("analyzedAt", {
+                    date: new Intl.DateTimeFormat(locale, {
+                      month: "short",
+                      day: "numeric",
+                      year: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }).format(new Date(analysis.analyzedAt)),
+                  })}
                   {analysis.analyzedByEmail
-                    ? ` by ${analysis.analyzedByEmail}`
+                    ? ` ${t("analyzedBy", { email: analysis.analyzedByEmail })}`
                     : ""}
                 </p>
               ) : null}
@@ -61,10 +60,12 @@ export function EvidenceAiAnalysisPanel({
               className={riskClassNameMap[analysis.riskLevel]}
               variant="secondary"
             >
-              {analysis.riskLevel} risk
+              {t("risk", { risk: analysis.riskLevel })}
             </Badge>
             <Badge variant="secondary">
-              {formatConfidence(analysis.confidence)} confidence
+              {t("confidence", {
+                confidence: Math.round(analysis.confidence * 100),
+              })}
             </Badge>
           </div>
         </div>
@@ -73,7 +74,7 @@ export function EvidenceAiAnalysisPanel({
           <div>
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
               <CheckCircle2 className="size-4 text-emerald-600" />
-              Findings
+              {t("findings")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
               {analysis.findings.map((item) => (
@@ -87,7 +88,7 @@ export function EvidenceAiAnalysisPanel({
           <div>
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
               <AlertTriangle className="size-4 text-amber-600" />
-              Missing information
+              {t("missingInformation")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
               {analysis.missingInformation.map((item) => (
@@ -101,7 +102,7 @@ export function EvidenceAiAnalysisPanel({
           <div>
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
               <Lightbulb className="size-4 text-cyan-700" />
-              Suggested actions
+              {t("suggestedActions")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
               {analysis.suggestedActions.map((item) => (

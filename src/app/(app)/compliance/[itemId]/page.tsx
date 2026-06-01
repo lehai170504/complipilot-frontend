@@ -85,6 +85,8 @@ export default function ComplianceItemDetailPage() {
   const locale = useLocale();
   const t = useTranslations("complianceDetail");
   const tStatus = useTranslations("status");
+  const tAiActions = useTranslations("ai.actions");
+  const tAiSuggestion = useTranslations("ai.complianceSuggestion");
 
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
@@ -227,10 +229,10 @@ export default function ComplianceItemDetailPage() {
             >
               <Sparkles className="mr-2 size-4" />
               {suggestEvidenceMutation.isPending
-                ? "Analyzing..."
+                ? tAiActions("suggestingEvidence")
                 : suggestEvidenceMutation.data
-                  ? "Re-run AI"
-                  : "AI suggest evidence"}
+                  ? tAiActions("rerunSuggestion")
+                  : tAiActions("suggestEvidence")}
             </Button>
 
             {suggestEvidenceMutation.data && !isAiSuggestionVisible ? (
@@ -240,7 +242,7 @@ export default function ComplianceItemDetailPage() {
                 onClick={() => setIsAiSuggestionVisible(true)}
                 className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
               >
-                View suggestion
+                {tAiActions("viewSuggestion")}
               </Button>
             ) : null}
           </div>
@@ -256,10 +258,10 @@ export default function ComplianceItemDetailPage() {
               </div>
               <div>
                 <h3 className="font-semibold text-slate-950">
-                  AI evidence recommendation
+                  {tAiSuggestion("title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
-                  Coverage, missing evidence, and next actions for this control.
+                  {tAiSuggestion("subtitle")}
                 </p>
               </div>
             </div>
@@ -272,7 +274,7 @@ export default function ComplianceItemDetailPage() {
               className="text-slate-500 hover:text-slate-700"
             >
               <X className="mr-2 size-4" />
-              Close
+              {tAiActions("close")}
             </Button>
           </div>
 

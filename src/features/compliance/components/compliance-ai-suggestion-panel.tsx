@@ -3,6 +3,7 @@ import { AlertTriangle, CheckCircle2, Lightbulb, Sparkles } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import type { ComplianceEvidenceSuggestionResponse } from "@/lib/api/api-types";
+import { useTranslations } from "next-intl";
 
 const riskClassNameMap: Record<
   ComplianceEvidenceSuggestionResponse["riskLevel"],
@@ -24,15 +25,12 @@ const coverageClassNameMap: Record<
   STRONG: "bg-emerald-50 text-emerald-700 hover:bg-emerald-50",
 };
 
-function formatConfidence(confidence: number) {
-  return `${Math.round(confidence * 100)}%`;
-}
-
 export function ComplianceAiSuggestionPanel({
   suggestion,
 }: {
   suggestion: ComplianceEvidenceSuggestionResponse;
 }) {
+  const t = useTranslations("ai.complianceSuggestion");
   return (
     <Card className="border-cyan-200 bg-cyan-50/60">
       <CardContent className="space-y-4 p-5">
@@ -43,9 +41,7 @@ export function ComplianceAiSuggestionPanel({
             </div>
 
             <div>
-              <p className="font-semibold text-slate-950">
-                AI evidence suggestion
-              </p>
+              <p className="font-semibold text-slate-950">{t("panelTitle")}</p>
               <p className="mt-1 text-sm leading-6 text-slate-700">
                 {suggestion.summary}
               </p>
@@ -57,16 +53,20 @@ export function ComplianceAiSuggestionPanel({
               className={coverageClassNameMap[suggestion.coverageLevel]}
               variant="secondary"
             >
-              {suggestion.coverageLevel} coverage
+              {t("coverage", { coverage: suggestion.coverageLevel })}
             </Badge>
+
             <Badge
               className={riskClassNameMap[suggestion.riskLevel]}
               variant="secondary"
             >
-              {suggestion.riskLevel} risk
+              {t("risk", { risk: suggestion.riskLevel })}
             </Badge>
+
             <Badge variant="secondary">
-              {formatConfidence(suggestion.confidence)} confidence
+              {t("confidence", {
+                confidence: Math.round(suggestion.confidence * 100),
+              })}
             </Badge>
           </div>
         </div>
@@ -75,7 +75,7 @@ export function ComplianceAiSuggestionPanel({
           <div>
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
               <CheckCircle2 className="size-4 text-emerald-600" />
-              Existing evidence assessment
+              {t("existingEvidenceAssessment")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
               {suggestion.existingEvidenceAssessment.map((item) => (
@@ -89,7 +89,7 @@ export function ComplianceAiSuggestionPanel({
           <div>
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
               <AlertTriangle className="size-4 text-amber-600" />
-              Missing evidence
+              {t("missingEvidence")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
               {suggestion.missingEvidence.map((item) => (
@@ -103,7 +103,7 @@ export function ComplianceAiSuggestionPanel({
           <div>
             <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
               <Lightbulb className="size-4 text-cyan-700" />
-              Suggested actions
+              {t("suggestedActions")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
               {suggestion.suggestedActions.map((item) => (

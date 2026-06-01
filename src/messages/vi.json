@@ -685,5 +685,40 @@
       "seeding": "Đang tạo tài khoản demo...",
       "success": "Đã tạo {createdUsers} users, tạo {createdMemberships} memberships, cập nhật {updatedMemberships} memberships."
     }
+  },
+  "ai": {
+    "actions": {
+      "analyze": "Phân tích",
+      "analyzing": "Đang phân tích...",
+      "reanalyze": "Phân tích lại",
+      "viewLatest": "Xem phân tích mới nhất",
+      "close": "Đóng",
+      "suggestEvidence": "AI gợi ý bằng chứng",
+      "suggestingEvidence": "Đang phân tích bằng chứng...",
+      "rerunSuggestion": "Chạy lại AI",
+      "viewSuggestion": "Xem gợi ý"
+    },
+    "evidenceAnalysis": {
+      "title": "Phân tích bằng chứng bằng AI",
+      "resultTitle": "Kết quả phân tích AI",
+      "findings": "Nhận định",
+      "missingInformation": "Thông tin còn thiếu",
+      "suggestedActions": "Hành động đề xuất",
+      "risk": "Rủi ro {risk}",
+      "confidence": "Độ tin cậy {confidence}%",
+      "analyzedAt": "Đã phân tích lúc {date}",
+      "analyzedBy": "bởi {email}"
+    },
+    "complianceSuggestion": {
+      "title": "Gợi ý bằng chứng bằng AI",
+      "subtitle": "Đánh giá mức độ bao phủ, bằng chứng còn thiếu và hành động tiếp theo cho control này.",
+      "panelTitle": "Gợi ý bằng chứng AI",
+      "existingEvidenceAssessment": "Đánh giá bằng chứng hiện có",
+      "missingEvidence": "Bằng chứng còn thiếu",
+      "suggestedActions": "Hành động đề xuất",
+      "coverage": "Mức bao phủ {coverage}",
+      "risk": "Rủi ro {risk}",
+      "confidence": "Độ tin cậy {confidence}%"
+    }
   }
 }

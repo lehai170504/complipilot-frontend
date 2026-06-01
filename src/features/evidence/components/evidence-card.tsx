@@ -69,6 +69,9 @@ export function EvidenceCard({
   const locale = useLocale();
   const t = useTranslations("evidenceCard");
 
+  const tAiActions = useTranslations("ai.actions");
+  const tEvidenceAi = useTranslations("ai.evidenceAnalysis");
+
   const archiveMutation = useArchiveEvidenceMutation(organizationId);
   const downloadUrlMutation =
     useCreateEvidenceDownloadUrlMutation(organizationId);
@@ -182,10 +185,10 @@ export function EvidenceCard({
             >
               <Sparkles className="mr-2 size-4" />
               {analyzeMutation.isPending
-                ? "Analyzing..."
+                ? tAiActions("analyzing")
                 : analysis
-                  ? "Re-analyze"
-                  : "Analyze"}
+                  ? tAiActions("reanalyze")
+                  : tAiActions("analyze")}
             </Button>
 
             {analysis && !isAnalysisVisible ? (
@@ -195,7 +198,7 @@ export function EvidenceCard({
                 type="button"
                 variant="ghost"
               >
-                View latest
+                {tAiActions("viewLatest")}
               </Button>
             ) : null}
 
@@ -244,7 +247,7 @@ export function EvidenceCard({
             <div className="mb-3 flex items-center justify-between gap-3">
               <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
                 <Sparkles className="size-4 text-cyan-700" />
-                AI analysis result
+                {tEvidenceAi("resultTitle")}
               </div>
 
               <Button
@@ -255,7 +258,7 @@ export function EvidenceCard({
                 className="text-slate-500 hover:text-slate-700"
               >
                 <X className="mr-2 size-4" />
-                Close
+                {tAiActions("close")}
               </Button>
             </div>
 
