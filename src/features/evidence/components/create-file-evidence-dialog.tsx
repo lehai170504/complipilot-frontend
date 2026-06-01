@@ -134,13 +134,16 @@ export function CreateFileEvidenceDialog({
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent className="sm:max-w-xl">
+      <DialogContent className="sm:max-w-xl max-h-[90vh] flex flex-col overflow-hidden">
         <DialogHeader>
           <DialogTitle>{t("title")}</DialogTitle>
           <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <form className="space-y-5" onSubmit={handleSubmit}>
+        <form
+          className="space-y-5 overflow-y-auto px-1 py-2"
+          onSubmit={handleSubmit}
+        >
           <div className="space-y-2">
             <Label htmlFor="evidence-file">{t("file")}</Label>
 
@@ -158,16 +161,19 @@ export function CreateFileEvidenceDialog({
                 </p>
               </label>
             ) : (
-              <div className="flex items-center justify-between rounded-3xl border bg-slate-50 p-4">
-                <div className="min-w-0">
-                  <p className="truncate font-medium">{file.name}</p>
-                  <p className="mt-1 text-sm text-muted-foreground">
+              <div className="flex items-center justify-between gap-3 rounded-3xl border bg-slate-50 p-4">
+                <div className="min-w-0 flex-1">
+                  <p className="truncate font-medium" title={file.name}>
+                    {file.name}
+                  </p>
+                  <p className="mt-1 truncate text-sm text-muted-foreground">
                     {file.type || "application/octet-stream"} ·{" "}
                     {formatFileSize(file.size)}
                   </p>
                 </div>
 
                 <Button
+                  className="shrink-0"
                   onClick={() => handleFileChange(null)}
                   size="icon"
                   type="button"
@@ -196,6 +202,7 @@ export function CreateFileEvidenceDialog({
               onChange={(event) => setTitle(event.target.value)}
               placeholder={t("titlePlaceholder")}
               required
+              className="w-full"
             />
           </div>
 
@@ -205,12 +212,12 @@ export function CreateFileEvidenceDialog({
               value={evidenceType}
               onValueChange={(value) => setEvidenceType(value as EvidenceType)}
             >
-              <SelectTrigger id="file-evidence-type">
+              <SelectTrigger id="file-evidence-type" className="w-full">
                 <SelectValue placeholder={t("typePlaceholder")} />
               </SelectTrigger>
               <SelectContent>
                 {evidenceTypeOptions.map((type) => (
-                  <SelectItem key={type} value={type}>
+                  <SelectItem key={type} value={type} className="truncate">
                     {tType(type)}
                   </SelectItem>
                 ))}
@@ -228,11 +235,12 @@ export function CreateFileEvidenceDialog({
               onChange={(event) => setDescription(event.target.value)}
               placeholder={t("descriptionPlaceholder")}
               rows={4}
+              className="w-full resize-y"
             />
           </div>
 
           {clientError ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700">
+            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 break-words">
               {clientError}
             </div>
           ) : null}
@@ -241,7 +249,7 @@ export function CreateFileEvidenceDialog({
             <ErrorAlert error={createFileEvidenceMutation.error} />
           ) : null}
 
-          <div className="flex justify-end gap-3">
+          <div className="flex justify-end gap-3 pt-2">
             <Button
               type="button"
               variant="outline"
