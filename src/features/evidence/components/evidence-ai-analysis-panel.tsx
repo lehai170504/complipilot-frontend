@@ -22,6 +22,7 @@ export function EvidenceAiAnalysisPanel({
 }) {
   const t = useTranslations("ai.evidenceAnalysis");
   const locale = useLocale();
+  const tRiskLevels = useTranslations("ai.riskLevels");
 
   return (
     <Card className="border-cyan-200 bg-cyan-50/60">
@@ -60,7 +61,7 @@ export function EvidenceAiAnalysisPanel({
               className={riskClassNameMap[analysis.riskLevel]}
               variant="secondary"
             >
-              {t("risk", { risk: analysis.riskLevel })}
+              {t("risk", { risk: tRiskLevels(analysis.riskLevel) })}
             </Badge>
             <Badge variant="secondary">
               {t("confidence", {

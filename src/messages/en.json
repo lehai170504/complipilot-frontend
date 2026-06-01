@@ -692,11 +692,24 @@
       "analyzing": "Analyzing...",
       "reanalyze": "Re-analyze",
       "viewLatest": "View latest",
+      "history": "History",
       "close": "Close",
       "suggestEvidence": "AI suggest evidence",
       "suggestingEvidence": "Analyzing evidence...",
       "rerunSuggestion": "Re-run AI",
       "viewSuggestion": "View suggestion"
+    },
+    "riskLevels": {
+      "LOW": "Low",
+      "MEDIUM": "Medium",
+      "HIGH": "High",
+      "CRITICAL": "Critical"
+    },
+    "coverageLevels": {
+      "NONE": "None",
+      "WEAK": "Weak",
+      "PARTIAL": "Partial",
+      "STRONG": "Strong"
     },
     "evidenceAnalysis": {
       "title": "AI evidence analysis",
@@ -708,6 +721,12 @@
       "confidence": "{confidence}% confidence",
       "analyzedAt": "Analyzed {date}",
       "analyzedBy": "by {email}"
+    },
+    "evidenceHistory": {
+      "title": "AI analysis history",
+      "description": "Latest saved AI analysis records for this evidence.",
+      "loading": "Loading AI history...",
+      "empty": "No AI analysis history yet."
     },
     "complianceSuggestion": {
       "title": "AI evidence recommendation",

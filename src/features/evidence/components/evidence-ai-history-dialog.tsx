@@ -1,7 +1,7 @@
 "use client";
 
 import { Clock, Sparkles } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Badge } from "@/components/ui/badge";
@@ -14,8 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { useEvidenceAiAnalysesQuery } from "@/features/evidence/hooks/evidence-hooks";
 
-function formatDateTime(value: string) {
-  return new Intl.DateTimeFormat("en", {
+function formatDateTime(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -35,7 +35,11 @@ export function EvidenceAiHistoryDialog({
   organizationId: string | undefined;
   evidenceId: string;
 }) {
-  const tAi = useTranslations("ai.evidenceAnalysis");
+  const locale = useLocale();
+
+  const tHistory = useTranslations("ai.evidenceHistory");
+  const tEvidenceAi = useTranslations("ai.evidenceAnalysis");
+  const tRiskLevels = useTranslations("ai.riskLevels");
 
   const historyQuery = useEvidenceAiAnalysesQuery(
     organizationId,
@@ -51,16 +55,14 @@ export function EvidenceAiHistoryDialog({
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             <Sparkles className="size-5 text-cyan-700" />
-            AI analysis history
+            {tHistory("title")}
           </DialogTitle>
-          <DialogDescription>
-            Latest saved AI analysis records for this evidence.
-          </DialogDescription>
+          <DialogDescription>{tHistory("description")}</DialogDescription>
         </DialogHeader>
 
         {historyQuery.isLoading ? (
           <div className="rounded-2xl border bg-slate-50 p-5 text-sm text-muted-foreground">
-            Loading AI history...
+            {tHistory("loading")}
           </div>
         ) : null}
 
@@ -68,7 +70,7 @@ export function EvidenceAiHistoryDialog({
 
         {!historyQuery.isLoading && analyses.length === 0 ? (
           <div className="rounded-2xl border bg-slate-50 p-5 text-sm text-muted-foreground">
-            No AI analysis history yet.
+            {tHistory("empty")}
           </div>
         ) : null}
 
@@ -78,9 +80,15 @@ export function EvidenceAiHistoryDialog({
               <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
-                    <Badge variant="secondary">{analysis.riskLevel} risk</Badge>
                     <Badge variant="secondary">
-                      {Math.round(analysis.confidence * 100)}% confidence
+                      {tEvidenceAi("risk", {
+                        risk: tRiskLevels(analysis.riskLevel),
+                      })}
+                    </Badge>
+                    <Badge variant="secondary">
+                      {tEvidenceAi("confidence", {
+                        confidence: Math.round(analysis.confidence * 100),
+                      })}
                     </Badge>
                   </div>
 
@@ -88,21 +96,44 @@ export function EvidenceAiHistoryDialog({
                     {analysis.summary}
                   </p>
 
-                  <div className="mt-3 flex items-center gap-2 text-xs text-muted-foreground">
+                  <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
                     <Clock className="size-3" />
-                    {formatDateTime(analysis.analyzedAt)}
-                    {analysis.analyzedByEmail
-                      ? ` by ${analysis.analyzedByEmail}`
-                      : ""}
+                    <span>
+                      {tEvidenceAi("analyzedAt", {
+                        date: formatDateTime(analysis.analyzedAt, locale),
+                      })}
+                    </span>
+                    {analysis.analyzedByEmail ? (
+                      <span>
+                        {tEvidenceAi("analyzedBy", {
+                          email: analysis.analyzedByEmail,
+                        })}
+                      </span>
+                    ) : null}
                   </div>
                 </div>
               </div>
 
               {analysis.missingInformation.length > 0 ? (
                 <div className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">
-                  <p className="font-medium">{tAi("missingInformation")}</p>
+                  <p className="font-medium">
+                    {tEvidenceAi("missingInformation")}
+                  </p>
                   <ul className="mt-1 space-y-1">
                     {analysis.missingInformation.map((item) => (
+                      <li key={item}>• {item}</li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+
+              {analysis.suggestedActions.length > 0 ? (
+                <div className="mt-3 rounded-xl bg-cyan-50 p-3 text-sm text-cyan-900">
+                  <p className="font-medium">
+                    {tEvidenceAi("suggestedActions")}
+                  </p>
+                  <ul className="mt-1 space-y-1">
+                    {analysis.suggestedActions.map((item) => (
                       <li key={item}>• {item}</li>
                     ))}
                   </ul>

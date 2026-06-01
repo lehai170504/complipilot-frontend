@@ -692,11 +692,24 @@
       "analyzing": "Đang phân tích...",
       "reanalyze": "Phân tích lại",
       "viewLatest": "Xem phân tích mới nhất",
+      "history": "Lịch sử",
       "close": "Đóng",
       "suggestEvidence": "AI gợi ý bằng chứng",
       "suggestingEvidence": "Đang phân tích bằng chứng...",
       "rerunSuggestion": "Chạy lại AI",
       "viewSuggestion": "Xem gợi ý"
+    },
+    "riskLevels": {
+      "LOW": "Thấp",
+      "MEDIUM": "Trung bình",
+      "HIGH": "Cao",
+      "CRITICAL": "Nghiêm trọng"
+    },
+    "coverageLevels": {
+      "NONE": "Chưa có",
+      "WEAK": "Yếu",
+      "PARTIAL": "Một phần",
+      "STRONG": "Tốt"
     },
     "evidenceAnalysis": {
       "title": "Phân tích bằng chứng bằng AI",
@@ -708,6 +721,12 @@
       "confidence": "Độ tin cậy {confidence}%",
       "analyzedAt": "Đã phân tích lúc {date}",
       "analyzedBy": "bởi {email}"
+    },
+    "evidenceHistory": {
+      "title": "Lịch sử phân tích AI",
+      "description": "Các kết quả phân tích AI đã lưu gần nhất cho bằng chứng này.",
+      "loading": "Đang tải lịch sử AI...",
+      "empty": "Chưa có lịch sử phân tích AI."
     },
     "complianceSuggestion": {
       "title": "Gợi ý bằng chứng bằng AI",

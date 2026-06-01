@@ -217,7 +217,7 @@ export function EvidenceCard({
                 variant="ghost"
               >
                 <History className="mr-2 size-4" />
-                History
+                {tAiActions("history")}
               </Button>
 
               {evidence.sourceType === "FILE" ? (

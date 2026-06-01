@@ -31,6 +31,8 @@ export function ComplianceAiSuggestionPanel({
   suggestion: ComplianceEvidenceSuggestionResponse;
 }) {
   const t = useTranslations("ai.complianceSuggestion");
+  const tRiskLevels = useTranslations("ai.riskLevels");
+  const tCoverageLevels = useTranslations("ai.coverageLevels");
   return (
     <Card className="border-cyan-200 bg-cyan-50/60">
       <CardContent className="space-y-4 p-5">
@@ -53,14 +55,18 @@ export function ComplianceAiSuggestionPanel({
               className={coverageClassNameMap[suggestion.coverageLevel]}
               variant="secondary"
             >
-              {t("coverage", { coverage: suggestion.coverageLevel })}
+              {t("coverage", {
+                coverage: tCoverageLevels(suggestion.coverageLevel),
+              })}
             </Badge>
 
             <Badge
               className={riskClassNameMap[suggestion.riskLevel]}
               variant="secondary"
             >
-              {t("risk", { risk: suggestion.riskLevel })}
+              {t("risk", {
+                risk: tRiskLevels(suggestion.riskLevel),
+              })}
             </Badge>
 
             <Badge variant="secondary">
