@@ -1,16 +1,16 @@
 "use client";
 
+import { useState } from "react";
 import {
   Archive,
   Download,
   ExternalLink,
   FileCheck2,
+  History,
   Pencil,
   Sparkles,
   X,
 } from "lucide-react";
-
-import { useState } from "react";
 import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -20,14 +20,15 @@ import {
   EvidenceSourceBadge,
   EvidenceTypeBadge,
 } from "@/features/evidence/components/evidence-badges";
+import { EvidenceAiAnalysisPanel } from "@/features/evidence/components/evidence-ai-analysis-panel";
+import { EvidenceAiHistoryDialog } from "@/features/evidence/components/evidence-ai-history-dialog";
 import {
+  useAnalyzeEvidenceWithAiMutation,
   useArchiveEvidenceMutation,
   useCreateEvidenceDownloadUrlMutation,
-  useAnalyzeEvidenceWithAiMutation,
   useLatestEvidenceAiAnalysisQuery,
 } from "@/features/evidence/hooks/evidence-hooks";
 import type { EvidenceDocument } from "@/lib/api/api-types";
-import { EvidenceAiAnalysisPanel } from "@/features/evidence/components/evidence-ai-analysis-panel";
 
 function formatDateTime(date: string, locale: string) {
   return new Intl.DateTimeFormat(locale, {
@@ -67,21 +68,24 @@ export function EvidenceCard({
   onEdit?: () => void;
 }) {
   const locale = useLocale();
-  const t = useTranslations("evidenceCard");
 
+  const t = useTranslations("evidenceCard");
   const tAiActions = useTranslations("ai.actions");
   const tEvidenceAi = useTranslations("ai.evidenceAnalysis");
+
+  const [isAnalysisVisible, setIsAnalysisVisible] = useState(false);
+  const [isHistoryOpen, setIsHistoryOpen] = useState(false);
 
   const archiveMutation = useArchiveEvidenceMutation(organizationId);
   const downloadUrlMutation =
     useCreateEvidenceDownloadUrlMutation(organizationId);
-
   const analyzeMutation = useAnalyzeEvidenceWithAiMutation(organizationId);
+
   const latestAnalysisQuery = useLatestEvidenceAiAnalysisQuery(
     organizationId,
     evidence.id,
   );
-  const [isAnalysisVisible, setIsAnalysisVisible] = useState(false);
+
   const analysis = analyzeMutation.data ?? latestAnalysisQuery.data;
 
   function handleArchive() {
@@ -108,183 +112,207 @@ export function EvidenceCard({
     setIsAnalysisVisible(true);
     analyzeMutation.mutate(evidence.id);
   }
+
   return (
-    <Card className="overflow-hidden">
-      <CardContent className="p-0">
-        <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-start lg:justify-between">
-          <div className="min-w-0 flex-1">
-            <div className="flex flex-wrap items-center gap-2">
-              <div className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
-                <FileCheck2 className="size-5" />
+    <>
+      <Card className="overflow-hidden">
+        <CardContent className="p-0">
+          <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-start lg:justify-between">
+            <div className="min-w-0 flex-1">
+              <div className="flex flex-wrap items-center gap-2">
+                <div className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                  <FileCheck2 className="size-5" />
+                </div>
+                <EvidenceTypeBadge type={evidence.evidenceType} />
+                <EvidenceSourceBadge sourceType={evidence.sourceType} />
               </div>
-              <EvidenceTypeBadge type={evidence.evidenceType} />
-              <EvidenceSourceBadge sourceType={evidence.sourceType} />
+
+              <h3 className="mt-4 truncate text-lg font-semibold tracking-tight">
+                {evidence.title}
+              </h3>
+
+              <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-muted-foreground">
+                {evidence.description ?? t("noDescription")}
+              </p>
+
+              {evidence.sourceType === "FILE" ? (
+                <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm">
+                  <p className="font-medium text-slate-700">
+                    {t("storedFile")}
+                  </p>
+                  <p className="mt-1 text-muted-foreground">
+                    {evidence.contentType ?? t("unknownContentType")} ·{" "}
+                    {formatFileSize(evidence.fileSizeBytes, t("unknownSize"))}
+                  </p>
+                  <p className="mt-1 max-w-full truncate text-xs text-muted-foreground">
+                    {t("objectKey", {
+                      objectKey: evidence.fileObjectKey ?? "—",
+                    })}
+                  </p>
+                </div>
+              ) : null}
+
+              {evidence.externalUrl ? (
+                <a
+                  className="mt-4 inline-flex items-center text-sm font-medium text-cyan-700 hover:text-cyan-800"
+                  href={evidence.externalUrl}
+                  rel="noreferrer"
+                  target="_blank"
+                >
+                  {t("openExternal")}
+                  <ExternalLink className="ml-2 size-4" />
+                </a>
+              ) : null}
+
+              <p className="mt-4 text-xs text-muted-foreground">
+                {t("created", {
+                  date: formatDateTime(evidence.createdAt, locale),
+                })}
+              </p>
             </div>
 
-            <h3 className="mt-4 truncate text-lg font-semibold tracking-tight">
-              {evidence.title}
-            </h3>
+            <div className="flex shrink-0 flex-col gap-2">
+              {canManageCompliance ? (
+                <Button
+                  onClick={onEdit}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  <Pencil className="mr-2 size-4" />
+                  {t("edit")}
+                </Button>
+              ) : null}
 
-            <p className="mt-2 line-clamp-2 break-words text-sm leading-6 text-muted-foreground">
-              {evidence.description ?? t("noDescription")}
-            </p>
-
-            {evidence.sourceType === "FILE" ? (
-              <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm">
-                <p className="font-medium text-slate-700">{t("storedFile")}</p>
-                <p className="mt-1 text-muted-foreground">
-                  {evidence.contentType ?? t("unknownContentType")} ·{" "}
-                  {formatFileSize(evidence.fileSizeBytes, t("unknownSize"))}
-                </p>
-                <p className="mt-1 max-w-full truncate text-xs text-muted-foreground">
-                  {t("objectKey", {
-                    objectKey: evidence.fileObjectKey ?? "—",
-                  })}
-                </p>
-              </div>
-            ) : null}
-
-            {evidence.externalUrl ? (
-              <a
-                className="mt-4 inline-flex items-center text-sm font-medium text-cyan-700 hover:text-cyan-800"
-                href={evidence.externalUrl}
-                rel="noreferrer"
-                target="_blank"
-              >
-                {t("openExternal")}
-                <ExternalLink className="ml-2 size-4" />
-              </a>
-            ) : null}
-
-            <p className="mt-4 text-xs text-muted-foreground">
-              {t("created", {
-                date: formatDateTime(evidence.createdAt, locale),
-              })}
-            </p>
-          </div>
-
-          <div className="flex shrink-0 flex-col gap-2">
-            {canManageCompliance ? (
               <Button
-                onClick={onEdit}
+                disabled={analyzeMutation.isPending}
+                onClick={handleAnalyze}
                 size="sm"
                 type="button"
                 variant="outline"
               >
-                <Pencil className="mr-2 size-4" />
-                {t("edit")}
+                <Sparkles className="mr-2 size-4" />
+                {analyzeMutation.isPending
+                  ? tAiActions("analyzing")
+                  : analysis
+                    ? tAiActions("reanalyze")
+                    : tAiActions("analyze")}
               </Button>
-            ) : null}
 
-            <Button
-              disabled={analyzeMutation.isPending}
-              onClick={handleAnalyze}
-              size="sm"
-              type="button"
-              variant="outline"
-            >
-              <Sparkles className="mr-2 size-4" />
-              {analyzeMutation.isPending
-                ? tAiActions("analyzing")
-                : analysis
-                  ? tAiActions("reanalyze")
-                  : tAiActions("analyze")}
-            </Button>
+              {analysis && !isAnalysisVisible ? (
+                <Button
+                  onClick={() => setIsAnalysisVisible(true)}
+                  size="sm"
+                  type="button"
+                  variant="ghost"
+                >
+                  {tAiActions("viewLatest")}
+                </Button>
+              ) : null}
 
-            {analysis && !isAnalysisVisible ? (
               <Button
-                onClick={() => setIsAnalysisVisible(true)}
+                onClick={() => setIsHistoryOpen(true)}
                 size="sm"
                 type="button"
                 variant="ghost"
               >
-                {tAiActions("viewLatest")}
+                <History className="mr-2 size-4" />
+                History
               </Button>
-            ) : null}
 
-            {evidence.sourceType === "FILE" ? (
-              <Button
-                disabled={downloadUrlMutation.isPending}
-                onClick={handleDownload}
-                size="sm"
-                type="button"
-                variant="outline"
-              >
-                <Download className="mr-2 size-4" />
-                {downloadUrlMutation.isPending ? t("preparing") : t("download")}
-              </Button>
-            ) : null}
+              {evidence.sourceType === "FILE" ? (
+                <Button
+                  disabled={downloadUrlMutation.isPending}
+                  onClick={handleDownload}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  <Download className="mr-2 size-4" />
+                  {downloadUrlMutation.isPending
+                    ? t("preparing")
+                    : t("download")}
+                </Button>
+              ) : null}
 
-            {canManageCompliance ? (
-              <Button
-                disabled={archiveMutation.isPending}
-                onClick={handleArchive}
-                size="sm"
-                type="button"
-                variant="outline"
-              >
-                <Archive className="mr-2 size-4" />
-                {archiveMutation.isPending ? t("archiving") : t("archive")}
-              </Button>
-            ) : null}
+              {canManageCompliance ? (
+                <Button
+                  disabled={archiveMutation.isPending}
+                  onClick={handleArchive}
+                  size="sm"
+                  type="button"
+                  variant="outline"
+                >
+                  <Archive className="mr-2 size-4" />
+                  {archiveMutation.isPending ? t("archiving") : t("archive")}
+                </Button>
+              ) : null}
+            </div>
           </div>
-        </div>
 
-        {downloadUrlMutation.error ? (
-          <div className="border-t bg-red-50 p-5">
-            <ErrorAlert error={downloadUrlMutation.error} />
-          </div>
-        ) : null}
+          {downloadUrlMutation.error ? (
+            <div className="border-t bg-red-50 p-5">
+              <ErrorAlert error={downloadUrlMutation.error} />
+            </div>
+          ) : null}
 
-        {archiveMutation.error ? (
-          <div className="border-t bg-red-50 p-5">
-            <ErrorAlert error={archiveMutation.error} />
-          </div>
-        ) : null}
+          {archiveMutation.error ? (
+            <div className="border-t bg-red-50 p-5">
+              <ErrorAlert error={archiveMutation.error} />
+            </div>
+          ) : null}
 
-        {analysis && isAnalysisVisible ? (
-          <div className="border-t bg-white p-5">
-            <div className="mb-3 flex items-center justify-between gap-3">
-              <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                <Sparkles className="size-4 text-cyan-700" />
-                {tEvidenceAi("resultTitle")}
+          {analysis && isAnalysisVisible ? (
+            <div className="border-t bg-white p-5">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
+                  <Sparkles className="size-4 text-cyan-700" />
+                  {tEvidenceAi("resultTitle")}
+                </div>
+
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setIsAnalysisVisible(false)}
+                  className="text-slate-500 hover:text-slate-700"
+                >
+                  <X className="mr-2 size-4" />
+                  {tAiActions("close")}
+                </Button>
               </div>
 
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => setIsAnalysisVisible(false)}
-                className="text-slate-500 hover:text-slate-700"
-              >
-                <X className="mr-2 size-4" />
-                {tAiActions("close")}
-              </Button>
+              <EvidenceAiAnalysisPanel analysis={analysis} />
             </div>
+          ) : null}
 
-            <EvidenceAiAnalysisPanel analysis={analysis} />
-          </div>
-        ) : null}
+          {analyzeMutation.error && isAnalysisVisible ? (
+            <div className="border-t bg-red-50 p-5">
+              <div className="mb-3 flex justify-end">
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="ghost"
+                  onClick={() => setIsAnalysisVisible(false)}
+                  className="text-slate-500 hover:text-slate-700"
+                >
+                  <X className="mr-2 size-4" />
+                  {tAiActions("close")}
+                </Button>
+              </div>
 
-        {analyzeMutation.error && isAnalysisVisible ? (
-          <div className="border-t bg-red-50 p-5">
-            <div className="mb-3 flex justify-end">
-              <Button
-                type="button"
-                size="sm"
-                variant="ghost"
-                onClick={() => setIsAnalysisVisible(false)}
-                className="text-slate-500 hover:text-slate-700"
-              >
-                <X className="mr-2 size-4" />
-                Close
-              </Button>
+              <ErrorAlert error={analyzeMutation.error} />
             </div>
+          ) : null}
+        </CardContent>
+      </Card>
 
-            <ErrorAlert error={analyzeMutation.error} />
-          </div>
-        ) : null}
-      </CardContent>
-    </Card>
+      <EvidenceAiHistoryDialog
+        open={isHistoryOpen}
+        onOpenChange={setIsHistoryOpen}
+        organizationId={organizationId}
+        evidenceId={evidence.id}
+      />
+    </>
   );
 }

@@ -258,3 +258,12 @@ export async function getLatestEvidenceAiAnalysis(
     `/api/v1/organizations/${organizationId}/evidence/${evidenceId}/ai/analysis/latest`,
   );
 }
+
+export async function listEvidenceAiAnalyses(
+  organizationId: string,
+  evidenceId: string,
+): Promise<EvidenceAiAnalysisResponse[]> {
+  return apiClient<EvidenceAiAnalysisResponse[]>(
+    `/api/v1/organizations/${organizationId}/evidence/${evidenceId}/ai/analyses`,
+  );
+}
