@@ -318,8 +318,14 @@ export type OrganizationInvitationResponse = {
   email: string;
   role: OrganizationMemberRole;
   status: OrganizationInvitationStatus;
-  inviteUrl: string;
+  invitedByUserId: string;
+  invitedByEmail: string;
+  acceptedByUserId: string | null;
+  acceptedByEmail: string | null;
   expiresAt: string;
   acceptedAt: string | null;
   createdAt: string;
+  updatedAt: string;
+  invitationToken: string | null;
+  acceptUrl: string | null;
 };

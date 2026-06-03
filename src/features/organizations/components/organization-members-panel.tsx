@@ -92,6 +92,21 @@ function formatDateTime(value: string) {
   }).format(new Date(value));
 }
 
+function getInviteUrl(invitation: {
+  acceptUrl?: string | null;
+  invitationToken?: string | null;
+}) {
+  if (invitation.acceptUrl) {
+    return invitation.acceptUrl;
+  }
+
+  if (invitation.invitationToken) {
+    return `${window.location.origin}/invite/${invitation.invitationToken}`;
+  }
+
+  return null;
+}
+
 export function OrganizationMembersPanel({
   organizationId,
   canManageMembers,
@@ -122,7 +137,14 @@ export function OrganizationMembersPanel({
   const members = membersQuery.data ?? [];
   const invitations = invitationsQuery.data ?? [];
 
-  async function handleCopyInviteLink(invitationId: string, inviteUrl: string) {
+  async function handleCopyInviteLink(
+    invitationId: string,
+    inviteUrl: string | null,
+  ) {
+    if (!inviteUrl) {
+      return;
+    }
+
     await navigator.clipboard.writeText(inviteUrl);
     setCopiedInvitationId(invitationId);
 
@@ -365,82 +387,94 @@ export function OrganizationMembersPanel({
                 </div>
 
                 <div className="divide-y">
-                  {invitations.map((invitation) => (
-                    <div
-                      key={invitation.id}
-                      className="grid gap-3 px-4 py-4 lg:grid-cols-[1.2fr_170px_150px_190px_170px] lg:items-center"
-                    >
-                      <div className="min-w-0">
-                        <p className="truncate font-semibold">
-                          {invitation.email}
-                        </p>
-                        <p className="mt-1 truncate text-xs text-muted-foreground">
-                          {invitation.organizationName}
-                        </p>
-                      </div>
+                  {invitations.map((invitation) => {
+                    const inviteUrl = getInviteUrl(invitation);
+                    const canOpenInvitation =
+                      invitation.status === "PENDING" && Boolean(inviteUrl);
 
-                      <Badge variant="secondary">
-                        {roleLabel(invitation.role)}
-                      </Badge>
+                    return (
+                      <div
+                        key={invitation.id}
+                        className="grid gap-3 px-4 py-4 lg:grid-cols-[1.2fr_170px_150px_190px_170px] lg:items-center"
+                      >
+                        <div className="min-w-0">
+                          <p className="truncate font-semibold">
+                            {invitation.email}
+                          </p>
+                          <p className="mt-1 truncate text-xs text-muted-foreground">
+                            {invitation.organizationName}
+                          </p>
+                        </div>
 
-                      <span className="text-sm text-muted-foreground">
-                        {statusLabel(invitation.status)}
-                      </span>
+                        <Badge variant="secondary">
+                          {roleLabel(invitation.role)}
+                        </Badge>
 
-                      <span className="text-sm text-muted-foreground">
-                        {formatDateTime(invitation.expiresAt)}
-                      </span>
+                        <span className="text-sm text-muted-foreground">
+                          {statusLabel(invitation.status)}
+                        </span>
 
-                      <div className="flex justify-end gap-2">
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            window.open(
-                              invitation.inviteUrl,
-                              "_blank",
-                              "noopener,noreferrer",
-                            )
-                          }
-                        >
-                          <ExternalLink className="mr-2 size-4" />
-                          Open
-                        </Button>
+                        <span className="text-sm text-muted-foreground">
+                          {formatDateTime(invitation.expiresAt)}
+                        </span>
 
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() =>
-                            handleCopyInviteLink(
-                              invitation.id,
-                              invitation.inviteUrl,
-                            )
-                          }
-                        >
-                          <Copy className="mr-2 size-4" />
-                          {copiedInvitationId === invitation.id
-                            ? "Copied"
-                            : "Copy"}
-                        </Button>
-
-                        {canManageMembers ? (
+                        <div className="flex justify-end gap-2">
                           <Button
                             type="button"
-                            size="icon"
-                            variant="ghost"
-                            onClick={() =>
-                              revokeInvitationMutation.mutate(invitation.id)
-                            }
-                            disabled={revokeInvitationMutation.isPending}
+                            size="sm"
+                            variant="outline"
+                            disabled={!canOpenInvitation}
+                            onClick={() => {
+                              if (!inviteUrl) {
+                                return;
+                              }
+
+                              window.open(
+                                inviteUrl,
+                                "_blank",
+                                "noopener,noreferrer",
+                              );
+                            }}
                           >
-                            <XCircle className="size-4 text-red-600" />
+                            <ExternalLink className="mr-2 size-4" />
+                            Open
                           </Button>
-                        ) : null}
+
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            disabled={!canOpenInvitation}
+                            onClick={() =>
+                              handleCopyInviteLink(invitation.id, inviteUrl)
+                            }
+                          >
+                            <Copy className="mr-2 size-4" />
+                            {copiedInvitationId === invitation.id
+                              ? "Copied"
+                              : "Copy"}
+                          </Button>
+
+                          {canManageMembers ? (
+                            <Button
+                              type="button"
+                              size="icon"
+                              variant="ghost"
+                              onClick={() =>
+                                revokeInvitationMutation.mutate(invitation.id)
+                              }
+                              disabled={
+                                revokeInvitationMutation.isPending ||
+                                invitation.status !== "PENDING"
+                              }
+                            >
+                              <XCircle className="size-4 text-red-600" />
+                            </Button>
+                          ) : null}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    );
+                  })}
                 </div>
               </div>
             )}
