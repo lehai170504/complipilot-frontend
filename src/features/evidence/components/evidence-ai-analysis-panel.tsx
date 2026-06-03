@@ -1,9 +1,16 @@
-import { AlertTriangle, CheckCircle2, Lightbulb, Sparkles } from "lucide-react";
-
-import type { EvidenceAiAnalysisResponse } from "@/lib/api/api-types";
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent } from "@/components/ui/card";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Lightbulb,
+  Sparkles,
+  X,
+} from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent } from "@/components/ui/card";
+import type { EvidenceAiAnalysisResponse } from "@/lib/api/api-types";
 
 const riskClassNameMap: Record<
   EvidenceAiAnalysisResponse["riskLevel"],
@@ -17,12 +24,22 @@ const riskClassNameMap: Record<
 
 export function EvidenceAiAnalysisPanel({
   analysis,
+  onClose,
 }: {
   analysis: EvidenceAiAnalysisResponse;
+  onClose?: () => void;
 }) {
   const t = useTranslations("ai.evidenceAnalysis");
   const locale = useLocale();
   const tRiskLevels = useTranslations("ai.riskLevels");
+
+  const findings = analysis.findings ?? [];
+  const missingInformation = analysis.missingInformation ?? [];
+  const suggestedActions = analysis.suggestedActions ?? [];
+
+  const confidence = Number.isFinite(analysis.confidence)
+    ? Math.round(analysis.confidence * 100)
+    : 0;
 
   return (
     <Card className="border-cyan-200 bg-cyan-50/60">
@@ -32,11 +49,14 @@ export function EvidenceAiAnalysisPanel({
             <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
               <Sparkles className="size-5" />
             </div>
+
             <div>
               <p className="font-semibold text-slate-950">{t("title")}</p>
+
               <p className="mt-1 text-sm leading-6 text-slate-700">
                 {analysis.summary}
               </p>
+
               {analysis.analyzedAt ? (
                 <p className="mt-2 text-xs text-slate-500">
                   {t("analyzedAt", {
@@ -49,70 +69,93 @@ export function EvidenceAiAnalysisPanel({
                     }).format(new Date(analysis.analyzedAt)),
                   })}
                   {analysis.analyzedByEmail
-                    ? ` ${t("analyzedBy", { email: analysis.analyzedByEmail })}`
+                    ? ` ${t("analyzedBy", {
+                        email: analysis.analyzedByEmail,
+                      })}`
                     : ""}
                 </p>
               ) : null}
             </div>
           </div>
 
-          <div className="flex shrink-0 flex-wrap gap-2">
+          <div className="flex shrink-0 flex-wrap items-center justify-end gap-2">
             <Badge
               className={riskClassNameMap[analysis.riskLevel]}
               variant="secondary"
             >
               {t("risk", { risk: tRiskLevels(analysis.riskLevel) })}
             </Badge>
+
             <Badge variant="secondary">
               {t("confidence", {
-                confidence: Math.round(analysis.confidence * 100),
+                confidence,
               })}
             </Badge>
+
+            {onClose ? (
+              <Button
+                aria-label="Close AI analysis"
+                className="size-8 rounded-full"
+                onClick={onClose}
+                size="icon"
+                type="button"
+                variant="ghost"
+              >
+                <X className="size-4" />
+              </Button>
+            ) : null}
           </div>
         </div>
 
-        {analysis.findings.length > 0 ? (
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
-              <CheckCircle2 className="size-4 text-emerald-600" />
-              {t("findings")}
-            </div>
-            <ul className="space-y-1 text-sm leading-6 text-slate-700">
-              {analysis.findings.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
+        {findings.length > 0 ? (
+          <AnalysisList
+            icon={<CheckCircle2 className="size-4 text-emerald-600" />}
+            items={findings}
+            title={t("findings")}
+          />
         ) : null}
 
-        {analysis.missingInformation.length > 0 ? (
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
-              <AlertTriangle className="size-4 text-amber-600" />
-              {t("missingInformation")}
-            </div>
-            <ul className="space-y-1 text-sm leading-6 text-slate-700">
-              {analysis.missingInformation.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
+        {missingInformation.length > 0 ? (
+          <AnalysisList
+            icon={<AlertTriangle className="size-4 text-amber-600" />}
+            items={missingInformation}
+            title={t("missingInformation")}
+          />
         ) : null}
 
-        {analysis.suggestedActions.length > 0 ? (
-          <div>
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
-              <Lightbulb className="size-4 text-cyan-700" />
-              {t("suggestedActions")}
-            </div>
-            <ul className="space-y-1 text-sm leading-6 text-slate-700">
-              {analysis.suggestedActions.map((item) => (
-                <li key={item}>• {item}</li>
-              ))}
-            </ul>
-          </div>
+        {suggestedActions.length > 0 ? (
+          <AnalysisList
+            icon={<Lightbulb className="size-4 text-cyan-700" />}
+            items={suggestedActions}
+            title={t("suggestedActions")}
+          />
         ) : null}
       </CardContent>
     </Card>
+  );
+}
+
+function AnalysisList({
+  title,
+  icon,
+  items,
+}: {
+  title: string;
+  icon: React.ReactNode;
+  items: string[];
+}) {
+  return (
+    <div>
+      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
+        {icon}
+        {title}
+      </div>
+
+      <ul className="space-y-1 text-sm leading-6 text-slate-700">
+        {items.map((item) => (
+          <li key={item}>• {item}</li>
+        ))}
+      </ul>
+    </div>
   );
 }

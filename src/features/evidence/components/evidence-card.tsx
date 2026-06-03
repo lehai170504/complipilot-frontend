@@ -10,7 +10,6 @@ import {
   MoreHorizontal,
   Pencil,
   Sparkles,
-  X,
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 
@@ -24,11 +23,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { EvidenceAiAnalysisPanel } from "@/features/evidence/components/evidence-ai-analysis-panel";
 import {
   EvidenceSourceBadge,
   EvidenceTypeBadge,
 } from "@/features/evidence/components/evidence-badges";
-import { EvidenceAiAnalysisPanel } from "@/features/evidence/components/evidence-ai-analysis-panel";
 import { EvidenceAiHistoryDialog } from "@/features/evidence/components/evidence-ai-history-dialog";
 import {
   useAnalyzeEvidenceWithAiMutation,
@@ -79,7 +78,6 @@ export function EvidenceCard({
 
   const t = useTranslations("evidenceCard");
   const tAiActions = useTranslations("ai.actions");
-  const tEvidenceAi = useTranslations("ai.evidenceAnalysis");
 
   const [isAnalysisVisible, setIsAnalysisVisible] = useState(false);
   const [isHistoryOpen, setIsHistoryOpen] = useState(false);
@@ -95,6 +93,10 @@ export function EvidenceCard({
   );
 
   const analysis = analyzeMutation.data ?? latestAnalysisQuery.data;
+  const shouldShowAnalysis = Boolean(analysis && isAnalysisVisible);
+  const shouldShowAnalyzeError = Boolean(
+    analyzeMutation.error && isAnalysisVisible,
+  );
 
   function handleArchive() {
     const confirmed = window.confirm(
@@ -116,8 +118,14 @@ export function EvidenceCard({
   }
 
   function handleAnalyze() {
+    analyzeMutation.reset();
     setIsAnalysisVisible(true);
     analyzeMutation.mutate(evidence.id);
+  }
+
+  function handleCloseAnalysis() {
+    setIsAnalysisVisible(false);
+    analyzeMutation.reset();
   }
 
   return (
@@ -178,7 +186,6 @@ export function EvidenceCard({
               </p>
             </div>
 
-            {/* Khung chứa các nút hành động (Đã được cấu trúc lại) */}
             <div className="flex shrink-0 items-start gap-2">
               <div className="flex flex-col gap-2 sm:flex-row">
                 {evidence.sourceType === "FILE" ? (
@@ -225,10 +232,11 @@ export function EvidenceCard({
 
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" size="sm" className="px-2">
+                  <Button className="px-2" size="sm" variant="ghost">
                     <MoreHorizontal className="size-4" />
                   </Button>
                 </DropdownMenuTrigger>
+
                 <DropdownMenuContent align="end">
                   {canManageCompliance ? (
                     <DropdownMenuItem onClick={onEdit}>
@@ -247,8 +255,8 @@ export function EvidenceCard({
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
                         className="text-red-600 focus:bg-red-50 focus:text-red-600"
-                        onClick={handleArchive}
                         disabled={archiveMutation.isPending}
+                        onClick={handleArchive}
                       >
                         <Archive className="mr-2 size-4" />
                         {archiveMutation.isPending
@@ -276,43 +284,15 @@ export function EvidenceCard({
 
           {analysis && isAnalysisVisible ? (
             <div className="border-t bg-white p-5">
-              <div className="mb-3 flex items-center justify-between gap-3">
-                <div className="flex items-center gap-2 text-sm font-semibold text-slate-900">
-                  <Sparkles className="size-4 text-cyan-700" />
-                  {tEvidenceAi("resultTitle")}
-                </div>
-
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setIsAnalysisVisible(false)}
-                  className="text-slate-500 hover:text-slate-700"
-                >
-                  <X className="mr-2 size-4" />
-                  {tAiActions("close")}
-                </Button>
-              </div>
-
-              <EvidenceAiAnalysisPanel analysis={analysis} />
+              <EvidenceAiAnalysisPanel
+                analysis={analysis}
+                onClose={handleCloseAnalysis}
+              />
             </div>
           ) : null}
 
-          {analyzeMutation.error && isAnalysisVisible ? (
+          {shouldShowAnalyzeError ? (
             <div className="border-t bg-red-50 p-5">
-              <div className="mb-3 flex justify-end">
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="ghost"
-                  onClick={() => setIsAnalysisVisible(false)}
-                  className="text-slate-500 hover:text-slate-700"
-                >
-                  <X className="mr-2 size-4" />
-                  {tAiActions("close")}
-                </Button>
-              </div>
-
               <ErrorAlert error={analyzeMutation.error} />
             </div>
           ) : null}
@@ -320,10 +300,10 @@ export function EvidenceCard({
       </Card>
 
       <EvidenceAiHistoryDialog
-        open={isHistoryOpen}
-        onOpenChange={setIsHistoryOpen}
-        organizationId={organizationId}
         evidenceId={evidence.id}
+        onOpenChange={setIsHistoryOpen}
+        open={isHistoryOpen}
+        organizationId={organizationId}
       />
     </>
   );
