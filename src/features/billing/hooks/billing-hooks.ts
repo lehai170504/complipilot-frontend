@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getOrganizationUsage } from "@/lib/api/billing-api";
+import { getOrganizationUsage } from "@/features/billing/api/billing-api";
 
 export function useOrganizationUsageQuery(organizationId: string | undefined) {
   return useQuery({

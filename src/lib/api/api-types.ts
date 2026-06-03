@@ -1,3 +1,5 @@
+import { OrganizationMemberRole } from "@/features/organizations/api/organization-members-api";
+
 export type PageResponse<T> = {
   items: T[];
   page: number;
@@ -291,4 +293,33 @@ export type OrganizationUsageResponse = {
   storageLimitBytes: number;
   aiAnalysisCountThisMonth: number;
   aiAnalysisLimitPerMonth: number;
+};
+
+export type OrganizationInvitationStatus =
+  | "PENDING"
+  | "ACCEPTED"
+  | "EXPIRED"
+  | "REVOKED";
+
+export type CreateOrganizationInvitationRequest = {
+  email: string;
+  role: OrganizationMemberRole;
+};
+
+export type AcceptOrganizationInvitationRequest = {
+  fullName: string;
+  password: string;
+};
+
+export type OrganizationInvitationResponse = {
+  id: string;
+  organizationId: string;
+  organizationName: string;
+  email: string;
+  role: OrganizationMemberRole;
+  status: OrganizationInvitationStatus;
+  inviteUrl: string;
+  expiresAt: string;
+  acceptedAt: string | null;
+  createdAt: string;
 };
