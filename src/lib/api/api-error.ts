@@ -1,14 +1,43 @@
+import type { ApiErrorResponse } from "@/lib/api/api-types";
+
+export class ApiClientError extends Error {
+  payload: ApiErrorResponse;
+
+  constructor(payload: ApiErrorResponse) {
+    super(payload.message || payload.error || "Request failed");
+
+    this.name = "ApiClientError";
+    this.payload = payload;
+  }
+
+  get status() {
+    return this.payload.status;
+  }
+
+  get requestId() {
+    return this.payload.requestId ?? undefined;
+  }
+
+  get path() {
+    return this.payload.path;
+  }
+
+  get fieldViolations() {
+    return this.payload.fieldViolations ?? [];
+  }
+}
+
 export type ApiErrorPayload = {
-  timestamp?: string;
-  status?: number;
-  error?: string;
-  message?: string;
-  path?: string;
-  requestId?: string;
+  timestamp?: string | null;
+  status?: number | null;
+  error?: string | null;
+  message?: string | null;
+  path?: string | null;
+  requestId?: string | null;
   fieldViolations?: Array<{
     field: string;
     message: string;
-  }>;
+  }> | null;
 };
 
 export type FriendlyApiError = {
@@ -27,9 +56,17 @@ function getString(value: unknown): string | undefined {
     : undefined;
 }
 
+function normalizeNullableString(value: string | null | undefined): string | undefined {
+  return value && value.trim().length > 0 ? value : undefined;
+}
+
 export function parseApiErrorPayload(error: unknown): ApiErrorPayload | null {
   if (!isRecord(error)) {
     return null;
+  }
+
+  if (error instanceof ApiClientError) {
+    return error.payload;
   }
 
   const response = error.response;
@@ -42,16 +79,20 @@ export function parseApiErrorPayload(error: unknown): ApiErrorPayload | null {
     return error.data as ApiErrorPayload;
   }
 
+  if (isRecord(error.payload)) {
+    return error.payload as ApiErrorPayload;
+  }
+
   return null;
 }
 
 export function getFriendlyApiError(error: unknown): FriendlyApiError {
   const payload = parseApiErrorPayload(error);
 
-  const status = payload?.status;
-  const path = payload?.path ?? "";
-  const message = payload?.message;
-  const requestId = payload?.requestId;
+  const status = payload?.status ?? undefined;
+  const path = normalizeNullableString(payload?.path) ?? "";
+  const message = normalizeNullableString(payload?.message);
+  const requestId = normalizeNullableString(payload?.requestId);
 
   if (status === 400) {
     return {

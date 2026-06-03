@@ -93,7 +93,6 @@ export function EvidenceCard({
   );
 
   const analysis = analyzeMutation.data ?? latestAnalysisQuery.data;
-  const shouldShowAnalysis = Boolean(analysis && isAnalysisVisible);
   const shouldShowAnalyzeError = Boolean(
     analyzeMutation.error && isAnalysisVisible,
   );
