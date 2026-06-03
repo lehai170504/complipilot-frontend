@@ -270,3 +270,25 @@ export type ComplianceEvidenceSuggestionResponse = {
   suggestedActions: string[];
   reviewerNote: string;
 };
+
+export type SubscriptionPlan = "FREE" | "PRO" | "BUSINESS" | "ENTERPRISE";
+
+export type SubscriptionStatus =
+  | "ACTIVE"
+  | "PAST_DUE"
+  | "CANCELLED"
+  | "TRIALING";
+
+export type OrganizationUsageResponse = {
+  organizationId: string;
+  plan: SubscriptionPlan;
+  subscriptionStatus: SubscriptionStatus;
+  memberCount: number;
+  memberLimit: number;
+  evidenceDocumentCount: number;
+  evidenceDocumentLimit: number;
+  storageUsedBytes: number;
+  storageLimitBytes: number;
+  aiAnalysisCountThisMonth: number;
+  aiAnalysisLimitPerMonth: number;
+};
