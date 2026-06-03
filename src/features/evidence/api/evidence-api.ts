@@ -10,6 +10,7 @@ import type {
   PageResponse,
   SortDirection,
 } from "@/lib/api/api-types";
+import { supabaseBrowserClient } from "@/lib/supabase-browser";
 
 export type EvidenceSortBy =
   | "createdAt"
@@ -82,6 +83,9 @@ function buildEvidenceQuery(params: ListEvidenceParams): string {
   return searchParams.toString();
 }
 
+const SUPABASE_STORAGE_BUCKET =
+  process.env.NEXT_PUBLIC_SUPABASE_STORAGE_BUCKET ?? "complipilot-evidence-prod";
+
 export async function listEvidence(
   params: ListEvidenceParams,
 ): Promise<PageResponse<EvidenceDocument>> {
@@ -142,6 +146,50 @@ export async function uploadFileToPresignedUrl(
   }
 }
 
+export async function uploadFileToStorage(
+  uploadUrlResponse: CreateEvidenceUploadUrlResponse,
+  file: File,
+): Promise<void> {
+  const contentType = file.type || "application/octet-stream";
+
+  if (uploadUrlResponse.uploadToken) {
+    const { error } = await supabaseBrowserClient.storage
+      .from(SUPABASE_STORAGE_BUCKET)
+      .uploadToSignedUrl(
+        uploadUrlResponse.objectKey,
+        uploadUrlResponse.uploadToken,
+        file,
+        {
+          contentType,
+        },
+      );
+
+    if (error) {
+      throw new Error(`Failed to upload file to Supabase Storage: ${error.message}`);
+    }
+
+    return;
+  }
+
+  const response = await fetch(uploadUrlResponse.uploadUrl, {
+    method: uploadUrlResponse.method || "PUT",
+    headers: {
+      "Content-Type": contentType,
+    },
+    body: file,
+  });
+
+  if (!response.ok) {
+    const errorText = await response.text().catch(() => "");
+
+    throw new Error(
+      errorText
+        ? `Failed to upload file to storage: ${errorText}`
+        : "Failed to upload file to storage",
+    );
+  }
+}
+
 export async function createFileEvidence(
   organizationId: string,
   request: CreateFileEvidenceRequest,
@@ -154,7 +202,7 @@ export async function createFileEvidence(
     fileSizeBytes: request.file.size,
   });
 
-  await uploadFileToPresignedUrl(uploadUrlResponse.uploadUrl, request.file);
+  await uploadFileToStorage(uploadUrlResponse, request.file);
 
   return createEvidence(organizationId, {
     title: request.title,
