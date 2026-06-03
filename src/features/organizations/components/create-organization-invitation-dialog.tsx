@@ -1,7 +1,7 @@
 "use client";
 
 import { FormEvent, useState } from "react";
-import { MailPlus } from "lucide-react";
+import { ExternalLink, MailPlus } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -127,13 +127,24 @@ export function CreateOrganizationInvitationDialog({
               <Input readOnly value={createdInviteUrl} />
             </div>
 
-            <div className="flex justify-end gap-3">
+            <div className="flex flex-col justify-end gap-3 sm:flex-row">
               <Button
                 type="button"
                 variant="outline"
                 onClick={() => handleOpenChange(false)}
               >
                 Close
+              </Button>
+
+              <Button
+                type="button"
+                variant="outline"
+                onClick={() =>
+                  window.open(createdInviteUrl, "_blank", "noopener,noreferrer")
+                }
+              >
+                <ExternalLink className="mr-2 size-4" />
+                Open invite page
               </Button>
 
               <Button type="button" onClick={handleCopyInviteLink}>

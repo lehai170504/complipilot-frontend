@@ -3,6 +3,7 @@
 import { useState } from "react";
 import {
   Copy,
+  ExternalLink,
   Mail,
   ShieldCheck,
   Trash2,
@@ -391,6 +392,22 @@ export function OrganizationMembersPanel({
                       </span>
 
                       <div className="flex justify-end gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            window.open(
+                              invitation.inviteUrl,
+                              "_blank",
+                              "noopener,noreferrer",
+                            )
+                          }
+                        >
+                          <ExternalLink className="mr-2 size-4" />
+                          Open
+                        </Button>
+
                         <Button
                           type="button"
                           size="sm"
