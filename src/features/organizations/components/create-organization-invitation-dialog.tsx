@@ -89,7 +89,12 @@ export function CreateOrganizationInvitationDialog({
       },
       {
         onSuccess: (response) => {
-          setCreatedInviteUrl(response.acceptUrl);
+          setCreatedInviteUrl(
+            response.acceptUrl ??
+              (response.invitationToken
+                ? `${window.location.origin}/invite/${response.invitationToken}`
+                : null),
+          );
         },
       },
     );
