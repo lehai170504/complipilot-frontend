@@ -307,6 +307,7 @@ export type CreateOrganizationInvitationRequest = {
 };
 
 export type AcceptOrganizationInvitationRequest = {
+  email: string;
   fullName: string;
   password: string;
 };

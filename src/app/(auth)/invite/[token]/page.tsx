@@ -50,8 +50,13 @@ export default function AcceptInvitationPage() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
+    if (!invitation) {
+      return;
+    }
+
     acceptMutation.mutate(
       {
+        email: invitation.email,
         fullName: fullName.trim(),
         password,
       },
