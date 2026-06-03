@@ -214,6 +214,7 @@ export type CreateEvidenceUploadUrlResponse = {
   uploadUrl: string;
   method: "PUT";
   expiresInMinutes: number;
+  uploadToken?: string | null;
 };
 
 export type EvidenceDownloadUrlResponse = {

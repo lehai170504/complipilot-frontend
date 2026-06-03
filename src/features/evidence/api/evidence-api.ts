@@ -126,12 +126,19 @@ export async function uploadFileToPresignedUrl(
     method: "PUT",
     headers: {
       "Content-Type": file.type || "application/octet-stream",
+      "x-upsert": "false",
     },
     body: file,
   });
 
   if (!response.ok) {
-    throw new Error("Failed to upload file to storage");
+    const errorText = await response.text().catch(() => "");
+
+    throw new Error(
+      errorText
+        ? `Failed to upload file to storage: ${errorText}`
+        : "Failed to upload file to storage",
+    );
   }
 }
 
@@ -139,9 +146,11 @@ export async function createFileEvidence(
   organizationId: string,
   request: CreateFileEvidenceRequest,
 ): Promise<EvidenceDocument> {
+  const contentType = request.file.type || "application/octet-stream";
+
   const uploadUrlResponse = await createEvidenceUploadUrl(organizationId, {
     filename: request.file.name,
-    contentType: request.file.type || "application/octet-stream",
+    contentType,
     fileSizeBytes: request.file.size,
   });
 
@@ -154,7 +163,7 @@ export async function createFileEvidence(
     sourceType: "FILE",
     fileObjectKey: uploadUrlResponse.objectKey,
     externalUrl: null,
-    contentType: request.file.type || "application/octet-stream",
+    contentType,
     fileSizeBytes: request.file.size,
   });
 }
