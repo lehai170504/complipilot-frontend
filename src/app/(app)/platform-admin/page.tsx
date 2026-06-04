@@ -14,12 +14,30 @@ import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { useCurrentUserQuery } from "@/features/auth/hooks/auth-hooks";
+import {
   usePlatformOrganizationsQuery,
   usePlatformOrganizationUsageQuery,
   usePlatformUsersQuery,
+  useUpdatePlatformOrganizationSubscriptionMutation,
 } from "@/features/platform-admin/hooks/platform-admin-hooks";
-import { useCurrentUserQuery } from "@/features/auth/hooks/auth-hooks";
-import type { PlatformOrganizationResponse } from "@/lib/api/api-types";
+import type {
+  PlatformOrganizationResponse,
+  SubscriptionPlan,
+} from "@/lib/api/api-types";
+
+const planOptions: SubscriptionPlan[] = [
+  "FREE",
+  "PRO",
+  "BUSINESS",
+  "ENTERPRISE",
+];
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) {
@@ -101,6 +119,8 @@ export default function PlatformAdminPage() {
 
   const organizationsQuery = usePlatformOrganizationsQuery();
   const usersQuery = usePlatformUsersQuery();
+  const updateSubscriptionMutation =
+    useUpdatePlatformOrganizationSubscriptionMutation();
 
   const organizations = organizationsQuery.data?.items ?? [];
   const users = usersQuery.data?.items ?? [];
@@ -122,6 +142,17 @@ export default function PlatformAdminPage() {
     (total, organization) => total + organization.storageBytes,
     0,
   );
+
+  function handleChangePlan(plan: SubscriptionPlan) {
+    if (!selectedOrganization?.id) {
+      return;
+    }
+
+    updateSubscriptionMutation.mutate({
+      organizationId: selectedOrganization.id,
+      plan,
+    });
+  }
 
   return (
     <div className="space-y-6">
@@ -325,6 +356,48 @@ export default function PlatformAdminPage() {
                       {organizationUsageQuery.data.plan}
                     </Badge>
                   </div>
+
+                  <div className="space-y-2 rounded-2xl border bg-slate-50 p-3">
+                    <p className="text-sm font-medium text-muted-foreground">
+                      Change plan
+                    </p>
+
+                    <Select
+                      value={organizationUsageQuery.data.plan}
+                      disabled={updateSubscriptionMutation.isPending}
+                      onValueChange={(plan) =>
+                        handleChangePlan(plan as SubscriptionPlan)
+                      }
+                    >
+                      <SelectTrigger className="bg-white">
+                        <SelectValue />
+                      </SelectTrigger>
+
+                      <SelectContent>
+                        {planOptions.map((plan) => (
+                          <SelectItem key={plan} value={plan}>
+                            {plan}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+
+                    <p className="text-xs text-muted-foreground">
+                      This is a manual platform-admin override. Billing checkout
+                      can be connected later.
+                    </p>
+                  </div>
+
+                  {updateSubscriptionMutation.error ? (
+                    <ErrorAlert error={updateSubscriptionMutation.error} />
+                  ) : null}
+
+                  {updateSubscriptionMutation.isPending ? (
+                    <div className="flex items-center gap-2 rounded-2xl bg-cyan-50 px-3 py-2 text-xs text-cyan-700">
+                      <Loader2 className="size-3.5 animate-spin" />
+                      Updating subscription plan...
+                    </div>
+                  ) : null}
 
                   <div className="flex justify-between gap-3">
                     <span className="text-muted-foreground">Members</span>

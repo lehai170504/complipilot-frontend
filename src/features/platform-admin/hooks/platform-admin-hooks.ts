@@ -1,9 +1,10 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   getPlatformOrganizationUsage,
   listPlatformOrganizations,
   listPlatformUsers,
+  updatePlatformOrganizationSubscription,
 } from "@/lib/api/platform-admin-api";
 
 export function usePlatformOrganizationsQuery() {
@@ -27,5 +28,29 @@ export function usePlatformOrganizationUsageQuery(
     queryKey: ["platform-admin", "organization-usage", organizationId],
     queryFn: () => getPlatformOrganizationUsage(organizationId!),
     enabled: Boolean(organizationId),
+  });
+}
+
+export function useUpdatePlatformOrganizationSubscriptionMutation() {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: ({
+      organizationId,
+      plan,
+    }: {
+      organizationId: string;
+      plan: "FREE" | "PRO" | "BUSINESS" | "ENTERPRISE";
+    }) => updatePlatformOrganizationSubscription(organizationId, plan),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["platform-admin", "organizations"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["platform-admin", "organization-usage"],
+        }),
+      ]);
+    },
   });
 }

@@ -4,6 +4,7 @@ import type {
   PageResponse,
   PlatformOrganizationResponse,
   PlatformUserResponse,
+  SubscriptionPlan,
 } from "@/lib/api/api-types";
 
 export function listPlatformOrganizations(
@@ -39,5 +40,18 @@ export function getPlatformOrganizationUsage(
 ): Promise<OrganizationUsageResponse> {
   return apiClient<OrganizationUsageResponse>(
     `/api/v1/platform/organizations/${organizationId}/usage`,
+  );
+}
+
+export function updatePlatformOrganizationSubscription(
+  organizationId: string,
+  plan: SubscriptionPlan,
+): Promise<OrganizationUsageResponse> {
+  return apiClient<OrganizationUsageResponse>(
+    `/api/v1/platform/organizations/${organizationId}/subscription`,
+    {
+      method: "PATCH",
+      body: JSON.stringify({ plan }),
+    },
   );
 }
