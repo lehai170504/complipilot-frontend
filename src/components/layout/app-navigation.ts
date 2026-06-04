@@ -1,6 +1,7 @@
 import {
   Building2,
   ClipboardCheck,
+  CreditCard,
   FileCheck2,
   Gauge,
   ListChecks,
@@ -32,6 +33,12 @@ export const appNavigationItems = [
     labelKey: "tasks",
     href: "/tasks",
     icon: ListChecks,
+    permission: "all",
+  },
+  {
+    labelKey: "billing",
+    href: "/billing",
+    icon: CreditCard,
     permission: "all",
   },
   {

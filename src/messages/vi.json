@@ -9,7 +9,8 @@
     "evidence": "Bằng chứng",
     "tasks": "Công việc",
     "audit": "Nhật ký kiểm toán",
-    "workspaces": "Không gian làm việc"
+    "workspaces": "Không gian làm việc",
+    "billing": "Gói dịch vụ"
   },
   "topbar": {
     "workspace": "Không gian làm việc",

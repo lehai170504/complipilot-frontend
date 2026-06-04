@@ -9,7 +9,8 @@
     "evidence": "Evidence",
     "tasks": "Tasks",
     "audit": "Audit",
-    "workspaces": "Workspaces"
+    "workspaces": "Workspaces",
+    "billing": "Billing"
   },
   "topbar": {
     "workspace": "Workspace",
