@@ -8,7 +8,15 @@ import { useTranslations } from "next-intl";
 import { cn } from "@/lib/utils";
 import { appNavigationItems } from "@/components/layout/app-navigation";
 import { WorkspaceSelector } from "@/components/layout/workspace-selector";
+import { useCurrentUserQuery } from "@/features/auth/hooks/auth-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
+
+function getPlatformAdminEmails() {
+  return (process.env.NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS ?? "")
+    .split(",")
+    .map((email) => email.trim().toLowerCase())
+    .filter(Boolean);
+}
 
 export function AppSidebar() {
   const pathname = usePathname();
@@ -18,10 +26,21 @@ export function AppSidebar() {
   const tSidebar = useTranslations("sidebar");
 
   const { canViewAudit } = useActiveOrganization();
+  const currentUserQuery = useCurrentUserQuery();
+
+  const currentUserEmail = currentUserQuery.data?.email?.toLowerCase();
+  const platformAdminEmails = getPlatformAdminEmails();
+  const canViewPlatformAdmin =
+    Boolean(currentUserEmail) &&
+    platformAdminEmails.includes(currentUserEmail!);
 
   const visibleNavigationItems = appNavigationItems.filter((item) => {
     if (item.permission === "canViewAudit") {
       return canViewAudit;
+    }
+
+    if (item.permission === "canViewPlatformAdmin") {
+      return canViewPlatformAdmin;
     }
 
     return true;

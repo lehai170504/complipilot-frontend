@@ -10,7 +10,8 @@
     "tasks": "Công việc",
     "audit": "Nhật ký kiểm toán",
     "workspaces": "Không gian làm việc",
-    "billing": "Gói dịch vụ"
+    "billing": "Gói dịch vụ",
+    "platformAdmin": "Quản trị nền tảng"
   },
   "topbar": {
     "workspace": "Không gian làm việc",

@@ -4,7 +4,7 @@ import {
   countUnreadNotifications,
   listNotifications,
   markNotificationAsRead,
-} from "@/lib/api/notifications-api";
+} from "@/features/notifications/api/notifications-api";
 
 export function useNotificationsQuery(organizationId: string | undefined) {
   return useQuery({

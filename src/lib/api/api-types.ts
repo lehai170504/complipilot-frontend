@@ -358,3 +358,31 @@ export type NotificationResponse = {
 export type UnreadNotificationCountResponse = {
   unreadCount: number;
 };
+
+export type OrganizationStatus = "ACTIVE" | "DISABLED";
+
+export type UserStatus = "ACTIVE" | "DISABLED";
+
+export type PlatformOrganizationResponse = {
+  id: string;
+  name: string;
+  slug: string;
+  status: OrganizationStatus;
+  plan: SubscriptionPlan | null;
+  subscriptionStatus: SubscriptionStatus | null;
+  activeMemberCount: number;
+  evidenceDocumentCount: number;
+  storageBytes: number;
+  aiAnalysisCount: number;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type PlatformUserResponse = {
+  id: string;
+  email: string;
+  fullName: string;
+  status: UserStatus;
+  createdAt: string;
+  updatedAt: string;
+};

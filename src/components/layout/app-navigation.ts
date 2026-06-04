@@ -6,9 +6,13 @@ import {
   Gauge,
   ListChecks,
   ScrollText,
+  Shield,
 } from "lucide-react";
 
-export type AppNavigationPermission = "all" | "canViewAudit";
+export type AppNavigationPermission =
+  | "all"
+  | "canViewAudit"
+  | "canViewPlatformAdmin";
 
 export const appNavigationItems = [
   {
@@ -46,6 +50,12 @@ export const appNavigationItems = [
     href: "/audit",
     icon: ScrollText,
     permission: "canViewAudit",
+  },
+  {
+    labelKey: "platformAdmin",
+    href: "/platform-admin",
+    icon: Shield,
+    permission: "canViewPlatformAdmin",
   },
   {
     labelKey: "workspaces",

@@ -10,7 +10,8 @@
     "tasks": "Tasks",
     "audit": "Audit",
     "workspaces": "Workspaces",
-    "billing": "Billing"
+    "billing": "Billing",
+    "platformAdmin": "Platform Admin"
   },
   "topbar": {
     "workspace": "Workspace",
