@@ -5,6 +5,7 @@ import {
   createOrganizationInvitation,
   getOrganizationInvitationByToken,
   listOrganizationInvitations,
+  regenerateOrganizationInvitationLink,
   revokeOrganizationInvitation,
 } from "@/features/organizations/api/organization-invitations-api";
 import type {
@@ -57,7 +58,9 @@ export function useRevokeOrganizationInvitationMutation(
   });
 }
 
-export function useOrganizationInvitationByTokenQuery(token: string | undefined) {
+export function useOrganizationInvitationByTokenQuery(
+  token: string | undefined,
+) {
   return useQuery({
     queryKey: ["organization-invitation", token],
     queryFn: () => getOrganizationInvitationByToken(token!),
@@ -66,9 +69,27 @@ export function useOrganizationInvitationByTokenQuery(token: string | undefined)
   });
 }
 
-export function useAcceptOrganizationInvitationMutation(token: string | undefined) {
+export function useAcceptOrganizationInvitationMutation(
+  token: string | undefined,
+) {
   return useMutation({
     mutationFn: (request: AcceptOrganizationInvitationRequest) =>
       acceptOrganizationInvitation(token!, request),
+  });
+}
+
+export function useRegenerateOrganizationInvitationLinkMutation(
+  organizationId: string | undefined,
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (invitationId: string) =>
+      regenerateOrganizationInvitationLink(organizationId!, invitationId),
+    onSuccess: () => {
+      void queryClient.invalidateQueries({
+        queryKey: ["organization-invitations", organizationId],
+      });
+    },
   });
 }

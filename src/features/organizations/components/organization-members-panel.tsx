@@ -10,6 +10,7 @@ import {
   UserPlus,
   UsersRound,
   XCircle,
+  RefreshCw,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -39,6 +40,7 @@ import {
 import {
   useOrganizationInvitationsQuery,
   useRevokeOrganizationInvitationMutation,
+  useRegenerateOrganizationInvitationLinkMutation,
 } from "@/features/organizations/hooks/organization-invitation-hooks";
 
 const roleOptions: OrganizationMemberRole[] = [
@@ -127,6 +129,12 @@ export function OrganizationMembersPanel({
   const deleteMutation = useDeleteOrganizationMemberMutation(organizationId);
   const revokeInvitationMutation =
     useRevokeOrganizationInvitationMutation(organizationId);
+  const regenerateInvitationMutation =
+    useRegenerateOrganizationInvitationLinkMutation(organizationId);
+
+  const [regeneratedInviteUrls, setRegeneratedInviteUrls] = useState<
+    Record<string, string>
+  >({});
 
   const [activeTab, setActiveTab] = useState<PanelTab>("members");
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
@@ -136,6 +144,27 @@ export function OrganizationMembersPanel({
 
   const members = membersQuery.data ?? [];
   const invitations = invitationsQuery.data ?? [];
+
+  function handleRegenerateInviteLink(invitationId: string) {
+    regenerateInvitationMutation.mutate(invitationId, {
+      onSuccess: (response) => {
+        const regeneratedUrl =
+          response.acceptUrl ??
+          (response.invitationToken
+            ? `${window.location.origin}/invite/${response.invitationToken}`
+            : null);
+
+        if (!regeneratedUrl) {
+          return;
+        }
+
+        setRegeneratedInviteUrls((current) => ({
+          ...current,
+          [invitationId]: regeneratedUrl,
+        }));
+      },
+    });
+  }
 
   async function handleCopyInviteLink(
     invitationId: string,
@@ -388,7 +417,10 @@ export function OrganizationMembersPanel({
 
                 <div className="divide-y">
                   {invitations.map((invitation) => {
-                    const inviteUrl = getInviteUrl(invitation);
+                    const inviteUrl =
+                      regeneratedInviteUrls[invitation.id] ??
+                      getInviteUrl(invitation);
+
                     const canOpenInvitation =
                       invitation.status === "PENDING" && Boolean(inviteUrl);
 
@@ -419,6 +451,22 @@ export function OrganizationMembersPanel({
                         </span>
 
                         <div className="flex justify-end gap-2">
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            disabled={
+                              regenerateInvitationMutation.isPending ||
+                              invitation.status !== "PENDING"
+                            }
+                            onClick={() =>
+                              handleRegenerateInviteLink(invitation.id)
+                            }
+                          >
+                            <RefreshCw className="mr-2 size-4" />
+                            Regenerate
+                          </Button>
+
                           <Button
                             type="button"
                             size="sm"
@@ -479,9 +527,15 @@ export function OrganizationMembersPanel({
               </div>
             )}
 
-            {revokeInvitationMutation.error ? (
+            {revokeInvitationMutation.error ||
+            regenerateInvitationMutation.error ? (
               <div className="mt-4">
-                <ErrorAlert error={revokeInvitationMutation.error} />
+                <ErrorAlert
+                  error={
+                    revokeInvitationMutation.error ??
+                    regenerateInvitationMutation.error
+                  }
+                />
               </div>
             ) : null}
           </>

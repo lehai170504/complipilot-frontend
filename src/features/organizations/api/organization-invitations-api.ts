@@ -62,3 +62,15 @@ export function acceptOrganizationInvitation(
     },
   );
 }
+
+export function regenerateOrganizationInvitationLink(
+  organizationId: string,
+  invitationId: string,
+): Promise<OrganizationInvitationResponse> {
+  return apiClient<OrganizationInvitationResponse>(
+    `/api/v1/organizations/${organizationId}/invitations/${invitationId}/regenerate-link`,
+    {
+      method: "POST",
+    },
+  );
+}
