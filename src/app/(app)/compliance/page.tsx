@@ -150,7 +150,10 @@ export default function CompliancePage() {
         </section>
       )}
 
-      <FrameworksPanel />
+      <FrameworksPanel
+        organizationId={organizationId}
+        canManageCompliance={canManageCompliance}
+      />
 
       <CreateComplianceItemDialog
         open={isCreateItemDialogOpen}

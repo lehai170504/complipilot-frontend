@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
+  applyFrameworkToOrganization,
   createComplianceItem,
   createFramework,
   createRequirement,
@@ -210,6 +211,47 @@ export function useSuggestMissingEvidenceWithAiMutation(
       }
 
       return suggestMissingEvidenceWithAi(organizationId, itemId);
+    },
+  });
+}
+
+export function useApplyFrameworkToOrganizationMutation(
+  organizationId: string | undefined,
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (frameworkId: string) => {
+      if (!organizationId) {
+        throw new Error("Missing active organization.");
+      }
+
+      return applyFrameworkToOrganization(organizationId, frameworkId);
+    },
+    onSuccess: async (data) => {
+      toast.success("Framework applied", {
+        description: `${data.createdCount} controls created, ${data.skippedCount} skipped.`,
+      });
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: complianceQueryKeys.items(organizationId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: complianceQueryKeys.summary(organizationId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: complianceQueryKeys.dueSoon(organizationId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: complianceQueryKeys.overdue(organizationId),
+        }),
+        queryClient.invalidateQueries({ queryKey: ["tasks"] }),
+        queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
+      ]);
+    },
+    onError: () => {
+      toast.error("Failed to apply framework");
     },
   });
 }
