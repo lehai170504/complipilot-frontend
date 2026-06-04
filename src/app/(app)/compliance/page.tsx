@@ -7,6 +7,7 @@ import {
   FileClock,
   Plus,
   ShieldCheck,
+  Download,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -23,6 +24,7 @@ import {
 import { MetricCard } from "@/features/dashboard/components/metric-card";
 import { SeedDemoWorkspaceButton } from "@/features/dashboard/components/seed-demo-workspace-button";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
+import { useExportComplianceItemsCsvMutation } from "@/features/exports/hooks/export-hooks";
 
 export default function CompliancePage() {
   const t = useTranslations("compliancePage");
@@ -32,6 +34,7 @@ export default function CompliancePage() {
 
   const complianceItemsQuery = useComplianceItemsQuery(organizationId);
   const complianceSummaryQuery = useComplianceSummaryQuery(organizationId);
+  const exportComplianceCsvMutation = useExportComplianceItemsCsvMutation();
 
   const [isCreateItemDialogOpen, setIsCreateItemDialogOpen] = useState(false);
 
@@ -63,7 +66,29 @@ export default function CompliancePage() {
 
           {canManageCompliance ? (
             <div className="flex flex-col gap-2 sm:flex-row">
+              <Button
+                type="button"
+                variant="outline"
+                className="border-cyan-300/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                disabled={
+                  !organizationId || exportComplianceCsvMutation.isPending
+                }
+                onClick={() => {
+                  if (!organizationId) {
+                    return;
+                  }
+
+                  exportComplianceCsvMutation.mutate(organizationId);
+                }}
+              >
+                <Download className="mr-2 size-4" />
+                {exportComplianceCsvMutation.isPending
+                  ? "Exporting..."
+                  : "Export CSV"}
+              </Button>
+
               <SeedDemoWorkspaceButton organizationId={organizationId} />
+
               <Button
                 onClick={() => setIsCreateItemDialogOpen(true)}
                 variant="outline"

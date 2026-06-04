@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FileCheck2 } from "lucide-react";
+import { FileCheck2, Download } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -17,6 +17,7 @@ import {
 } from "@/features/evidence/components/evidence-toolbar";
 import { useEvidenceQuery } from "@/features/evidence/hooks/evidence-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
+import { useExportEvidenceCsvMutation } from "@/features/exports/hooks/export-hooks";
 import type { EvidenceDocument } from "@/lib/api/api-types";
 
 export default function EvidencePage() {
@@ -25,6 +26,7 @@ export default function EvidencePage() {
   const tCommon = useTranslations("common");
 
   const { activeOrganization, canManageCompliance } = useActiveOrganization();
+  const exportEvidenceCsvMutation = useExportEvidenceCsvMutation();
 
   const [page, setPage] = useState(0);
   const [isCreateUrlDialogOpen, setIsCreateUrlDialogOpen] = useState(false);
@@ -56,7 +58,7 @@ export default function EvidencePage() {
             sortDirection: toolbarState.sortDirection,
           }
         : undefined,
-    [organizationId, page, toolbarState]
+    [organizationId, page, toolbarState],
   );
 
   const evidenceQuery = useEvidenceQuery(evidenceQueryParams);
@@ -133,6 +135,25 @@ export default function EvidencePage() {
                   variant="outline"
                 >
                   {t("addUrl")}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={
+                    !organizationId || exportEvidenceCsvMutation.isPending
+                  }
+                  onClick={() => {
+                    if (!organizationId) {
+                      return;
+                    }
+
+                    exportEvidenceCsvMutation.mutate(organizationId);
+                  }}
+                >
+                  <Download className="mr-2 size-4" />
+                  {exportEvidenceCsvMutation.isPending
+                    ? "Exporting..."
+                    : "Export CSV"}
                 </Button>
               </div>
             ) : null}

@@ -5,7 +5,7 @@ import {
   listPlatformOrganizations,
   listPlatformUsers,
   updatePlatformOrganizationSubscription,
-} from "@/lib/api/platform-admin-api";
+} from "@/features/platform-admin/api/platform-admin-api";
 
 export function usePlatformOrganizationsQuery() {
   return useQuery({

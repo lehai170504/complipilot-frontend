@@ -1,14 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ScrollText } from "lucide-react";
+import { Download, ScrollText } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { FilterBar } from "@/components/layout/filter-bar";
-import { AuditEventCard } from "@/features/audit/components/audit-event-card";
-import { useAuditEventsQuery } from "@/features/audit/hooks/audit-hooks";
-import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -19,6 +16,10 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { AuditEventCard } from "@/features/audit/components/audit-event-card";
+import { useAuditEventsQuery } from "@/features/audit/hooks/audit-hooks";
+import { useExportAuditEventsCsvMutation } from "@/features/exports/hooks/export-hooks";
+import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import type {
   AuditAction,
   AuditResourceType,
@@ -60,8 +61,11 @@ type AuditSortBy = "createdAt" | "action" | "resourceType" | "actorEmail";
 
 export default function AuditPage() {
   const t = useTranslations("audit");
+
   const { activeOrganization, canViewAudit } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
+
+  const exportAuditCsvMutation = useExportAuditEventsCsvMutation();
 
   const [page, setPage] = useState(0);
   const [search, setSearch] = useState("");
@@ -100,9 +104,18 @@ export default function AuditPage() {
   );
 
   const auditQuery = useAuditEventsQuery(params);
+
   const events = auditQuery.data?.items ?? [];
   const totalPages = auditQuery.data?.totalPages ?? 0;
   const totalItems = auditQuery.data?.totalItems ?? 0;
+
+  function handleExportCsv() {
+    if (!organizationId) {
+      return;
+    }
+
+    exportAuditCsvMutation.mutate(organizationId);
+  }
 
   if (!canViewAudit) {
     return (
@@ -117,13 +130,32 @@ export default function AuditPage() {
   return (
     <div className="space-y-6">
       <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-          {t("heroEyebrow")}
-        </p>
-        <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-          {t("heroTitle")}
-        </h2>
-        <p className="mt-3 max-w-2xl text-slate-300">{t("heroDescription")}</p>
+        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
+              {t("heroEyebrow")}
+            </p>
+
+            <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+              {t("heroTitle")}
+            </h2>
+
+            <p className="mt-3 max-w-2xl text-slate-300">
+              {t("heroDescription")}
+            </p>
+          </div>
+
+          <Button
+            type="button"
+            variant="outline"
+            className="border-cyan-300/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+            disabled={!organizationId || exportAuditCsvMutation.isPending}
+            onClick={handleExportCsv}
+          >
+            <Download className="mr-2 size-4" />
+            {exportAuditCsvMutation.isPending ? "Exporting..." : "Export CSV"}
+          </Button>
+        </div>
       </section>
 
       <FilterBar>
@@ -147,8 +179,10 @@ export default function AuditPage() {
           <SelectTrigger className="min-w-[150px]">
             <SelectValue placeholder={t("filters.action")} />
           </SelectTrigger>
+
           <SelectContent>
             <SelectItem value={ALL}>{t("filters.allActions")}</SelectItem>
+
             {auditActionOptions.map((action) => (
               <SelectItem key={action} value={action}>
                 {t(`actions.${action}`)}
@@ -167,8 +201,10 @@ export default function AuditPage() {
           <SelectTrigger className="min-w-[150px]">
             <SelectValue placeholder={t("filters.resource")} />
           </SelectTrigger>
+
           <SelectContent>
             <SelectItem value={ALL}>{t("filters.allResources")}</SelectItem>
+
             {auditResourceTypeOptions.map((resourceType) => (
               <SelectItem key={resourceType} value={resourceType}>
                 {t(`resourceTypes.${resourceType}`)}
@@ -179,11 +215,15 @@ export default function AuditPage() {
 
         <Select
           value={sortBy}
-          onValueChange={(value) => setSortBy(value as AuditSortBy)}
+          onValueChange={(value) => {
+            setSortBy(value as AuditSortBy);
+            setPage(0);
+          }}
         >
           <SelectTrigger className="min-w-[130px]">
             <SelectValue placeholder={t("filters.sort")} />
           </SelectTrigger>
+
           <SelectContent>
             {auditSortOptions.map((option) => (
               <SelectItem key={option.value} value={option.value}>
@@ -195,11 +235,15 @@ export default function AuditPage() {
 
         <Select
           value={sortDirection}
-          onValueChange={(value) => setSortDirection(value as SortDirection)}
+          onValueChange={(value) => {
+            setSortDirection(value as SortDirection);
+            setPage(0);
+          }}
         >
           <SelectTrigger className="min-w-[110px]">
             <SelectValue placeholder={t("filters.direction")} />
           </SelectTrigger>
+
           <SelectContent>
             <SelectItem value="DESC">{t("sort.newest")}</SelectItem>
             <SelectItem value="ASC">{t("sort.oldest")}</SelectItem>
@@ -208,6 +252,10 @@ export default function AuditPage() {
       </FilterBar>
 
       {auditQuery.error ? <ErrorAlert error={auditQuery.error} /> : null}
+
+      {exportAuditCsvMutation.error ? (
+        <ErrorAlert error={exportAuditCsvMutation.error} />
+      ) : null}
 
       {auditQuery.isLoading ? (
         <Card>
@@ -221,9 +269,11 @@ export default function AuditPage() {
             <div className="rounded-3xl bg-slate-950 p-4 text-cyan-300">
               <ScrollText className="size-8" />
             </div>
+
             <h3 className="mt-5 text-xl font-semibold">
               {t("state.emptyTitle")}
             </h3>
+
             <p className="mt-2 max-w-md text-muted-foreground">
               {t("state.emptyDescription")}
             </p>
@@ -237,7 +287,7 @@ export default function AuditPage() {
         </section>
       )}
 
-      <div className="flex items-center justify-between rounded-3xl border bg-white p-4 shadow-sm">
+      <div className="flex flex-col gap-4 rounded-3xl border bg-white p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-muted-foreground">
           {t("pagination.page")} {page + 1} {t("pagination.of")}{" "}
           {Math.max(totalPages, 1)} · {totalItems} {t("pagination.events")}
@@ -253,6 +303,7 @@ export default function AuditPage() {
           >
             {t("pagination.previous")}
           </Button>
+
           <Button
             disabled={page + 1 >= totalPages || auditQuery.isFetching}
             onClick={() => setPage((currentPage) => currentPage + 1)}
