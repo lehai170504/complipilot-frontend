@@ -386,3 +386,16 @@ export type PlatformUserResponse = {
   createdAt: string;
   updatedAt: string;
 };
+
+export type OrganizationSettingsResponse = {
+  id: string;
+  name: string;
+  slug: string;
+  status: OrganizationStatus;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UpdateOrganizationSettingsRequest = {
+  name: string;
+};

@@ -6,6 +6,7 @@ import {
   Gauge,
   ListChecks,
   ScrollText,
+  Settings,
   Shield,
 } from "lucide-react";
 
@@ -43,6 +44,12 @@ export const appNavigationItems = [
     labelKey: "billing",
     href: "/billing",
     icon: CreditCard,
+    permission: "all",
+  },
+  {
+    labelKey: "settings",
+    href: "/settings",
+    icon: Settings,
     permission: "all",
   },
   {

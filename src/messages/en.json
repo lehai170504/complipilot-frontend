@@ -11,7 +11,8 @@
     "audit": "Audit",
     "workspaces": "Workspaces",
     "billing": "Billing",
-    "platformAdmin": "Platform Admin"
+    "platformAdmin": "Platform Admin",
+    "settings": "Settings"
   },
   "topbar": {
     "workspace": "Workspace",

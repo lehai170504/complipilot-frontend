@@ -11,7 +11,8 @@
     "audit": "Nhật ký kiểm toán",
     "workspaces": "Không gian làm việc",
     "billing": "Gói dịch vụ",
-    "platformAdmin": "Quản trị nền tảng"
+    "platformAdmin": "Quản trị nền tảng",
+    "settings": "Cài đặt"
   },
   "topbar": {
     "workspace": "Không gian làm việc",
