@@ -1,18 +1,24 @@
 "use client";
 
-import { Menu, Search, LogOut } from "lucide-react";
+import { LogOut, Menu, Search } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { Button } from "@/components/ui/button";
 import { LanguageSwitcher } from "@/components/layout/language-switcher";
+import { Button } from "@/components/ui/button";
 import {
   useCurrentUserQuery,
   useLogoutMutation,
 } from "@/features/auth/hooks/auth-hooks";
+import { NotificationBell } from "@/features/notifications/components/notification-bell";
 
-export function AppTopbar() {
+export function AppTopbar({
+  organizationId,
+}: {
+  organizationId?: string;
+}) {
   const currentUserQuery = useCurrentUserQuery();
   const logoutMutation = useLogoutMutation();
+
   const tTopbar = useTranslations("topbar");
   const tAuth = useTranslations("auth");
 
@@ -28,6 +34,7 @@ export function AppTopbar() {
             <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-slate-400">
               {tTopbar("workspace")}
             </p>
+
             <h1 className="text-xl font-bold tracking-tight text-slate-900">
               {tTopbar("title")}
             </h1>
@@ -40,12 +47,15 @@ export function AppTopbar() {
         </div>
 
         <div className="flex items-center gap-3">
+          <NotificationBell organizationId={organizationId} />
+
           <LanguageSwitcher />
 
           <div className="hidden text-right sm:block">
             <p className="text-sm font-semibold text-slate-900">
               {currentUserQuery.data?.fullName ?? tTopbar("loadingUser")}
             </p>
+
             <p className="text-xs text-slate-500">
               {currentUserQuery.data?.email}
             </p>

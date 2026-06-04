@@ -16,6 +16,8 @@ function AppShellContent({ children }: { children: ReactNode }) {
   const { activeOrganization } = useActiveOrganization();
   const [isOnboardingOpen, setIsOnboardingOpen] = useState(false);
 
+  const organizationId = activeOrganization?.organizationId;
+
   useEffect(() => {
     if (!hasDismissedOnboarding()) {
       const timer = window.setTimeout(() => {
@@ -39,7 +41,8 @@ function AppShellContent({ children }: { children: ReactNode }) {
         <AppSidebar />
 
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <AppTopbar />
+          <AppTopbar organizationId={organizationId} />
+
           <main className="min-h-0 flex-1 overflow-y-auto px-4 py-6 xl:px-8">
             {children}
           </main>
@@ -49,7 +52,7 @@ function AppShellContent({ children }: { children: ReactNode }) {
       <OnboardingModal
         open={isOnboardingOpen}
         onOpenChange={setIsOnboardingOpen}
-        organizationId={activeOrganization?.organizationId}
+        organizationId={organizationId}
         onDismissPermanently={handleDismissPermanently}
       />
     </div>

@@ -5,12 +5,12 @@ import {
   Copy,
   ExternalLink,
   Mail,
+  RefreshCw,
   ShieldCheck,
   Trash2,
   UserPlus,
   UsersRound,
   XCircle,
-  RefreshCw,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -39,8 +39,8 @@ import {
 } from "@/features/organizations/hooks/organization-members-hooks";
 import {
   useOrganizationInvitationsQuery,
-  useRevokeOrganizationInvitationMutation,
   useRegenerateOrganizationInvitationLinkMutation,
+  useRevokeOrganizationInvitationMutation,
 } from "@/features/organizations/hooks/organization-invitation-hooks";
 
 const roleOptions: OrganizationMemberRole[] = [
@@ -82,6 +82,21 @@ function statusLabel(status: string) {
     .split("_")
     .map((part) => part.charAt(0).toUpperCase() + part.slice(1))
     .join(" ");
+}
+
+function invitationStatusClassName(status: string) {
+  switch (status) {
+    case "PENDING":
+      return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+    case "ACCEPTED":
+      return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+    case "REVOKED":
+      return "bg-red-50 text-red-700 hover:bg-red-50";
+    case "EXPIRED":
+      return "bg-slate-100 text-slate-600 hover:bg-slate-100";
+    default:
+      return "bg-slate-100 text-slate-600 hover:bg-slate-100";
+  }
 }
 
 function formatDateTime(value: string) {
@@ -132,15 +147,14 @@ export function OrganizationMembersPanel({
   const regenerateInvitationMutation =
     useRegenerateOrganizationInvitationLinkMutation(organizationId);
 
-  const [regeneratedInviteUrls, setRegeneratedInviteUrls] = useState<
-    Record<string, string>
-  >({});
-
   const [activeTab, setActiveTab] = useState<PanelTab>("members");
   const [isInviteDialogOpen, setIsInviteDialogOpen] = useState(false);
   const [copiedInvitationId, setCopiedInvitationId] = useState<string | null>(
     null,
   );
+  const [regeneratedInviteUrls, setRegeneratedInviteUrls] = useState<
+    Record<string, string>
+  >({});
 
   const members = membersQuery.data ?? [];
   const invitations = invitationsQuery.data ?? [];
@@ -185,237 +199,239 @@ export function OrganizationMembersPanel({
   }
 
   return (
-    <Card>
-      <CardContent className="p-6">
-        <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
-          <div>
-            <div className="flex items-center gap-3">
-              <div className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+    <Card className="overflow-hidden">
+      <CardContent className="p-0">
+        <div className="border-b bg-white p-6">
+          <div className="flex flex-col justify-between gap-5 xl:flex-row xl:items-start">
+            <div className="flex items-start gap-3">
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
                 <UsersRound className="size-5" />
               </div>
 
               <div>
                 <h3 className="text-lg font-semibold">{t("title")}</h3>
-                <p className="mt-1 text-sm text-muted-foreground">
+                <p className="mt-1 max-w-2xl text-sm leading-6 text-muted-foreground">
                   {t("description")}
                 </p>
               </div>
             </div>
+
+            {canManageMembers ? (
+              <div className="flex flex-col gap-2 sm:flex-row xl:justify-end">
+                <SeedDemoUsersButton organizationId={organizationId} />
+
+                <Button
+                  type="button"
+                  size="sm"
+                  className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+                  onClick={() => setIsInviteDialogOpen(true)}
+                >
+                  <UserPlus className="mr-2 size-4" />
+                  Invite member
+                </Button>
+              </div>
+            ) : null}
           </div>
 
-          {canManageMembers ? (
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <SeedDemoUsersButton organizationId={organizationId} />
+          <div className="mt-6 inline-flex rounded-2xl border bg-slate-50 p-1">
+            <Button
+              type="button"
+              size="sm"
+              variant={activeTab === "members" ? "default" : "ghost"}
+              className="rounded-xl"
+              onClick={() => setActiveTab("members")}
+            >
+              Members
+              <span className="ml-2 rounded-full bg-white/80 px-2 py-0.5 text-xs text-slate-700">
+                {members.length}
+              </span>
+            </Button>
 
-              <Button
-                type="button"
-                size="sm"
-                className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
-                onClick={() => setIsInviteDialogOpen(true)}
-              >
-                <UserPlus className="mr-2 size-4" />
-                Invite member
-              </Button>
-            </div>
-          ) : null}
-        </div>
-
-        <div className="mt-6 flex flex-wrap gap-2">
-          <Button
-            type="button"
-            size="sm"
-            variant={activeTab === "members" ? "default" : "outline"}
-            onClick={() => setActiveTab("members")}
-          >
-            Members
-          </Button>
-
-          <Button
-            type="button"
-            size="sm"
-            variant={activeTab === "invitations" ? "default" : "outline"}
-            onClick={() => setActiveTab("invitations")}
-          >
-            Invitations
-            {invitations.length > 0 ? (
-              <span className="ml-2 rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-700">
+            <Button
+              type="button"
+              size="sm"
+              variant={activeTab === "invitations" ? "default" : "ghost"}
+              className="rounded-xl"
+              onClick={() => setActiveTab("invitations")}
+            >
+              Invitations
+              <span className="ml-2 rounded-full bg-white/80 px-2 py-0.5 text-xs text-slate-700">
                 {invitations.length}
               </span>
-            ) : null}
-          </Button>
+            </Button>
+          </div>
         </div>
 
-        {activeTab === "members" ? (
-          <>
-            {membersQuery.error ? (
-              <div className="mt-4">
-                <ErrorAlert error={membersQuery.error} />
-              </div>
-            ) : null}
-
-            {membersQuery.isLoading ? (
-              <p className="mt-5 text-sm text-muted-foreground">
-                {t("loading")}
-              </p>
-            ) : members.length === 0 ? (
-              <p className="mt-5 text-sm text-muted-foreground">{t("empty")}</p>
-            ) : (
-              <div className="mt-5 overflow-hidden rounded-2xl border">
-                <div className="hidden grid-cols-[1.4fr_180px_160px_110px] gap-3 border-b bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 lg:grid">
-                  <span>{t("columns.member")}</span>
-                  <span>{t("columns.role")}</span>
-                  <span>{t("columns.status")}</span>
-                  <span className="text-right">{t("columns.actions")}</span>
+        <div className="p-6">
+          {activeTab === "members" ? (
+            <>
+              {membersQuery.error ? (
+                <div className="mb-4">
+                  <ErrorAlert error={membersQuery.error} />
                 </div>
+              ) : null}
 
-                <div className="divide-y">
-                  {members.map((member) => (
-                    <div
-                      key={member.id}
-                      className="grid gap-3 px-4 py-4 lg:grid-cols-[1.4fr_180px_160px_110px] lg:items-center"
-                    >
-                      <div className="min-w-0">
-                        <div className="flex items-center gap-2">
-                          <p className="truncate font-semibold">
-                            {member.fullName}
+              {membersQuery.isLoading ? (
+                <p className="text-sm text-muted-foreground">{t("loading")}</p>
+              ) : members.length === 0 ? (
+                <div className="rounded-2xl border border-dashed p-8 text-center">
+                  <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                    <UsersRound className="size-5" />
+                  </div>
+
+                  <h4 className="mt-4 font-semibold">{t("empty")}</h4>
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Invite teammates to collaborate in this workspace.
+                  </p>
+                </div>
+              ) : (
+                <div className="overflow-hidden rounded-2xl border">
+                  <div className="hidden grid-cols-[minmax(260px,1.4fr)_180px_160px_90px] gap-3 border-b bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 lg:grid">
+                    <span>{t("columns.member")}</span>
+                    <span>{t("columns.role")}</span>
+                    <span>{t("columns.status")}</span>
+                    <span className="text-right">{t("columns.actions")}</span>
+                  </div>
+
+                  <div className="divide-y">
+                    {members.map((member) => (
+                      <div
+                        key={member.id}
+                        className="grid gap-4 px-4 py-4 lg:grid-cols-[minmax(260px,1.4fr)_180px_160px_90px] lg:items-center"
+                      >
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="truncate font-semibold">
+                              {member.fullName}
+                            </p>
+
+                            {member.role === "OWNER" ? (
+                              <ShieldCheck className="size-4 shrink-0 text-cyan-600" />
+                            ) : null}
+                          </div>
+
+                          <p className="mt-1 truncate text-sm text-muted-foreground">
+                            {member.email}
                           </p>
-
-                          {member.role === "OWNER" ? (
-                            <ShieldCheck className="size-4 text-cyan-600" />
-                          ) : null}
                         </div>
 
-                        <p className="mt-1 truncate text-sm text-muted-foreground">
-                          {member.email}
-                        </p>
-                      </div>
-
-                      {canManageMembers ? (
-                        <Select
-                          value={member.role}
-                          onValueChange={(role) =>
-                            updateRoleMutation.mutate({
-                              memberId: member.id,
-                              role: role as OrganizationMemberRole,
-                            })
-                          }
-                          disabled={updateRoleMutation.isPending}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-
-                          <SelectContent>
-                            {roleOptions.map((role) => (
-                              <SelectItem key={role} value={role}>
-                                {tStatus(role)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      ) : (
-                        <Badge variant="secondary">
-                          {tStatus(member.role)}
-                        </Badge>
-                      )}
-
-                      {canManageMembers ? (
-                        <Select
-                          value={member.status}
-                          onValueChange={(status) =>
-                            updateStatusMutation.mutate({
-                              memberId: member.id,
-                              status: status as OrganizationMemberStatus,
-                            })
-                          }
-                          disabled={updateStatusMutation.isPending}
-                        >
-                          <SelectTrigger>
-                            <SelectValue />
-                          </SelectTrigger>
-
-                          <SelectContent>
-                            {statusOptions.map((status) => (
-                              <SelectItem key={status} value={status}>
-                                {tStatus(status)}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      ) : (
-                        <span className="text-sm text-muted-foreground">
-                          {tStatus(member.status)}
-                        </span>
-                      )}
-
-                      <div className="flex justify-end">
                         {canManageMembers ? (
-                          <Button
-                            type="button"
-                            variant="ghost"
-                            size="icon"
-                            onClick={() => deleteMutation.mutate(member.id)}
-                            disabled={deleteMutation.isPending}
+                          <Select
+                            value={member.role}
+                            onValueChange={(role) =>
+                              updateRoleMutation.mutate({
+                                memberId: member.id,
+                                role: role as OrganizationMemberRole,
+                              })
+                            }
+                            disabled={updateRoleMutation.isPending}
                           >
-                            <Trash2 className="size-4 text-red-600" />
-                          </Button>
-                        ) : null}
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                              {roleOptions.map((role) => (
+                                <SelectItem key={role} value={role}>
+                                  {tStatus(role)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <Badge variant="secondary">
+                            {tStatus(member.role)}
+                          </Badge>
+                        )}
+
+                        {canManageMembers ? (
+                          <Select
+                            value={member.status}
+                            onValueChange={(status) =>
+                              updateStatusMutation.mutate({
+                                memberId: member.id,
+                                status: status as OrganizationMemberStatus,
+                              })
+                            }
+                            disabled={updateStatusMutation.isPending}
+                          >
+                            <SelectTrigger>
+                              <SelectValue />
+                            </SelectTrigger>
+
+                            <SelectContent>
+                              {statusOptions.map((status) => (
+                                <SelectItem key={status} value={status}>
+                                  {tStatus(status)}
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
+                        ) : (
+                          <span className="text-sm text-muted-foreground">
+                            {tStatus(member.status)}
+                          </span>
+                        )}
+
+                        <div className="flex justify-end">
+                          {canManageMembers ? (
+                            <Button
+                              type="button"
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => deleteMutation.mutate(member.id)}
+                              disabled={deleteMutation.isPending}
+                            >
+                              <Trash2 className="size-4 text-red-600" />
+                            </Button>
+                          ) : null}
+                        </div>
                       </div>
-                    </div>
-                  ))}
+                    ))}
+                  </div>
                 </div>
-              </div>
-            )}
+              )}
 
-            {updateRoleMutation.error ||
-            updateStatusMutation.error ||
-            deleteMutation.error ? (
-              <div className="mt-4">
-                <ErrorAlert
-                  error={
-                    updateRoleMutation.error ??
-                    updateStatusMutation.error ??
-                    deleteMutation.error
-                  }
-                />
-              </div>
-            ) : null}
-          </>
-        ) : (
-          <>
-            {invitationsQuery.error ? (
-              <div className="mt-4">
-                <ErrorAlert error={invitationsQuery.error} />
-              </div>
-            ) : null}
-
-            {invitationsQuery.isLoading ? (
-              <p className="mt-5 text-sm text-muted-foreground">
-                Loading invitations...
-              </p>
-            ) : invitations.length === 0 ? (
-              <div className="mt-5 rounded-2xl border border-dashed p-8 text-center">
-                <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
-                  <Mail className="size-5" />
+              {updateRoleMutation.error ||
+              updateStatusMutation.error ||
+              deleteMutation.error ? (
+                <div className="mt-4">
+                  <ErrorAlert
+                    error={
+                      updateRoleMutation.error ??
+                      updateStatusMutation.error ??
+                      deleteMutation.error
+                    }
+                  />
                 </div>
+              ) : null}
+            </>
+          ) : (
+            <>
+              {invitationsQuery.error ? (
+                <div className="mb-4">
+                  <ErrorAlert error={invitationsQuery.error} />
+                </div>
+              ) : null}
 
-                <h4 className="mt-4 font-semibold">No pending invitations</h4>
-
-                <p className="mt-2 text-sm text-muted-foreground">
-                  Create an invite link to add new members to this workspace.
+              {invitationsQuery.isLoading ? (
+                <p className="text-sm text-muted-foreground">
+                  Loading invitations...
                 </p>
-              </div>
-            ) : (
-              <div className="mt-5 overflow-hidden rounded-2xl border">
-                <div className="hidden grid-cols-[1.2fr_170px_150px_190px_170px] gap-3 border-b bg-slate-50 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-500 lg:grid">
-                  <span>Email</span>
-                  <span>Role</span>
-                  <span>Status</span>
-                  <span>Expires</span>
-                  <span className="text-right">Actions</span>
-                </div>
+              ) : invitations.length === 0 ? (
+                <div className="rounded-2xl border border-dashed p-8 text-center">
+                  <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                    <Mail className="size-5" />
+                  </div>
 
-                <div className="divide-y">
+                  <h4 className="mt-4 font-semibold">No invitations yet</h4>
+
+                  <p className="mt-2 text-sm text-muted-foreground">
+                    Create an invite link to add new members to this workspace.
+                  </p>
+                </div>
+              ) : (
+                <div className="space-y-3">
                   {invitations.map((invitation) => {
                     const inviteUrl =
                       regeneratedInviteUrls[invitation.id] ??
@@ -427,119 +443,154 @@ export function OrganizationMembersPanel({
                     return (
                       <div
                         key={invitation.id}
-                        className="grid gap-3 px-4 py-4 lg:grid-cols-[1.2fr_170px_150px_190px_170px] lg:items-center"
+                        className="rounded-2xl border bg-white p-4 shadow-sm"
                       >
-                        <div className="min-w-0">
-                          <p className="truncate font-semibold">
-                            {invitation.email}
-                          </p>
-                          <p className="mt-1 truncate text-xs text-muted-foreground">
-                            {invitation.organizationName}
-                          </p>
-                        </div>
+                        <div className="flex flex-col gap-4 xl:flex-row xl:items-start xl:justify-between">
+                          <div className="min-w-0 flex-1">
+                            <div className="flex flex-wrap items-center gap-2">
+                              <p className="truncate font-semibold">
+                                {invitation.email}
+                              </p>
 
-                        <Badge variant="secondary">
-                          {roleLabel(invitation.role)}
-                        </Badge>
+                              <Badge variant="secondary">
+                                {roleLabel(invitation.role)}
+                              </Badge>
 
-                        <span className="text-sm text-muted-foreground">
-                          {statusLabel(invitation.status)}
-                        </span>
+                              <Badge
+                                variant="secondary"
+                                className={invitationStatusClassName(
+                                  invitation.status,
+                                )}
+                              >
+                                {statusLabel(invitation.status)}
+                              </Badge>
+                            </div>
 
-                        <span className="text-sm text-muted-foreground">
-                          {formatDateTime(invitation.expiresAt)}
-                        </span>
+                            <div className="mt-2 grid gap-1 text-sm text-muted-foreground md:grid-cols-2 xl:grid-cols-3">
+                              <p className="truncate">
+                                Workspace: {invitation.organizationName}
+                              </p>
+                              <p>
+                                Expires: {formatDateTime(invitation.expiresAt)}
+                              </p>
+                              <p>
+                                Invited by:{" "}
+                                {invitation.invitedByEmail ?? "Unknown"}
+                              </p>
+                            </div>
 
-                        <div className="flex justify-end gap-2">
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            disabled={
-                              regenerateInvitationMutation.isPending ||
-                              invitation.status !== "PENDING"
-                            }
-                            onClick={() =>
-                              handleRegenerateInviteLink(invitation.id)
-                            }
-                          >
-                            <RefreshCw className="mr-2 size-4" />
-                            Regenerate
-                          </Button>
+                            {canOpenInvitation ? (
+                              <div className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-xs text-muted-foreground">
+                                <span className="font-medium text-slate-700">
+                                  Invite link ready.
+                                </span>{" "}
+                                You can open or copy this regenerated link.
+                              </div>
+                            ) : invitation.status === "PENDING" ? (
+                              <div className="mt-3 rounded-xl bg-amber-50 px-3 py-2 text-xs text-amber-700">
+                                This invite does not expose its original link.
+                                Regenerate a secure link to open or copy it.
+                              </div>
+                            ) : (
+                              <div className="mt-3 rounded-xl bg-slate-50 px-3 py-2 text-xs text-muted-foreground">
+                                This invitation is no longer pending.
+                              </div>
+                            )}
+                          </div>
 
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            disabled={!canOpenInvitation}
-                            onClick={() => {
-                              if (!inviteUrl) {
-                                return;
-                              }
-
-                              window.open(
-                                inviteUrl,
-                                "_blank",
-                                "noopener,noreferrer",
-                              );
-                            }}
-                          >
-                            <ExternalLink className="mr-2 size-4" />
-                            Open
-                          </Button>
-
-                          <Button
-                            type="button"
-                            size="sm"
-                            variant="outline"
-                            disabled={!canOpenInvitation}
-                            onClick={() =>
-                              handleCopyInviteLink(invitation.id, inviteUrl)
-                            }
-                          >
-                            <Copy className="mr-2 size-4" />
-                            {copiedInvitationId === invitation.id
-                              ? "Copied"
-                              : "Copy"}
-                          </Button>
-
-                          {canManageMembers ? (
+                          <div className="flex flex-wrap justify-end gap-2 xl:min-w-[360px]">
                             <Button
                               type="button"
-                              size="icon"
-                              variant="ghost"
-                              onClick={() =>
-                                revokeInvitationMutation.mutate(invitation.id)
-                              }
+                              size="sm"
+                              variant="outline"
                               disabled={
-                                revokeInvitationMutation.isPending ||
+                                regenerateInvitationMutation.isPending ||
                                 invitation.status !== "PENDING"
                               }
+                              onClick={() =>
+                                handleRegenerateInviteLink(invitation.id)
+                              }
                             >
-                              <XCircle className="size-4 text-red-600" />
+                              <RefreshCw className="mr-2 size-4" />
+                              Regenerate
                             </Button>
-                          ) : null}
+
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              disabled={!canOpenInvitation}
+                              onClick={() => {
+                                if (!inviteUrl) {
+                                  return;
+                                }
+
+                                window.open(
+                                  inviteUrl,
+                                  "_blank",
+                                  "noopener,noreferrer",
+                                );
+                              }}
+                            >
+                              <ExternalLink className="mr-2 size-4" />
+                              Open
+                            </Button>
+
+                            <Button
+                              type="button"
+                              size="sm"
+                              variant="outline"
+                              disabled={!canOpenInvitation}
+                              onClick={() =>
+                                handleCopyInviteLink(invitation.id, inviteUrl)
+                              }
+                            >
+                              <Copy className="mr-2 size-4" />
+                              {copiedInvitationId === invitation.id
+                                ? "Copied"
+                                : "Copy"}
+                            </Button>
+
+                            {canManageMembers ? (
+                              <Button
+                                type="button"
+                                size="sm"
+                                variant="ghost"
+                                className="text-red-600 hover:bg-red-50 hover:text-red-700"
+                                onClick={() =>
+                                  revokeInvitationMutation.mutate(invitation.id)
+                                }
+                                disabled={
+                                  revokeInvitationMutation.isPending ||
+                                  invitation.status !== "PENDING"
+                                }
+                              >
+                                <XCircle className="mr-2 size-4" />
+                                Revoke
+                              </Button>
+                            ) : null}
+                          </div>
                         </div>
                       </div>
                     );
                   })}
                 </div>
-              </div>
-            )}
+              )}
 
-            {revokeInvitationMutation.error ||
-            regenerateInvitationMutation.error ? (
-              <div className="mt-4">
-                <ErrorAlert
-                  error={
-                    revokeInvitationMutation.error ??
-                    regenerateInvitationMutation.error
-                  }
-                />
-              </div>
-            ) : null}
-          </>
-        )}
+              {revokeInvitationMutation.error ||
+              regenerateInvitationMutation.error ? (
+                <div className="mt-4">
+                  <ErrorAlert
+                    error={
+                      revokeInvitationMutation.error ??
+                      regenerateInvitationMutation.error
+                    }
+                  />
+                </div>
+              ) : null}
+            </>
+          )}
+        </div>
 
         <CreateOrganizationInvitationDialog
           open={isInviteDialogOpen}
