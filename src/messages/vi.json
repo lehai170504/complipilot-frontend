@@ -12,7 +12,8 @@
     "workspaces": "Không gian làm việc",
     "billing": "Gói dịch vụ",
     "platformAdmin": "Quản trị nền tảng",
-    "settings": "Cài đặt"
+    "settings": "Cài đặt",
+    "profile": "Hồ sơ"
   },
   "topbar": {
     "workspace": "Không gian làm việc",

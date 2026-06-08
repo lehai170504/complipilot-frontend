@@ -365,6 +365,19 @@ export type OrganizationStatus = "ACTIVE" | "DISABLED";
 
 export type UserStatus = "ACTIVE" | "DISABLED";
 
+export type UserProfileResponse = {
+  id: string;
+  email: string;
+  fullName: string;
+  status: UserStatus;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type UpdateUserProfileRequest = {
+  fullName: string;
+};
+
 export type PlatformOrganizationResponse = {
   id: string;
   name: string;

@@ -8,6 +8,7 @@ import {
   ScrollText,
   Settings,
   Shield,
+  UserCircle,
 } from "lucide-react";
 
 export type AppNavigationPermission =
@@ -50,6 +51,12 @@ export const appNavigationItems = [
     labelKey: "settings",
     href: "/settings",
     icon: Settings,
+    permission: "all",
+  },
+  {
+    labelKey: "profile",
+    href: "/profile",
+    icon: UserCircle,
     permission: "all",
   },
   {

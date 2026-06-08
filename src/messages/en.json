@@ -12,7 +12,8 @@
     "workspaces": "Workspaces",
     "billing": "Billing",
     "platformAdmin": "Platform Admin",
-    "settings": "Settings"
+    "settings": "Settings",
+    "profile": "Profile"
   },
   "topbar": {
     "workspace": "Workspace",
