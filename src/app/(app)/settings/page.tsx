@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   AlertTriangle,
   ArrowRight,
@@ -53,18 +53,14 @@ export default function SettingsPage() {
   const updateSettingsMutation =
     useUpdateOrganizationSettingsMutation(organizationId);
 
-  const [name, setName] = useState("");
+  const [draftName, setDraftName] = useState<string | undefined>(undefined);
   const [isDisableDialogOpen, setIsDisableDialogOpen] = useState(false);
 
   const settings = settingsQuery.data;
   const canManageWorkspace = canManageMembers;
   const isDisabled = settings?.status === "DISABLED";
 
-  useEffect(() => {
-    if (settings?.name) {
-      setName(settings.name);
-    }
-  }, [settings?.name]);
+  const name = draftName ?? settings?.name ?? "";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -73,12 +69,21 @@ export default function SettingsPage() {
       return;
     }
 
-    updateSettingsMutation.mutate({
-      name: name.trim(),
-    });
+    updateSettingsMutation.mutate(
+      {
+        name: name.trim(),
+      },
+      {
+        onSuccess: () => {
+          setDraftName(undefined);
+        },
+      },
+    );
   }
 
-  const hasNameChanged = Boolean(settings && name.trim() !== settings.name);
+  const hasNameChanged = Boolean(
+    settings && draftName !== undefined && name.trim() !== settings.name,
+  );
 
   return (
     <div className="space-y-6">
@@ -157,7 +162,7 @@ export default function SettingsPage() {
                     <Input
                       id="workspace-name"
                       value={name}
-                      onChange={(event) => setName(event.target.value)}
+                      onChange={(event) => setDraftName(event.target.value)}
                       disabled={!canManageWorkspace || isDisabled}
                       placeholder="Workspace name"
                     />

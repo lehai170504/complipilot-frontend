@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useState } from "react";
 import {
   CalendarClock,
   Loader2,
@@ -21,6 +21,7 @@ import {
   useUpdateUserProfileMutation,
   useUserProfileQuery,
 } from "@/features/profile/hooks/profile-hooks";
+import { ChangePasswordDialog } from "@/features/profile/components/change-password-dialog";
 
 function formatDateTime(value: string) {
   return new Intl.DateTimeFormat("en", {
@@ -43,16 +44,16 @@ function statusTone(status: string) {
 export default function ProfilePage() {
   const profileQuery = useUserProfileQuery();
   const updateProfileMutation = useUpdateUserProfileMutation();
+  const [isChangePasswordDialogOpen, setIsChangePasswordDialogOpen] =
+    useState(false);
 
   const profile = profileQuery.data;
 
-  const [fullName, setFullName] = useState("");
+  const [draftFullName, setDraftFullName] = useState<string | undefined>(
+    undefined,
+  );
 
-  useEffect(() => {
-    if (profile?.fullName) {
-      setFullName(profile.fullName);
-    }
-  }, [profile?.fullName]);
+  const fullName = draftFullName ?? profile?.fullName ?? "";
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -61,13 +62,22 @@ export default function ProfilePage() {
       return;
     }
 
-    updateProfileMutation.mutate({
-      fullName: fullName.trim(),
-    });
+    updateProfileMutation.mutate(
+      {
+        fullName: fullName.trim(),
+      },
+      {
+        onSuccess: () => {
+          setDraftFullName(undefined);
+        },
+      },
+    );
   }
 
   const hasFullNameChanged = Boolean(
-    profile && fullName.trim() !== profile.fullName,
+    profile &&
+    draftFullName !== undefined &&
+    fullName.trim() !== profile.fullName,
   );
 
   return (
@@ -132,7 +142,7 @@ export default function ProfilePage() {
                     <Input
                       id="full-name"
                       value={fullName}
-                      onChange={(event) => setFullName(event.target.value)}
+                      onChange={(event) => setDraftFullName(event.target.value)}
                       placeholder="Your full name"
                     />
                   </div>
@@ -275,8 +285,12 @@ export default function ProfilePage() {
                   </div>
                 </div>
 
-                <Button type="button" className="mt-5 w-full" disabled>
-                  Change password — coming soon
+                <Button
+                  type="button"
+                  className="mt-5 w-full"
+                  onClick={() => setIsChangePasswordDialogOpen(true)}
+                >
+                  Change password
                 </Button>
               </CardContent>
             </Card>
@@ -301,6 +315,11 @@ export default function ProfilePage() {
           </div>
         </section>
       ) : null}
+
+      <ChangePasswordDialog
+        open={isChangePasswordDialogOpen}
+        onOpenChange={setIsChangePasswordDialogOpen}
+      />
     </div>
   );
 }

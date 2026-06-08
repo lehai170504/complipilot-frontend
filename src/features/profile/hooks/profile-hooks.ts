@@ -1,7 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getUserProfile, updateUserProfile } from "@/features/profile/api/profile-api";
-import type { UpdateUserProfileRequest } from "@/lib/api/api-types";
+import {
+  changePassword,
+  getUserProfile,
+  updateUserProfile,
+} from "@/features/profile/api/profile-api";
+import type {
+  ChangePasswordRequest,
+  UpdateUserProfileRequest,
+} from "@/lib/api/api-types";
 import { toast } from "@/lib/toast";
 
 export function useUserProfileQuery() {
@@ -31,6 +38,20 @@ export function useUpdateUserProfileMutation() {
     },
     onError: () => {
       toast.error("Failed to update profile");
+    },
+  });
+}
+
+export function useChangePasswordMutation() {
+  return useMutation({
+    mutationFn: (request: ChangePasswordRequest) => changePassword(request),
+    onSuccess: () => {
+      toast.success("Password changed", {
+        description: "Your password has been updated successfully.",
+      });
+    },
+    onError: () => {
+      toast.error("Failed to change password");
     },
   });
 }

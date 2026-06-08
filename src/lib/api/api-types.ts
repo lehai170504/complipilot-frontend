@@ -378,6 +378,11 @@ export type UpdateUserProfileRequest = {
   fullName: string;
 };
 
+export type ChangePasswordRequest = {
+  currentPassword: string;
+  newPassword: string;
+};
+
 export type PlatformOrganizationResponse = {
   id: string;
   name: string;
