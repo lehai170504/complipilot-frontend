@@ -5,6 +5,7 @@ import { ReactNode, useEffect, useState } from "react";
 import { AppSidebar } from "@/components/layout/app-sidebar";
 import { AppTopbar } from "@/components/layout/app-topbar";
 import { AuthGuard } from "@/features/auth/components/auth-guard";
+import { DisabledWorkspaceBanner } from "@/features/organizations/components/disabled-workspace-banner";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import { OnboardingModal } from "@/features/onboarding/components/onboarding-modal";
 import {
@@ -42,6 +43,8 @@ function AppShellContent({ children }: { children: ReactNode }) {
 
         <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
           <AppTopbar organizationId={organizationId} />
+
+          <DisabledWorkspaceBanner organizationId={organizationId} />
 
           <main className="min-h-0 flex-1 overflow-y-auto px-4 py-6 xl:px-8">
             {children}
