@@ -20,11 +20,12 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { DisableWorkspaceDialog } from "@/features/organizations/components/disable-workspace-dialog";
+import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import {
   useOrganizationSettingsQuery,
   useUpdateOrganizationSettingsMutation,
 } from "@/features/organizations/hooks/organization-settings-hooks";
-import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 
 function formatDateTime(value: string) {
   return new Intl.DateTimeFormat("en", {
@@ -41,7 +42,7 @@ function statusTone(status: string) {
     return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
   }
 
-  return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+  return "bg-red-50 text-red-700 hover:bg-red-50";
 }
 
 export default function SettingsPage() {
@@ -53,9 +54,11 @@ export default function SettingsPage() {
     useUpdateOrganizationSettingsMutation(organizationId);
 
   const [name, setName] = useState("");
+  const [isDisableDialogOpen, setIsDisableDialogOpen] = useState(false);
 
   const settings = settingsQuery.data;
   const canManageWorkspace = canManageMembers;
+  const isDisabled = settings?.status === "DISABLED";
 
   useEffect(() => {
     if (settings?.name) {
@@ -66,7 +69,7 @@ export default function SettingsPage() {
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
 
-    if (!organizationId || !name.trim()) {
+    if (!organizationId || !name.trim() || isDisabled) {
       return;
     }
 
@@ -108,6 +111,21 @@ export default function SettingsPage() {
 
       {settingsQuery.error ? <ErrorAlert error={settingsQuery.error} /> : null}
 
+      {isDisabled ? (
+        <div className="rounded-3xl border border-red-200 bg-red-50 p-5 text-red-800">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 size-5 shrink-0" />
+            <div>
+              <p className="font-semibold">Workspace is disabled</p>
+              <p className="mt-1 text-sm leading-6">
+                This workspace is disabled. Some operations may be restricted.
+                Contact a platform admin if this was a mistake.
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : null}
+
       {settingsQuery.isLoading ? (
         <Card>
           <CardContent className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
@@ -126,9 +144,7 @@ export default function SettingsPage() {
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold">
-                      Workspace profile
-                    </h3>
+                    <h3 className="text-lg font-semibold">Workspace profile</h3>
                     <p className="mt-1 text-sm text-muted-foreground">
                       Rename the workspace shown across CompliPilot.
                     </p>
@@ -142,12 +158,19 @@ export default function SettingsPage() {
                       id="workspace-name"
                       value={name}
                       onChange={(event) => setName(event.target.value)}
-                      disabled={!canManageWorkspace}
+                      disabled={!canManageWorkspace || isDisabled}
                       placeholder="Workspace name"
                     />
+
                     {!canManageWorkspace ? (
                       <p className="text-xs text-muted-foreground">
                         You need manager permissions to rename this workspace.
+                      </p>
+                    ) : null}
+
+                    {isDisabled ? (
+                      <p className="text-xs text-red-700">
+                        Disabled workspaces cannot be renamed.
                       </p>
                     ) : null}
                   </div>
@@ -161,6 +184,7 @@ export default function SettingsPage() {
                       type="submit"
                       disabled={
                         !canManageWorkspace ||
+                        isDisabled ||
                         !hasNameChanged ||
                         !name.trim() ||
                         updateSettingsMutation.isPending
@@ -307,9 +331,9 @@ export default function SettingsPage() {
                       Danger zone
                     </h3>
                     <p className="mt-1 text-sm leading-6 text-red-700">
-                      Disable workspace is intentionally locked for now. This
-                      action needs a stronger backend policy because it affects
-                      members, evidence, tasks, and audit history.
+                      Disable this workspace without deleting its data. This
+                      action is limited to owners and will be recorded in the
+                      audit trail.
                     </p>
                   </div>
                 </div>
@@ -318,15 +342,38 @@ export default function SettingsPage() {
                   type="button"
                   variant="destructive"
                   className="mt-5 w-full"
-                  disabled
+                  disabled={
+                    !canManageWorkspace || isDisabled || !organizationId
+                  }
+                  onClick={() => setIsDisableDialogOpen(true)}
                 >
-                  Disable workspace — coming soon
+                  Disable workspace
                 </Button>
+
+                {!canManageWorkspace ? (
+                  <p className="mt-2 text-xs text-muted-foreground">
+                    You need owner/admin permissions to access danger-zone
+                    actions.
+                  </p>
+                ) : null}
+
+                {isDisabled ? (
+                  <p className="mt-2 text-xs text-red-700">
+                    This workspace has already been disabled.
+                  </p>
+                ) : null}
               </CardContent>
             </Card>
           </div>
         </section>
       ) : null}
+
+      <DisableWorkspaceDialog
+        open={isDisableDialogOpen}
+        onOpenChange={setIsDisableDialogOpen}
+        organizationId={organizationId}
+        workspaceName={settings?.name ?? "this workspace"}
+      />
     </div>
   );
 }

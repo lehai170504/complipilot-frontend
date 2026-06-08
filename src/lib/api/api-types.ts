@@ -132,14 +132,16 @@ export type AuditAction =
   | "EVIDENCE_LINK_DELETED"
   | "COMPLIANCE_TASK_CREATED"
   | "COMPLIANCE_TASK_UPDATED"
-  | "COMPLIANCE_TASK_DELETED";
+  | "COMPLIANCE_TASK_DELETED"
+  | "ORGANIZATION_DISABLED";
 
 export type AuditResourceType =
   | "COMPLIANCE_FRAMEWORK"
   | "COMPLIANCE_ITEM"
   | "EVIDENCE_DOCUMENT"
   | "EVIDENCE_LINK"
-  | "COMPLIANCE_TASK";
+  | "COMPLIANCE_TASK"
+  | "ORGANIZATION";
 
 export type AuditEvent = {
   id: string;
@@ -398,4 +400,8 @@ export type OrganizationSettingsResponse = {
 
 export type UpdateOrganizationSettingsRequest = {
   name: string;
+};
+
+export type DisableOrganizationRequest = {
+  confirmation: string;
 };

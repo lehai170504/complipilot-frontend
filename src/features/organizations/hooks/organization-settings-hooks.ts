@@ -1,10 +1,14 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
+  disableOrganizationWorkspace,
   getOrganizationSettings,
   updateOrganizationSettings,
 } from "@/features/organizations/api/organization-settings-api";
-import type { UpdateOrganizationSettingsRequest } from "@/lib/api/api-types";
+import type {
+  DisableOrganizationRequest,
+  UpdateOrganizationSettingsRequest,
+} from "@/lib/api/api-types";
 import { toast } from "@/lib/toast";
 
 export function useOrganizationSettingsQuery(
@@ -42,6 +46,40 @@ export function useUpdateOrganizationSettingsMutation(
     },
     onError: () => {
       toast.error("Failed to update workspace settings");
+    },
+  });
+}
+
+export function useDisableOrganizationWorkspaceMutation(
+  organizationId: string | undefined,
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: DisableOrganizationRequest) =>
+      disableOrganizationWorkspace(organizationId!, request),
+    onSuccess: async () => {
+      toast.success("Workspace disabled", {
+        description: "This workspace is now disabled.",
+      });
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["organization-settings", organizationId],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["organizations"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["active-organization"],
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["audit-events"],
+        }),
+      ]);
+    },
+    onError: () => {
+      toast.error("Failed to disable workspace");
     },
   });
 }
