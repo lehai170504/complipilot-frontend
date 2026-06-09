@@ -6,6 +6,7 @@ import {
   Gauge,
   ListChecks,
   ScrollText,
+  ServerCog,
   Settings,
   Shield,
   UserCircle,
@@ -76,5 +77,11 @@ export const appNavigationItems = [
     href: "/workspaces",
     icon: Building2,
     permission: "all",
+  },
+  {
+    labelKey: "systemStatus",
+    href: "/system-status",
+    icon: ServerCog,
+    permission: "canViewPlatformAdmin",
   },
 ] as const;

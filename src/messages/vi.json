@@ -13,7 +13,8 @@
     "billing": "Gói dịch vụ",
     "platformAdmin": "Quản trị nền tảng",
     "settings": "Cài đặt",
-    "profile": "Hồ sơ"
+    "profile": "Hồ sơ",
+    "systemStatus": "Trạng thái hệ thống"
   },
   "topbar": {
     "workspace": "Không gian làm việc",

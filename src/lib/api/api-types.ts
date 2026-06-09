@@ -436,3 +436,21 @@ export type UpdateOrganizationSettingsRequest = {
 export type DisableOrganizationRequest = {
   confirmation: string;
 };
+
+export type SystemComponentStatus = "UP" | "WARN" | "DOWN";
+
+export type SystemStatusComponentResponse = {
+  key: string;
+  label: string;
+  status: SystemComponentStatus;
+  message: string;
+  details: Record<string, unknown>;
+};
+
+export type SystemStatusResponse = {
+  status: SystemComponentStatus;
+  service: string;
+  version: string;
+  timestamp: string;
+  components: SystemStatusComponentResponse[];
+};

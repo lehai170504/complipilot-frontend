@@ -13,7 +13,8 @@
     "billing": "Billing",
     "platformAdmin": "Platform Admin",
     "settings": "Settings",
-    "profile": "Profile"
+    "profile": "Profile",
+    "systemStatus": "System Status"
   },
   "topbar": {
     "workspace": "Workspace",
