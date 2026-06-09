@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { getSystemStatus } from "@/lib/api/system-status-api";
+import { getSystemStatus } from "@/features/system/api/system-status-api";
 
 export function useSystemStatusQuery() {
   return useQuery({

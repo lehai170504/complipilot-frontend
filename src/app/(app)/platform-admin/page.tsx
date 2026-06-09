@@ -31,6 +31,7 @@ import type {
   PlatformOrganizationResponse,
   SubscriptionPlan,
 } from "@/lib/api/api-types";
+import { BillingPlanChangeRequestsPanel } from "@/features/platform-admin/components/billing-plan-change-requests-panel";
 
 const planOptions: SubscriptionPlan[] = [
   "FREE",
@@ -219,6 +220,8 @@ export default function PlatformAdminPage() {
           icon={Sparkles}
         />
       </section>
+
+      <BillingPlanChangeRequestsPanel />
 
       <section className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
         <Card className="overflow-hidden">

@@ -1,12 +1,73 @@
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
-import { getOrganizationUsage } from "@/features/billing/api/billing-api";
+import {
+  createBillingPlanChangeRequest,
+  getLatestBillingPlanChangeRequest,
+  getOrganizationUsage,
+} from "@/features/billing/api/billing-api";
+import type {
+  CreateBillingPlanChangeRequest,
+  SubscriptionPlan,
+} from "@/lib/api/api-types";
+import { toast } from "@/lib/toast";
+
+export const billingQueryKeys = {
+  all: ["billing"] as const,
+  usage: (organizationId: string | undefined) =>
+    ["billing", "usage", organizationId] as const,
+  latestPlanChangeRequest: (organizationId: string | undefined) =>
+    ["billing", "plan-change-request", "latest", organizationId] as const,
+};
 
 export function useOrganizationUsageQuery(organizationId: string | undefined) {
   return useQuery({
-    queryKey: ["organization-usage", organizationId],
+    queryKey: billingQueryKeys.usage(organizationId),
     queryFn: () => getOrganizationUsage(organizationId!),
     enabled: Boolean(organizationId),
-    staleTime: 30_000,
   });
 }
+
+export function useLatestBillingPlanChangeRequestQuery(
+  organizationId: string | undefined,
+) {
+  return useQuery({
+    queryKey: billingQueryKeys.latestPlanChangeRequest(organizationId),
+    queryFn: () => getLatestBillingPlanChangeRequest(organizationId!),
+    enabled: Boolean(organizationId),
+  });
+}
+
+export function useCreateBillingPlanChangeRequestMutation(
+  organizationId: string | undefined,
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (request: CreateBillingPlanChangeRequest) =>
+      createBillingPlanChangeRequest(organizationId!, request),
+    onSuccess: async (data) => {
+      toast.success("Plan change requested", {
+        description: `Requested ${data.requestedPlan}. A platform admin can approve it.`,
+      });
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: billingQueryKeys.latestPlanChangeRequest(organizationId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["platform-admin", "billing-plan-change-requests"],
+        }),
+      ]);
+    },
+    onError: () => {
+      toast.error("Failed to request plan change");
+    },
+  });
+}
+
+export const subscriptionPlanOptions: SubscriptionPlan[] = [
+  "FREE",
+  "PRO",
+  "BUSINESS",
+  "ENTERPRISE",
+];

@@ -454,3 +454,29 @@ export type SystemStatusResponse = {
   timestamp: string;
   components: SystemStatusComponentResponse[];
 };
+
+export type BillingPlanChangeRequestStatus =
+  | "PENDING"
+  | "APPROVED"
+  | "REJECTED"
+  | "CANCELLED";
+
+export type BillingPlanChangeRequestResponse = {
+  id: string;
+  organizationId: string;
+  organizationName: string;
+  requestedByUserId: string;
+  requestedByEmail: string;
+  currentPlan: SubscriptionPlan;
+  requestedPlan: SubscriptionPlan;
+  status: BillingPlanChangeRequestStatus;
+  reviewedByUserId: string | null;
+  reviewedByEmail: string | null;
+  reviewedAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+};
+
+export type CreateBillingPlanChangeRequest = {
+  requestedPlan: SubscriptionPlan;
+};

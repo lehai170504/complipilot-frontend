@@ -1,10 +1,35 @@
 import { apiClient } from "@/lib/api/api-client";
-import type { OrganizationUsageResponse } from "@/lib/api/api-types";
+import type {
+  BillingPlanChangeRequestResponse,
+  CreateBillingPlanChangeRequest,
+  OrganizationUsageResponse,
+} from "@/lib/api/api-types";
 
 export function getOrganizationUsage(
   organizationId: string,
 ): Promise<OrganizationUsageResponse> {
   return apiClient<OrganizationUsageResponse>(
     `/api/v1/organizations/${organizationId}/billing/usage`,
+  );
+}
+
+export function createBillingPlanChangeRequest(
+  organizationId: string,
+  request: CreateBillingPlanChangeRequest,
+): Promise<BillingPlanChangeRequestResponse> {
+  return apiClient<BillingPlanChangeRequestResponse>(
+    `/api/v1/organizations/${organizationId}/billing/plan-change-requests`,
+    {
+      method: "POST",
+      body: JSON.stringify(request),
+    },
+  );
+}
+
+export function getLatestBillingPlanChangeRequest(
+  organizationId: string,
+): Promise<BillingPlanChangeRequestResponse | null> {
+  return apiClient<BillingPlanChangeRequestResponse | null>(
+    `/api/v1/organizations/${organizationId}/billing/plan-change-requests/latest`,
   );
 }

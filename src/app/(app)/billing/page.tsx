@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import {
   CheckCircle2,
   CreditCard,
@@ -16,6 +17,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { OrganizationUsageCard } from "@/features/billing/components/organization-usage-card";
 import { useOrganizationUsageQuery } from "@/features/billing/hooks/billing-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
+import { RequestPlanChangeDialog } from "@/features/billing/components/request-plan-change-dialog";
+import { useLatestBillingPlanChangeRequestQuery } from "@/features/billing/hooks/billing-hooks";
 import type { SubscriptionPlan } from "@/lib/api/api-types";
 
 type PlanCard = {
@@ -103,6 +106,10 @@ export default function BillingPage() {
   const organizationId = activeOrganization?.organizationId;
 
   const usageQuery = useOrganizationUsageQuery(organizationId);
+  const latestPlanChangeRequestQuery =
+    useLatestBillingPlanChangeRequestQuery(organizationId);
+
+  const [isRequestPlanDialogOpen, setIsRequestPlanDialogOpen] = useState(false);
   const currentPlan = usageQuery.data?.plan;
 
   return (
@@ -145,6 +152,30 @@ export default function BillingPage() {
         </Card>
       ) : usageQuery.data ? (
         <OrganizationUsageCard usage={usageQuery.data} />
+      ) : null}
+
+      {latestPlanChangeRequestQuery.data ? (
+        <Card>
+          <CardContent className="flex flex-col justify-between gap-4 p-5 md:flex-row md:items-center">
+            <div>
+              <p className="text-sm font-medium text-muted-foreground">
+                Latest plan change request
+              </p>
+              <h3 className="mt-1 text-lg font-semibold">
+                {latestPlanChangeRequestQuery.data.currentPlan} →{" "}
+                {latestPlanChangeRequestQuery.data.requestedPlan}
+              </h3>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Requested by{" "}
+                {latestPlanChangeRequestQuery.data.requestedByEmail}
+              </p>
+            </div>
+
+            <Badge variant="secondary">
+              {latestPlanChangeRequestQuery.data.status}
+            </Badge>
+          </CardContent>
+        </Card>
       ) : null}
 
       <section>
@@ -230,11 +261,19 @@ export default function BillingPage() {
                   <Button
                     type="button"
                     className="mt-6 w-full"
-                    disabled
+                    disabled={
+                      isCurrentPlan ||
+                      latestPlanChangeRequestQuery.data?.status === "PENDING"
+                    }
                     variant={isCurrentPlan ? "secondary" : "outline"}
+                    onClick={() => setIsRequestPlanDialogOpen(true)}
                   >
                     <CreditCard className="mr-2 size-4" />
-                    {isCurrentPlan ? "Current plan" : "Upgrade soon"}
+                    {isCurrentPlan
+                      ? "Current plan"
+                      : latestPlanChangeRequestQuery.data?.status === "PENDING"
+                        ? "Request pending"
+                        : "Request plan change"}
                   </Button>
                 </CardContent>
               </Card>
@@ -242,6 +281,13 @@ export default function BillingPage() {
           })}
         </div>
       </section>
+
+      <RequestPlanChangeDialog
+        open={isRequestPlanDialogOpen}
+        onOpenChange={setIsRequestPlanDialogOpen}
+        organizationId={organizationId}
+        currentPlan={usageQuery.data?.plan}
+      />
     </div>
   );
 }
