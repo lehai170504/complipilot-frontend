@@ -40,6 +40,9 @@ const auditActionOptions: AuditAction[] = [
   "COMPLIANCE_TASK_CREATED",
   "COMPLIANCE_TASK_UPDATED",
   "COMPLIANCE_TASK_DELETED",
+  "BILLING_PLAN_CHANGE_REQUESTED",
+  "BILLING_PLAN_CHANGE_APPROVED",
+  "BILLING_PLAN_CHANGE_REJECTED",
 ];
 
 const auditResourceTypeOptions: AuditResourceType[] = [
@@ -48,6 +51,7 @@ const auditResourceTypeOptions: AuditResourceType[] = [
   "EVIDENCE_DOCUMENT",
   "EVIDENCE_LINK",
   "COMPLIANCE_TASK",
+  "BILLING_PLAN_CHANGE_REQUEST",
 ];
 
 const auditSortOptions = [
