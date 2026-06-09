@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import {
   changePassword,
   getUserProfile,
+  listUserProfileActivity,
   updateUserProfile,
 } from "@/features/profile/api/profile-api";
 import type {
@@ -53,5 +54,12 @@ export function useChangePasswordMutation() {
     onError: () => {
       toast.error("Failed to change password");
     },
+  });
+}
+
+export function useUserProfileActivityQuery() {
+  return useQuery({
+    queryKey: ["profile", "activity"],
+    queryFn: () => listUserProfileActivity(0, 10),
   });
 }

@@ -143,6 +143,19 @@ export type AuditResourceType =
   | "COMPLIANCE_TASK"
   | "ORGANIZATION";
 
+export type AuditEventResponse = {
+  id: string;
+  organizationId: string;
+  actorUserId: string | null;
+  actorEmail: string | null;
+  action: AuditAction;
+  resourceType: AuditResourceType;
+  resourceId: string | null;
+  summary: string;
+  metadataJson: string | null;
+  createdAt: string;
+};
+
 export type AuditEvent = {
   id: string;
   organizationId: string;

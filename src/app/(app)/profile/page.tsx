@@ -22,6 +22,7 @@ import {
   useUserProfileQuery,
 } from "@/features/profile/hooks/profile-hooks";
 import { ChangePasswordDialog } from "@/features/profile/components/change-password-dialog";
+import { ProfileActivityCard } from "@/features/profile/components/profile-activity-card";
 
 function formatDateTime(value: string) {
   return new Intl.DateTimeFormat("en", {
@@ -239,6 +240,8 @@ export default function ProfilePage() {
                 </div>
               </CardContent>
             </Card>
+
+            <ProfileActivityCard />
           </div>
 
           <div className="space-y-6">
