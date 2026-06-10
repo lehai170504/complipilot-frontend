@@ -165,6 +165,17 @@ export function BillingPlanChangeRequestsPanel() {
                         <Badge variant="outline">{request.requestedPlan}</Badge>
                       </div>
 
+                      {request.requestNote ? (
+                        <div className="mt-3 rounded-2xl border bg-slate-50 p-3 text-sm">
+                          <p className="font-medium text-slate-700">
+                            Request note
+                          </p>
+                          <p className="mt-1 whitespace-pre-wrap text-muted-foreground">
+                            {request.requestNote}
+                          </p>
+                        </div>
+                      ) : null}
+
                       <p className="mt-3 text-xs text-muted-foreground">
                         Created {formatDate(request.createdAt)}
                       </p>

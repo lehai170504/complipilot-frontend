@@ -479,6 +479,7 @@ export type BillingPlanChangeRequestResponse = {
   requestedByEmail: string;
   currentPlan: SubscriptionPlan;
   requestedPlan: SubscriptionPlan;
+  requestNote: string | null;
   status: BillingPlanChangeRequestStatus;
   reviewedByUserId: string | null;
   reviewedByEmail: string | null;
@@ -489,6 +490,7 @@ export type BillingPlanChangeRequestResponse = {
 
 export type CreateBillingPlanChangeRequest = {
   requestedPlan: SubscriptionPlan;
+  requestNote?: string | null;
 };
 
 export type BillingCheckoutProvider = "MANUAL" | "STRIPE";

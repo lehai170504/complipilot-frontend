@@ -22,6 +22,7 @@ import {
 } from "@/components/ui/select";
 import { useCreateBillingPlanChangeRequestMutation } from "@/features/billing/hooks/billing-hooks";
 import type { SubscriptionPlan } from "@/lib/api/api-types";
+import { Textarea } from "@/components/ui/textarea";
 
 const planOptions: SubscriptionPlan[] = [
   "FREE",
@@ -65,8 +66,11 @@ export function RequestPlanChangeDialog({
     SubscriptionPlan | undefined
   >(initialRequestedPlan);
 
+  const [requestNote, setRequestNote] = useState("");
+
   function resetForm() {
     setRequestedPlan(undefined);
+    setRequestNote("");
     createRequestMutation.reset();
   }
 
@@ -95,6 +99,7 @@ export function RequestPlanChangeDialog({
     createRequestMutation.mutate(
       {
         requestedPlan,
+        requestNote: requestNote.trim() || null,
       },
       {
         onSuccess: () => {
@@ -117,6 +122,23 @@ export function RequestPlanChangeDialog({
             approve it before the workspace plan changes.
           </DialogDescription>
         </DialogHeader>
+
+        <div className="space-y-2">
+          <p className="text-sm font-medium">Reason for request</p>
+
+          <Textarea
+            value={requestNote}
+            onChange={(event) => setRequestNote(event.target.value)}
+            placeholder="Example: We need more storage and AI analyses for monthly compliance reviews."
+            maxLength={1000}
+            rows={4}
+          />
+
+          <p className="text-xs text-muted-foreground">
+            Optional. This helps platform admins understand why the workspace
+            needs this plan.
+          </p>
+        </div>
 
         <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
           <p className="text-muted-foreground">Current plan</p>
