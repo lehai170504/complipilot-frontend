@@ -15,7 +15,9 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { OrganizationUsageCard } from "@/features/billing/components/organization-usage-card";
+import { PlanChangeHistoryCard } from "@/features/billing/components/plan-change-history-card";
 import { RequestPlanChangeDialog } from "@/features/billing/components/request-plan-change-dialog";
+import { UsageLimitWarningCard } from "@/features/billing/components/usage-limit-warning-card";
 import {
   useCreateCheckoutSessionMutation,
   useLatestBillingPlanChangeRequestQuery,
@@ -23,8 +25,6 @@ import {
 } from "@/features/billing/hooks/billing-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import type { SubscriptionPlan } from "@/lib/api/api-types";
-import { PlanChangeHistoryCard } from "@/features/billing/components/plan-change-history-card";
-import { UsageLimitWarningCard } from "@/features/billing/components/usage-limit-warning-card";
 
 type PlanCard = {
   name: SubscriptionPlan;
@@ -172,6 +172,9 @@ export default function BillingPage() {
   const checkoutMutation = useCreateCheckoutSessionMutation(organizationId);
 
   const [isRequestPlanDialogOpen, setIsRequestPlanDialogOpen] = useState(false);
+  const [selectedPlanForRequest, setSelectedPlanForRequest] = useState<
+    SubscriptionPlan | undefined
+  >(undefined);
 
   const currentPlan = usageQuery.data?.plan;
   const latestPlanChangeRequest = latestPlanChangeRequestQuery.data;
@@ -185,13 +188,26 @@ export default function BillingPage() {
     });
   }
 
+  function openPlanRequestDialog(plan: SubscriptionPlan) {
+    setSelectedPlanForRequest(plan);
+    setIsRequestPlanDialogOpen(true);
+  }
+
+  function handlePlanDialogOpenChange(nextOpen: boolean) {
+    setIsRequestPlanDialogOpen(nextOpen);
+
+    if (!nextOpen) {
+      setSelectedPlanForRequest(undefined);
+    }
+  }
+
   function handlePlanAction(plan: SubscriptionPlan) {
     if (!organizationId || !currentPlan || plan === currentPlan) {
       return;
     }
 
     if (!isUpgrade(currentPlan, plan)) {
-      setIsRequestPlanDialogOpen(true);
+      openPlanRequestDialog(plan);
       return;
     }
 
@@ -206,7 +222,7 @@ export default function BillingPage() {
             return;
           }
 
-          setIsRequestPlanDialogOpen(true);
+          openPlanRequestDialog(plan);
         },
       },
     );
@@ -425,10 +441,12 @@ export default function BillingPage() {
       <PlanChangeHistoryCard organizationId={organizationId} />
 
       <RequestPlanChangeDialog
+        key={selectedPlanForRequest ?? "none"}
         open={isRequestPlanDialogOpen}
-        onOpenChange={setIsRequestPlanDialogOpen}
+        onOpenChange={handlePlanDialogOpenChange}
         organizationId={organizationId}
         currentPlan={usageQuery.data?.plan}
+        initialRequestedPlan={selectedPlanForRequest}
       />
     </div>
   );

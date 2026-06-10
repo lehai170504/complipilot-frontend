@@ -50,18 +50,20 @@ export function RequestPlanChangeDialog({
   onOpenChange,
   organizationId,
   currentPlan,
+  initialRequestedPlan,
 }: {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   organizationId: string | undefined;
   currentPlan: SubscriptionPlan | undefined;
+  initialRequestedPlan?: SubscriptionPlan;
 }) {
   const createRequestMutation =
     useCreateBillingPlanChangeRequestMutation(organizationId);
 
   const [requestedPlan, setRequestedPlan] = useState<
     SubscriptionPlan | undefined
-  >(undefined);
+  >(initialRequestedPlan);
 
   function resetForm() {
     setRequestedPlan(undefined);
