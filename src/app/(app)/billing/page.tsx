@@ -90,6 +90,47 @@ const plans: PlanCard[] = [
   },
 ];
 
+const planRank: Record<SubscriptionPlan, number> = {
+  FREE: 0,
+  PRO: 1,
+  BUSINESS: 2,
+  ENTERPRISE: 3,
+};
+
+function getPlanActionLabel(
+  currentPlan: SubscriptionPlan | undefined,
+  targetPlan: SubscriptionPlan,
+) {
+  if (!currentPlan) {
+    return "Select plan";
+  }
+
+  if (currentPlan === targetPlan) {
+    return "Current plan";
+  }
+
+  if (targetPlan === "ENTERPRISE") {
+    return "Contact sales / request";
+  }
+
+  if (planRank[targetPlan] > planRank[currentPlan]) {
+    return "Upgrade / request";
+  }
+
+  return "Request downgrade";
+}
+
+function isUpgrade(
+  currentPlan: SubscriptionPlan | undefined,
+  targetPlan: SubscriptionPlan,
+) {
+  if (!currentPlan) {
+    return false;
+  }
+
+  return planRank[targetPlan] > planRank[currentPlan];
+}
+
 function planTone(plan: SubscriptionPlan) {
   switch (plan) {
     case "FREE":
@@ -137,7 +178,12 @@ export default function BillingPage() {
     latestPlanChangeRequest?.status === "PENDING";
 
   function handlePlanAction(plan: SubscriptionPlan) {
-    if (!organizationId) {
+    if (!organizationId || !currentPlan || plan === currentPlan) {
+      return;
+    }
+
+    if (!isUpgrade(currentPlan, plan)) {
+      setIsRequestPlanDialogOpen(true);
       return;
     }
 
@@ -269,6 +315,7 @@ export default function BillingPage() {
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => {
             const isCurrentPlan = currentPlan === plan.name;
+            const actionLabel = getPlanActionLabel(currentPlan, plan.name);
             const isDisabled =
               !organizationId ||
               isCurrentPlan ||
@@ -339,8 +386,10 @@ export default function BillingPage() {
                   >
                     {checkoutMutation.isPending && !isCurrentPlan ? (
                       <Loader2 className="mr-2 size-4 animate-spin" />
-                    ) : (
+                    ) : isUpgrade(currentPlan, plan.name) ? (
                       <CreditCard className="mr-2 size-4" />
+                    ) : (
+                      <Sparkles className="mr-2 size-4" />
                     )}
 
                     {isCurrentPlan
@@ -349,7 +398,7 @@ export default function BillingPage() {
                         ? "Request pending"
                         : checkoutMutation.isPending
                           ? "Preparing checkout..."
-                          : "Upgrade / request"}
+                          : actionLabel}
                   </Button>
                 </CardContent>
               </Card>
