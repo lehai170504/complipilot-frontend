@@ -19,6 +19,7 @@ import { PlanChangeHistoryCard } from "@/features/billing/components/plan-change
 import { RequestPlanChangeDialog } from "@/features/billing/components/request-plan-change-dialog";
 import { UsageLimitWarningCard } from "@/features/billing/components/usage-limit-warning-card";
 import {
+  useCancelBillingPlanChangeRequestMutation,
   useCreateCheckoutSessionMutation,
   useLatestBillingPlanChangeRequestQuery,
   useOrganizationUsageQuery,
@@ -176,6 +177,9 @@ export default function BillingPage() {
     SubscriptionPlan | undefined
   >(undefined);
 
+  const cancelPlanChangeRequestMutation =
+    useCancelBillingPlanChangeRequestMutation(organizationId);
+
   const currentPlan = usageQuery.data?.plan;
   const latestPlanChangeRequest = latestPlanChangeRequestQuery.data;
   const hasPendingPlanChangeRequest =
@@ -309,12 +313,33 @@ export default function BillingPage() {
               ) : null}
             </div>
 
-            <Badge
-              variant="secondary"
-              className={requestStatusTone(latestPlanChangeRequest.status)}
-            >
-              {latestPlanChangeRequest.status}
-            </Badge>
+            <div className="flex items-center gap-2">
+              <Badge
+                variant="secondary"
+                className={requestStatusTone(latestPlanChangeRequest.status)}
+              >
+                {latestPlanChangeRequest.status}
+              </Badge>
+
+              {latestPlanChangeRequest.status === "PENDING" ? (
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="outline"
+                  disabled={cancelPlanChangeRequestMutation.isPending}
+                  onClick={() =>
+                    cancelPlanChangeRequestMutation.mutate(
+                      latestPlanChangeRequest.id,
+                    )
+                  }
+                >
+                  {cancelPlanChangeRequestMutation.isPending ? (
+                    <Loader2 className="mr-2 size-4 animate-spin" />
+                  ) : null}
+                  Cancel request
+                </Button>
+              ) : null}
+            </div>
           </CardContent>
         </Card>
       ) : null}

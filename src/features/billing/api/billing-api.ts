@@ -64,3 +64,15 @@ export function listBillingPlanChangeRequests(
     `/api/v1/organizations/${organizationId}/billing/plan-change-requests?${searchParams.toString()}`,
   );
 }
+
+export function cancelBillingPlanChangeRequest(
+  organizationId: string,
+  requestId: string,
+): Promise<BillingPlanChangeRequestResponse> {
+  return apiClient<BillingPlanChangeRequestResponse>(
+    `/api/v1/organizations/${organizationId}/billing/plan-change-requests/${requestId}/cancel`,
+    {
+      method: "PATCH",
+    },
+  );
+}

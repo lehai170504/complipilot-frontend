@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
+  cancelBillingPlanChangeRequest,
   createBillingPlanChangeRequest,
   createCheckoutSession,
   getLatestBillingPlanChangeRequest,
@@ -101,5 +102,34 @@ export function useBillingPlanChangeRequestsQuery(
     queryKey: billingQueryKeys.planChangeRequests(organizationId),
     queryFn: () => listBillingPlanChangeRequests(organizationId!, 0, 10),
     enabled: Boolean(organizationId),
+  });
+}
+
+export function useCancelBillingPlanChangeRequestMutation(
+  organizationId: string | undefined,
+) {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: (requestId: string) =>
+      cancelBillingPlanChangeRequest(organizationId!, requestId),
+    onSuccess: async () => {
+      toast.success("Plan change request cancelled");
+
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: billingQueryKeys.latestPlanChangeRequest(organizationId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: billingQueryKeys.planChangeRequests(organizationId),
+        }),
+        queryClient.invalidateQueries({
+          queryKey: ["platform-admin", "billing-plan-change-requests"],
+        }),
+      ]);
+    },
+    onError: () => {
+      toast.error("Failed to cancel plan change request");
+    },
   });
 }
