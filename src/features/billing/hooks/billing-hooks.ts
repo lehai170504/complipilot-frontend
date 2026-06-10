@@ -5,6 +5,7 @@ import {
   createCheckoutSession,
   getLatestBillingPlanChangeRequest,
   getOrganizationUsage,
+  listBillingPlanChangeRequests,
 } from "@/features/billing/api/billing-api";
 import type {
   CreateBillingPlanChangeRequest,
@@ -18,6 +19,8 @@ export const billingQueryKeys = {
     ["billing", "usage", organizationId] as const,
   latestPlanChangeRequest: (organizationId: string | undefined) =>
     ["billing", "plan-change-request", "latest", organizationId] as const,
+  planChangeRequests: (organizationId: string | undefined) =>
+    ["billing", "plan-change-requests", organizationId] as const,
 };
 
 export function useOrganizationUsageQuery(organizationId: string | undefined) {
@@ -58,6 +61,9 @@ export function useCreateBillingPlanChangeRequestMutation(
         queryClient.invalidateQueries({
           queryKey: ["platform-admin", "billing-plan-change-requests"],
         }),
+        queryClient.invalidateQueries({
+          queryKey: billingQueryKeys.planChangeRequests(organizationId),
+        }),
       ]);
     },
     onError: () => {
@@ -85,5 +91,15 @@ export function useCreateCheckoutSessionMutation(
     onError: () => {
       toast.error("Failed to start checkout");
     },
+  });
+}
+
+export function useBillingPlanChangeRequestsQuery(
+  organizationId: string | undefined,
+) {
+  return useQuery({
+    queryKey: billingQueryKeys.planChangeRequests(organizationId),
+    queryFn: () => listBillingPlanChangeRequests(organizationId!, 0, 10),
+    enabled: Boolean(organizationId),
   });
 }

@@ -23,6 +23,7 @@ import {
 } from "@/features/billing/hooks/billing-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import type { SubscriptionPlan } from "@/lib/api/api-types";
+import { PlanChangeHistoryCard } from "@/features/billing/components/plan-change-history-card";
 
 type PlanCard = {
   name: SubscriptionPlan;
@@ -356,6 +357,8 @@ export default function BillingPage() {
           })}
         </div>
       </section>
+
+      <PlanChangeHistoryCard organizationId={organizationId} />
 
       <RequestPlanChangeDialog
         open={isRequestPlanDialogOpen}

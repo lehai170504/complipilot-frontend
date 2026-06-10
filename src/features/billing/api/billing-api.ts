@@ -5,6 +5,7 @@ import type {
   CreateBillingPlanChangeRequest,
   CreateCheckoutSessionRequest,
   OrganizationUsageResponse,
+  PageResponse,
 } from "@/lib/api/api-types";
 
 export function getOrganizationUsage(
@@ -46,5 +47,20 @@ export function createCheckoutSession(
       method: "POST",
       body: JSON.stringify(request),
     },
+  );
+}
+
+export function listBillingPlanChangeRequests(
+  organizationId: string,
+  page = 0,
+  size = 10,
+): Promise<PageResponse<BillingPlanChangeRequestResponse>> {
+  const searchParams = new URLSearchParams({
+    page: String(page),
+    size: String(size),
+  });
+
+  return apiClient<PageResponse<BillingPlanChangeRequestResponse>>(
+    `/api/v1/organizations/${organizationId}/billing/plan-change-requests?${searchParams.toString()}`,
   );
 }
