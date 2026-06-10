@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { CheckCircle2, Loader2, Sparkles, XCircle } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
@@ -7,10 +8,28 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import {
   useApprovePlatformBillingPlanChangeRequestMutation,
   usePlatformBillingPlanChangeRequestsQuery,
   useRejectPlatformBillingPlanChangeRequestMutation,
 } from "@/features/platform-admin/hooks/platform-admin-hooks";
+import type { BillingPlanChangeRequestStatus } from "@/lib/api/api-types";
+
+type StatusFilter = "ALL" | BillingPlanChangeRequestStatus;
+
+const statusOptions: StatusFilter[] = [
+  "ALL",
+  "PENDING",
+  "APPROVED",
+  "REJECTED",
+  "CANCELLED",
+];
 
 function formatDate(value: string) {
   return new Intl.DateTimeFormat("en", {
@@ -39,16 +58,21 @@ function statusTone(status: string) {
 }
 
 export function BillingPlanChangeRequestsPanel() {
-  const requestsQuery = usePlatformBillingPlanChangeRequestsQuery("PENDING");
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("PENDING");
+
+  const queryStatus = statusFilter === "ALL" ? undefined : statusFilter;
+
+  const requestsQuery = usePlatformBillingPlanChangeRequestsQuery(queryStatus);
   const approveMutation = useApprovePlatformBillingPlanChangeRequestMutation();
   const rejectMutation = useRejectPlatformBillingPlanChangeRequestMutation();
 
   const requests = requestsQuery.data?.items ?? [];
+  const isMutating = approveMutation.isPending || rejectMutation.isPending;
 
   return (
     <Card>
       <CardContent className="p-0">
-        <div className="border-b p-5">
+        <div className="flex flex-col justify-between gap-4 border-b p-5 md:flex-row md:items-start">
           <div className="flex items-start gap-3">
             <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
               <Sparkles className="size-5" />
@@ -57,9 +81,28 @@ export function BillingPlanChangeRequestsPanel() {
             <div>
               <h3 className="font-semibold">Billing requests</h3>
               <p className="mt-1 text-sm text-muted-foreground">
-                Review pending plan change requests from workspaces.
+                Review plan change requests from workspaces.
               </p>
             </div>
+          </div>
+
+          <div className="w-full md:w-48">
+            <Select
+              value={statusFilter}
+              onValueChange={(value) => setStatusFilter(value as StatusFilter)}
+            >
+              <SelectTrigger>
+                <SelectValue placeholder="Filter status" />
+              </SelectTrigger>
+
+              <SelectContent>
+                {statusOptions.map((status) => (
+                  <SelectItem key={status} value={status}>
+                    {status === "ALL" ? "All requests" : status}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
         </div>
 
@@ -79,74 +122,82 @@ export function BillingPlanChangeRequestsPanel() {
             <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
               <Sparkles className="size-5" />
             </div>
-            <p className="mt-3 font-medium">No pending requests</p>
+            <p className="mt-3 font-medium">No requests found</p>
             <p className="mt-1 text-sm text-muted-foreground">
-              Plan upgrade requests will appear here.
+              Try changing the status filter.
             </p>
           </div>
         ) : (
           <div className="divide-y">
-            {requests.map((request) => (
-              <div key={request.id} className="p-5">
-                <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
-                  <div className="min-w-0">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <p className="font-semibold">
-                        {request.organizationName}
+            {requests.map((request) => {
+              const canReview = request.status === "PENDING";
+
+              return (
+                <div key={request.id} className="p-5">
+                  <div className="flex flex-col justify-between gap-4 xl:flex-row xl:items-start">
+                    <div className="min-w-0">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <p className="font-semibold">
+                          {request.organizationName}
+                        </p>
+
+                        <Badge
+                          variant="secondary"
+                          className={statusTone(request.status)}
+                        >
+                          {request.status}
+                        </Badge>
+                      </div>
+
+                      <p className="mt-1 text-sm text-muted-foreground">
+                        Requested by {request.requestedByEmail}
                       </p>
 
-                      <Badge
-                        variant="secondary"
-                        className={statusTone(request.status)}
-                      >
-                        {request.status}
-                      </Badge>
+                      {request.reviewedByEmail ? (
+                        <p className="mt-1 text-sm text-muted-foreground">
+                          Reviewed by {request.reviewedByEmail}
+                        </p>
+                      ) : null}
+
+                      <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
+                        <Badge variant="outline">{request.currentPlan}</Badge>
+                        <span className="text-muted-foreground">→</span>
+                        <Badge variant="outline">{request.requestedPlan}</Badge>
+                      </div>
+
+                      <p className="mt-3 text-xs text-muted-foreground">
+                        Created {formatDate(request.createdAt)}
+                      </p>
                     </div>
 
-                    <p className="mt-1 text-sm text-muted-foreground">
-                      Requested by {request.requestedByEmail}
-                    </p>
+                    {canReview ? (
+                      <div className="flex shrink-0 gap-2">
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          disabled={isMutating}
+                          onClick={() => rejectMutation.mutate(request.id)}
+                        >
+                          <XCircle className="mr-2 size-4" />
+                          Reject
+                        </Button>
 
-                    <div className="mt-3 flex flex-wrap items-center gap-2 text-sm">
-                      <Badge variant="outline">{request.currentPlan}</Badge>
-                      <span className="text-muted-foreground">→</span>
-                      <Badge variant="outline">{request.requestedPlan}</Badge>
-                    </div>
-
-                    <p className="mt-3 text-xs text-muted-foreground">
-                      Created {formatDate(request.createdAt)}
-                    </p>
-                  </div>
-
-                  <div className="flex shrink-0 gap-2">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="outline"
-                      disabled={
-                        approveMutation.isPending || rejectMutation.isPending
-                      }
-                      onClick={() => rejectMutation.mutate(request.id)}
-                    >
-                      <XCircle className="mr-2 size-4" />
-                      Reject
-                    </Button>
-
-                    <Button
-                      type="button"
-                      size="sm"
-                      disabled={
-                        approveMutation.isPending || rejectMutation.isPending
-                      }
-                      onClick={() => approveMutation.mutate(request.id)}
-                    >
-                      <CheckCircle2 className="mr-2 size-4" />
-                      Approve
-                    </Button>
+                        <Button
+                          type="button"
+                          size="sm"
+                          disabled={isMutating}
+                          onClick={() => approveMutation.mutate(request.id)}
+                        >
+                          <CheckCircle2 className="mr-2 size-4" />
+                          Approve
+                        </Button>
+                      </div>
+                    ) : null}
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         )}
       </CardContent>

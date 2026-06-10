@@ -59,7 +59,7 @@ export function updatePlatformOrganizationSubscription(
 }
 
 export function listPlatformBillingPlanChangeRequests(
-  status: BillingPlanChangeRequestStatus | undefined = "PENDING",
+  status: BillingPlanChangeRequestStatus | undefined,
   page = 0,
   size = 20,
 ): Promise<PageResponse<BillingPlanChangeRequestResponse>> {
