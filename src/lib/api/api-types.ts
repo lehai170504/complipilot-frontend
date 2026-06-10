@@ -487,3 +487,16 @@ export type BillingPlanChangeRequestResponse = {
 export type CreateBillingPlanChangeRequest = {
   requestedPlan: SubscriptionPlan;
 };
+
+export type BillingCheckoutProvider = "MANUAL" | "STRIPE";
+
+export type CreateCheckoutSessionRequest = {
+  plan: SubscriptionPlan;
+};
+
+export type CheckoutSessionResponse = {
+  provider: BillingCheckoutProvider;
+  plan: SubscriptionPlan;
+  checkoutUrl: string | null;
+  message: string;
+};

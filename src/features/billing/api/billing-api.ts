@@ -1,7 +1,9 @@
 import { apiClient } from "@/lib/api/api-client";
 import type {
   BillingPlanChangeRequestResponse,
+  CheckoutSessionResponse,
   CreateBillingPlanChangeRequest,
+  CreateCheckoutSessionRequest,
   OrganizationUsageResponse,
 } from "@/lib/api/api-types";
 
@@ -31,5 +33,18 @@ export function getLatestBillingPlanChangeRequest(
 ): Promise<BillingPlanChangeRequestResponse | null> {
   return apiClient<BillingPlanChangeRequestResponse | null>(
     `/api/v1/organizations/${organizationId}/billing/plan-change-requests/latest`,
+  );
+}
+
+export function createCheckoutSession(
+  organizationId: string,
+  request: CreateCheckoutSessionRequest,
+): Promise<CheckoutSessionResponse> {
+  return apiClient<CheckoutSessionResponse>(
+    `/api/v1/organizations/${organizationId}/billing/checkout-session`,
+    {
+      method: "POST",
+      body: JSON.stringify(request),
+    },
   );
 }

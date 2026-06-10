@@ -2,12 +2,13 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 
 import {
   createBillingPlanChangeRequest,
+  createCheckoutSession,
   getLatestBillingPlanChangeRequest,
   getOrganizationUsage,
 } from "@/features/billing/api/billing-api";
 import type {
   CreateBillingPlanChangeRequest,
-  SubscriptionPlan,
+  CreateCheckoutSessionRequest,
 } from "@/lib/api/api-types";
 import { toast } from "@/lib/toast";
 
@@ -65,9 +66,24 @@ export function useCreateBillingPlanChangeRequestMutation(
   });
 }
 
-export const subscriptionPlanOptions: SubscriptionPlan[] = [
-  "FREE",
-  "PRO",
-  "BUSINESS",
-  "ENTERPRISE",
-];
+export function useCreateCheckoutSessionMutation(
+  organizationId: string | undefined,
+) {
+  return useMutation({
+    mutationFn: (request: CreateCheckoutSessionRequest) =>
+      createCheckoutSession(organizationId!, request),
+    onSuccess: (data) => {
+      if (data.checkoutUrl) {
+        window.location.href = data.checkoutUrl;
+        return;
+      }
+
+      toast.info("Checkout is not connected yet", {
+        description: data.message,
+      });
+    },
+    onError: () => {
+      toast.error("Failed to start checkout");
+    },
+  });
+}

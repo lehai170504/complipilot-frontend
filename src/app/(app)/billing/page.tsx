@@ -15,10 +15,13 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { OrganizationUsageCard } from "@/features/billing/components/organization-usage-card";
-import { useOrganizationUsageQuery } from "@/features/billing/hooks/billing-hooks";
-import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import { RequestPlanChangeDialog } from "@/features/billing/components/request-plan-change-dialog";
-import { useLatestBillingPlanChangeRequestQuery } from "@/features/billing/hooks/billing-hooks";
+import {
+  useCreateCheckoutSessionMutation,
+  useLatestBillingPlanChangeRequestQuery,
+  useOrganizationUsageQuery,
+} from "@/features/billing/hooks/billing-hooks";
+import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import type { SubscriptionPlan } from "@/lib/api/api-types";
 
 type PlanCard = {
@@ -101,6 +104,21 @@ function planTone(plan: SubscriptionPlan) {
   }
 }
 
+function requestStatusTone(status: string) {
+  switch (status) {
+    case "PENDING":
+      return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+    case "APPROVED":
+      return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+    case "REJECTED":
+      return "bg-red-50 text-red-700 hover:bg-red-50";
+    case "CANCELLED":
+      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+    default:
+      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+  }
+}
+
 export default function BillingPage() {
   const { activeOrganization } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
@@ -108,9 +126,36 @@ export default function BillingPage() {
   const usageQuery = useOrganizationUsageQuery(organizationId);
   const latestPlanChangeRequestQuery =
     useLatestBillingPlanChangeRequestQuery(organizationId);
+  const checkoutMutation = useCreateCheckoutSessionMutation(organizationId);
 
   const [isRequestPlanDialogOpen, setIsRequestPlanDialogOpen] = useState(false);
+
   const currentPlan = usageQuery.data?.plan;
+  const latestPlanChangeRequest = latestPlanChangeRequestQuery.data;
+  const hasPendingPlanChangeRequest =
+    latestPlanChangeRequest?.status === "PENDING";
+
+  function handlePlanAction(plan: SubscriptionPlan) {
+    if (!organizationId) {
+      return;
+    }
+
+    checkoutMutation.mutate(
+      {
+        plan,
+      },
+      {
+        onSuccess: (data) => {
+          if (data.checkoutUrl) {
+            window.location.href = data.checkoutUrl;
+            return;
+          }
+
+          setIsRequestPlanDialogOpen(true);
+        },
+      },
+    );
+  }
 
   return (
     <div className="space-y-6">
@@ -143,6 +188,14 @@ export default function BillingPage() {
 
       {usageQuery.error ? <ErrorAlert error={usageQuery.error} /> : null}
 
+      {latestPlanChangeRequestQuery.error ? (
+        <ErrorAlert error={latestPlanChangeRequestQuery.error} />
+      ) : null}
+
+      {checkoutMutation.error ? (
+        <ErrorAlert error={checkoutMutation.error} />
+      ) : null}
+
       {usageQuery.isLoading ? (
         <Card>
           <CardContent className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
@@ -154,25 +207,35 @@ export default function BillingPage() {
         <OrganizationUsageCard usage={usageQuery.data} />
       ) : null}
 
-      {latestPlanChangeRequestQuery.data ? (
+      {latestPlanChangeRequest ? (
         <Card>
           <CardContent className="flex flex-col justify-between gap-4 p-5 md:flex-row md:items-center">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
                 Latest plan change request
               </p>
+
               <h3 className="mt-1 text-lg font-semibold">
-                {latestPlanChangeRequestQuery.data.currentPlan} →{" "}
-                {latestPlanChangeRequestQuery.data.requestedPlan}
+                {latestPlanChangeRequest.currentPlan} →{" "}
+                {latestPlanChangeRequest.requestedPlan}
               </h3>
+
               <p className="mt-1 text-sm text-muted-foreground">
-                Requested by{" "}
-                {latestPlanChangeRequestQuery.data.requestedByEmail}
+                Requested by {latestPlanChangeRequest.requestedByEmail}
               </p>
+
+              {latestPlanChangeRequest.reviewedByEmail ? (
+                <p className="mt-1 text-sm text-muted-foreground">
+                  Reviewed by {latestPlanChangeRequest.reviewedByEmail}
+                </p>
+              ) : null}
             </div>
 
-            <Badge variant="secondary">
-              {latestPlanChangeRequestQuery.data.status}
+            <Badge
+              variant="secondary"
+              className={requestStatusTone(latestPlanChangeRequest.status)}
+            >
+              {latestPlanChangeRequest.status}
             </Badge>
           </CardContent>
         </Card>
@@ -184,24 +247,32 @@ export default function BillingPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-700">
               Plans
             </p>
+
             <h3 className="mt-1 text-2xl font-semibold tracking-tight">
               Choose the right plan for your workspace
             </h3>
+
             <p className="mt-2 text-sm text-muted-foreground">
-              Payment checkout is not connected yet. These plan cards prepare
-              the product for Stripe or another billing provider later.
+              The checkout API is Stripe-ready. Until online checkout is
+              connected, plan changes fall back to a platform-admin approval
+              request.
             </p>
           </div>
 
           <Badge variant="secondary" className="w-fit">
             <Sparkles className="mr-2 size-3.5" />
-            Billing checkout coming soon
+            Stripe-ready checkout placeholder
           </Badge>
         </div>
 
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => {
             const isCurrentPlan = currentPlan === plan.name;
+            const isDisabled =
+              !organizationId ||
+              isCurrentPlan ||
+              hasPendingPlanChangeRequest ||
+              checkoutMutation.isPending;
 
             return (
               <Card
@@ -261,19 +332,23 @@ export default function BillingPage() {
                   <Button
                     type="button"
                     className="mt-6 w-full"
-                    disabled={
-                      isCurrentPlan ||
-                      latestPlanChangeRequestQuery.data?.status === "PENDING"
-                    }
+                    disabled={isDisabled}
                     variant={isCurrentPlan ? "secondary" : "outline"}
-                    onClick={() => setIsRequestPlanDialogOpen(true)}
+                    onClick={() => handlePlanAction(plan.name)}
                   >
-                    <CreditCard className="mr-2 size-4" />
+                    {checkoutMutation.isPending && !isCurrentPlan ? (
+                      <Loader2 className="mr-2 size-4 animate-spin" />
+                    ) : (
+                      <CreditCard className="mr-2 size-4" />
+                    )}
+
                     {isCurrentPlan
                       ? "Current plan"
-                      : latestPlanChangeRequestQuery.data?.status === "PENDING"
+                      : hasPendingPlanChangeRequest
                         ? "Request pending"
-                        : "Request plan change"}
+                        : checkoutMutation.isPending
+                          ? "Preparing checkout..."
+                          : "Upgrade / request"}
                   </Button>
                 </CardContent>
               </Card>
