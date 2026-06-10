@@ -24,6 +24,7 @@ import {
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import type { SubscriptionPlan } from "@/lib/api/api-types";
 import { PlanChangeHistoryCard } from "@/features/billing/components/plan-change-history-card";
+import { UsageLimitWarningCard } from "@/features/billing/components/usage-limit-warning-card";
 
 type PlanCard = {
   name: SubscriptionPlan;
@@ -177,6 +178,13 @@ export default function BillingPage() {
   const hasPendingPlanChangeRequest =
     latestPlanChangeRequest?.status === "PENDING";
 
+  function scrollToPlans() {
+    document.getElementById("billing-plans")?.scrollIntoView({
+      behavior: "smooth",
+      block: "start",
+    });
+  }
+
   function handlePlanAction(plan: SubscriptionPlan) {
     if (!organizationId || !currentPlan || plan === currentPlan) {
       return;
@@ -251,7 +259,14 @@ export default function BillingPage() {
           </CardContent>
         </Card>
       ) : usageQuery.data ? (
-        <OrganizationUsageCard usage={usageQuery.data} />
+        <>
+          <OrganizationUsageCard usage={usageQuery.data} />
+
+          <UsageLimitWarningCard
+            usage={usageQuery.data}
+            onUpgradeClick={scrollToPlans}
+          />
+        </>
       ) : null}
 
       {latestPlanChangeRequest ? (
@@ -288,7 +303,7 @@ export default function BillingPage() {
         </Card>
       ) : null}
 
-      <section>
+      <section id="billing-plans">
         <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-700">
