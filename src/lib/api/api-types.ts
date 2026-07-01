@@ -505,3 +505,17 @@ export type CheckoutSessionResponse = {
   checkoutUrl: string | null;
   message: string;
 };
+
+export type SearchResultItemDto = {
+  id: string;
+  title: string;
+  description: string | null;
+  url: string;
+};
+
+export type GlobalSearchResultDto = {
+  complianceItems: SearchResultItemDto[];
+  evidence: SearchResultItemDto[];
+  tasks: SearchResultItemDto[];
+  auditEvents: SearchResultItemDto[];
+};

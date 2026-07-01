@@ -50,16 +50,19 @@ export default function CompliancePage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+      <section className="compliance-hero">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
+
+        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
               {t("heroEyebrow")}
             </p>
-            <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
               {t("heroTitle")}
             </h2>
-            <p className="mt-3 max-w-2xl text-slate-300">
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
               {t("heroDescription")}
             </p>
           </div>
@@ -69,7 +72,7 @@ export default function CompliancePage() {
               <Button
                 type="button"
                 variant="outline"
-                className="border-cyan-300/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                className="border-primary/20 bg-primary/5 text-primary hover:bg-primary/10"
                 disabled={
                   !organizationId || exportComplianceCsvMutation.isPending
                 }
@@ -91,8 +94,8 @@ export default function CompliancePage() {
 
               <Button
                 onClick={() => setIsCreateItemDialogOpen(true)}
-                variant="outline"
-                className="border-cyan-300/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
+                variant="default"
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Plus className="mr-2 size-4" />
                 {t("createItem")}

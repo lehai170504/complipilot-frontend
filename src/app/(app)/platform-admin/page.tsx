@@ -66,24 +66,24 @@ function formatDate(value: string) {
 
 function statusTone(status: string) {
   if (status === "ACTIVE") {
-    return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+    return "bg-success/10 text-success hover:bg-success/20";
   }
 
-  return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+  return "bg-muted text-muted-foreground hover:bg-muted/80";
 }
 
 function planTone(plan: string | null) {
   switch (plan) {
     case "PRO":
-      return "bg-cyan-50 text-cyan-700 hover:bg-cyan-50";
+      return "bg-info/10 text-info hover:bg-info/20";
     case "BUSINESS":
-      return "bg-violet-50 text-violet-700 hover:bg-violet-50";
+      return "bg-primary/10 text-primary hover:bg-primary/20";
     case "ENTERPRISE":
-      return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+      return "bg-warning/10 text-warning hover:bg-warning/20";
     case "FREE":
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-muted-foreground hover:bg-muted/80";
     default:
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-muted-foreground hover:bg-muted/80";
   }
 }
 
@@ -107,7 +107,7 @@ function PlatformMetricCard({
           <p className="mt-1 text-xs text-muted-foreground">{description}</p>
         </div>
 
-        <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
           <Icon className="size-5" />
         </div>
       </CardContent>
@@ -157,30 +157,29 @@ export default function PlatformAdminPage() {
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div className="relative">
-          <div className="absolute -right-20 -top-20 size-56 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="compliance-hero">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
 
-          <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-                Platform Admin
-              </p>
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-                Manage CompliPilot SaaS operations
-              </h2>
-              <p className="mt-3 max-w-2xl text-slate-300">
-                Review organizations, users, subscriptions, and current usage
-                across the platform.
-              </p>
-            </div>
+        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
+              Platform Admin
+            </p>
+            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+              Manage CompliPilot SaaS operations
+            </h2>
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+              Review organizations, users, subscriptions, and current usage
+              across the platform.
+            </p>
+          </div>
 
-            <div className="rounded-2xl bg-white/5 px-4 py-3 text-sm text-slate-300 ring-1 ring-white/10">
-              Signed in as{" "}
-              <span className="font-semibold text-white">
-                {currentUserQuery.data?.email ?? "loading..."}
-              </span>
-            </div>
+          <div className="rounded-2xl border border-border/50 bg-muted/30 px-5 py-4 backdrop-blur-md">
+            <p className="text-sm text-muted-foreground">Signed in as</p>
+            <p className="mt-1 font-semibold text-foreground">
+              {currentUserQuery.data?.email ?? "loading..."}
+            </p>
           </div>
         </div>
       </section>
@@ -228,7 +227,7 @@ export default function PlatformAdminPage() {
           <CardContent className="p-0">
             <div className="border-b p-5">
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                <div className="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                   <Building2 className="size-5" />
                 </div>
                 <div>
@@ -260,8 +259,8 @@ export default function PlatformAdminPage() {
                       <button
                         key={organization.id}
                         type="button"
-                        className={`w-full p-5 text-left transition hover:bg-slate-50 ${
-                          isSelected ? "bg-cyan-50/60" : "bg-white"
+                        className={`w-full p-5 text-left transition hover:bg-muted/30 ${
+                          isSelected ? "bg-primary/5" : "bg-card"
                         }`}
                         onClick={() =>
                           setSelectedOrganizationId(organization.id)
@@ -324,7 +323,7 @@ export default function PlatformAdminPage() {
           <Card>
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                <div className="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                   <Database className="size-5" />
                 </div>
                 <div>
@@ -360,7 +359,7 @@ export default function PlatformAdminPage() {
                     </Badge>
                   </div>
 
-                  <div className="space-y-2 rounded-2xl border bg-slate-50 p-3">
+                  <div className="space-y-2 rounded-2xl border border-border/50 bg-muted/30 p-3">
                     <p className="text-sm font-medium text-muted-foreground">
                       Change plan
                     </p>
@@ -372,7 +371,7 @@ export default function PlatformAdminPage() {
                         handleChangePlan(plan as SubscriptionPlan)
                       }
                     >
-                      <SelectTrigger className="bg-white">
+                      <SelectTrigger className="bg-background">
                         <SelectValue />
                       </SelectTrigger>
 
@@ -396,7 +395,7 @@ export default function PlatformAdminPage() {
                   ) : null}
 
                   {updateSubscriptionMutation.isPending ? (
-                    <div className="flex items-center gap-2 rounded-2xl bg-cyan-50 px-3 py-2 text-xs text-cyan-700">
+                    <div className="flex items-center gap-2 rounded-2xl bg-primary/10 px-3 py-2 text-xs text-primary">
                       <Loader2 className="size-3.5 animate-spin" />
                       Updating subscription plan...
                     </div>
@@ -446,7 +445,7 @@ export default function PlatformAdminPage() {
           <Card>
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
-                <div className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                <div className="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                   <Users className="size-5" />
                 </div>
                 <div>
@@ -471,7 +470,7 @@ export default function PlatformAdminPage() {
                   {users.slice(0, 8).map((user) => (
                     <div
                       key={user.id}
-                      className="rounded-2xl border bg-slate-50 p-3"
+                      className="rounded-2xl border border-border/50 bg-muted/30 p-3"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0">

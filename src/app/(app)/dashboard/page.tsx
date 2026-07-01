@@ -67,25 +67,25 @@ export default function DashboardPage() {
   const openTasksQuery = useTasksQuery(
     organizationId
       ? {
-          organizationId,
-          status: "OPEN",
-          page: 0,
-          size: 5,
-          sortBy: "dueDate",
-          sortDirection: "ASC",
-        }
+        organizationId,
+        status: "OPEN",
+        page: 0,
+        size: 5,
+        sortBy: "dueDate",
+        sortDirection: "ASC",
+      }
       : undefined,
   );
 
   const auditEventsQuery = useAuditEventsQuery(
     organizationId
       ? {
-          organizationId,
-          page: 0,
-          size: 5,
-          sortBy: "createdAt",
-          sortDirection: "DESC",
-        }
+        organizationId,
+        page: 0,
+        size: 5,
+        sortBy: "createdAt",
+        sortDirection: "DESC",
+      }
       : undefined,
   );
 
@@ -95,52 +95,52 @@ export default function DashboardPage() {
   const complianceReadyPercent =
     complianceSummary && complianceSummary.totalItems > 0
       ? Math.round(
-          ((complianceSummary.compliant + complianceSummary.waived) /
-            complianceSummary.totalItems) *
-            100,
-        )
+        ((complianceSummary.compliant + complianceSummary.waived) /
+          complianceSummary.totalItems) *
+        100,
+      )
       : 0;
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div className="relative">
-          <div className="absolute -right-20 -top-20 size-72 rounded-full bg-cyan-400/20 blur-3xl" />
+      <section className="relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-card via-background to-card p-8 text-foreground shadow-2xl ring-1 ring-border sm:p-12">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
+        <div className="pointer-events-none absolute -bottom-20 -left-20 h-[20rem] w-[20rem] rounded-full bg-accent/10 blur-[80px]" />
 
-          <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+        <div className="relative z-10 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div>
+            <Badge className="bg-primary/10 text-primary hover:bg-primary/20">
+              {canManageCompliance
+                ? t("managerWorkspace")
+                : t("memberWorkspace")}
+            </Badge>
+            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl lg:text-5xl">
+              {t("welcome", {
+                name: currentUserQuery.data?.fullName ?? t("fallbackName"),
+              })}
+            </h2>
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+              {t("description")}
+            </p>
+          </div>
+
+          <div className="min-w-[280px] space-y-4 rounded-3xl border border-border/50 bg-muted/30 p-5 backdrop-blur-md transition-colors hover:bg-muted/50">
             <div>
-              <Badge className="bg-cyan-300/15 text-cyan-200 hover:bg-cyan-300/15">
-                {canManageCompliance
-                  ? t("managerWorkspace")
-                  : t("memberWorkspace")}
-              </Badge>
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-                {t("welcome", {
-                  name: currentUserQuery.data?.fullName ?? t("fallbackName"),
-                })}
-              </h2>
-              <p className="mt-3 max-w-2xl text-slate-300">
-                {t("description")}
+              <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">
+                {t("activeOrganization")}
               </p>
-            </div>
-
-            <div className="space-y-4 rounded-3xl border border-white/10 bg-white/6 p-4">
-              <div>
-                <p className="text-sm text-slate-400">
-                  {t("activeOrganization")}
-                </p>
-                <p className="mt-1 text-lg font-semibold">
-                  {activeOrganization?.organizationName ?? "Loading..."}
-                </p>
-                <p className="mt-1 text-sm text-cyan-200">
-                  {activeOrganization?.role ?? "—"}
-                </p>
+              <p className="mt-1 text-xl font-bold text-foreground">
+                {activeOrganization?.organizationName ?? "Loading..."}
+              </p>
+              <div className="mt-2 inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                {activeOrganization?.role ?? "—"}
               </div>
-
-              {canManageCompliance ? (
-                <SeedDemoWorkspaceButton organizationId={organizationId} />
-              ) : null}
             </div>
+
+            {canManageCompliance ? (
+              <SeedDemoWorkspaceButton organizationId={organizationId} />
+            ) : null}
           </div>
         </div>
       </section>
@@ -208,13 +208,13 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {openTasksQuery.data.items.map((task) => (
                   <div
-                    className="rounded-2xl border bg-slate-50 p-4"
+                    className="rounded-2xl border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50"
                     key={task.id}
                   >
                     <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
                       <div>
-                        <p className="font-semibold">{task.title}</p>
-                        <p className="mt-1 text-sm text-muted-foreground">
+                        <p className="font-semibold text-foreground">{task.title}</p>
+                        <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
                           {task.description ?? t("noDescription")}
                         </p>
                       </div>
@@ -222,7 +222,7 @@ export default function DashboardPage() {
                       <StatusPill status={task.priority} />
                     </div>
 
-                    <div className="mt-3 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+                    <div className="mt-4 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
                       <StatusPill status={task.status} />
                       <span>
                         {t("due", {
@@ -244,34 +244,36 @@ export default function DashboardPage() {
             <CardTitle>{t("complianceStatus")}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-3">
-            {[
-              [t("statusBreakdown.open"), complianceSummary?.open ?? 0],
-              [
-                t("statusBreakdown.inProgress"),
-                complianceSummary?.inProgress ?? 0,
-              ],
-              [
-                t("statusBreakdown.readyForReview"),
-                complianceSummary?.readyForReview ?? 0,
-              ],
-              [
-                t("statusBreakdown.compliant"),
-                complianceSummary?.compliant ?? 0,
-              ],
-              [
-                t("statusBreakdown.nonCompliant"),
-                complianceSummary?.nonCompliant ?? 0,
-              ],
-              [t("statusBreakdown.waived"), complianceSummary?.waived ?? 0],
-            ].map(([label, value]) => (
-              <div
-                className="flex items-center justify-between rounded-2xl border bg-slate-50 px-4 py-3"
-                key={label}
-              >
-                <span className="text-sm text-muted-foreground">{label}</span>
-                <span className="font-semibold">{value}</span>
-              </div>
-            ))}
+            <div className="grid gap-3 sm:grid-cols-2">
+              {[
+                [t("statusBreakdown.open"), complianceSummary?.open ?? 0],
+                [
+                  t("statusBreakdown.inProgress"),
+                  complianceSummary?.inProgress ?? 0,
+                ],
+                [
+                  t("statusBreakdown.readyForReview"),
+                  complianceSummary?.readyForReview ?? 0,
+                ],
+                [
+                  t("statusBreakdown.compliant"),
+                  complianceSummary?.compliant ?? 0,
+                ],
+                [
+                  t("statusBreakdown.nonCompliant"),
+                  complianceSummary?.nonCompliant ?? 0,
+                ],
+                [t("statusBreakdown.waived"), complianceSummary?.waived ?? 0],
+              ].map(([label, value]) => (
+                <div
+                  className="flex items-center justify-between rounded-2xl border border-border/50 bg-muted/30 px-4 py-3 transition-colors hover:bg-muted/50"
+                  key={label}
+                >
+                  <span className="text-sm font-medium text-muted-foreground">{label}</span>
+                  <span className="font-bold text-foreground">{value}</span>
+                </div>
+              ))}
+            </div>
           </CardContent>
         </Card>
       </section>
@@ -290,12 +292,12 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {dueSoonQuery.data.slice(0, 5).map((item) => (
                   <div
-                    className="rounded-2xl border bg-slate-50 p-4"
+                    className="rounded-2xl border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50"
                     key={item.id}
                   >
                     <div className="flex items-start justify-between gap-3">
                       <div>
-                        <p className="font-semibold">
+                        <p className="font-semibold text-foreground">
                           {item.requirementCode} · {item.requirementTitle}
                         </p>
                         <p className="mt-1 text-sm text-muted-foreground">
@@ -328,22 +330,22 @@ export default function DashboardPage() {
               <div className="space-y-3">
                 {auditEventsQuery.data.items.map((event) => (
                   <div
-                    className="rounded-2xl border bg-slate-50 p-4"
+                    className="rounded-2xl border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50"
                     key={event.id}
                   >
                     <div className="flex items-start gap-3">
-                      <div className="mt-1 rounded-2xl bg-slate-950 p-2 text-cyan-300">
+                      <div className="mt-1 flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                         <ScrollText className="size-4" />
                       </div>
                       <div>
-                        <p className="font-semibold">{event.summary}</p>
+                        <p className="font-semibold text-foreground">{event.summary}</p>
                         <p className="mt-1 text-sm text-muted-foreground">
-                          {event.actorEmail ?? "System"} ·{" "}
+                          <span className="font-medium">{event.actorEmail ?? "System"}</span> ·{" "}
                           {formatDateTime(event.createdAt)}
                         </p>
-                        <p className="mt-2 text-xs text-muted-foreground">
+                        <div className="mt-2 inline-flex rounded-full border border-border/50 bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                           {event.action} / {event.resourceType}
-                        </p>
+                        </div>
                       </div>
                     </div>
                   </div>

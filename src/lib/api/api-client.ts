@@ -122,8 +122,13 @@ export async function apiClient<TResponse>(
   }
 
   if (response.status === 204) {
-    return undefined as TResponse;
+    return null as TResponse;
   }
 
-  return response.json() as Promise<TResponse>;
+  const text = await response.text();
+  if (!text || text.trim() === "") {
+    return null as TResponse;
+  }
+
+  return JSON.parse(text) as TResponse;
 }

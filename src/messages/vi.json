@@ -20,7 +20,10 @@
     "workspace": "Không gian làm việc",
     "title": "Không gian vận hành tuân thủ",
     "searchPlaceholder": "Tìm control, bằng chứng, công việc và hoạt động kiểm toán...",
-    "loadingUser": "Đang tải..."
+    "loadingUser": "Đang tải...",
+    "modules": "Phân hệ",
+    "management": "Quản lý",
+    "noResults": "Không tìm thấy kết quả."
   },
   "sidebar": {
     "mvpTitle": "Workspace sẵn sàng kiểm toán",
@@ -106,14 +109,18 @@
       "EVIDENCE_LINK_DELETED": "Đã hủy liên kết bằng chứng",
       "COMPLIANCE_TASK_CREATED": "Đã tạo công việc tuân thủ",
       "COMPLIANCE_TASK_UPDATED": "Đã cập nhật công việc tuân thủ",
-      "COMPLIANCE_TASK_DELETED": "Đã xóa công việc tuân thủ"
+      "COMPLIANCE_TASK_DELETED": "Đã xóa công việc tuân thủ",
+      "BILLING_PLAN_CHANGE_REQUESTED": "Đã yêu cầu đổi gói dịch vụ",
+      "BILLING_PLAN_CHANGE_APPROVED": "Đã phê duyệt đổi gói dịch vụ",
+      "BILLING_PLAN_CHANGE_REJECTED": "Đã từ chối đổi gói dịch vụ"
     },
     "resourceTypes": {
       "COMPLIANCE_FRAMEWORK": "Framework tuân thủ",
       "COMPLIANCE_ITEM": "Control tuân thủ",
       "EVIDENCE_DOCUMENT": "Tài liệu bằng chứng",
       "EVIDENCE_LINK": "Liên kết bằng chứng",
-      "COMPLIANCE_TASK": "Công việc tuân thủ"
+      "COMPLIANCE_TASK": "Công việc tuân thủ",
+      "BILLING_PLAN_CHANGE_REQUEST": "Yêu cầu đổi gói dịch vụ"
     }
   },
   "common": {
@@ -457,11 +464,88 @@
     },
     "placeholders": {
       "frameworkCode": "SEC-BASIC",
-      "frameworkName": "Security Baseline",
+      "frameworkName": "Cơ sở Bảo mật",
       "optional": "Tùy chọn...",
       "requirementCode": "SEC-006",
-      "requirementTitle": "Tiêu đề requirement",
-      "category": "Access Control"
+      "requirementTitle": "Tiêu đề yêu cầu",
+      "category": "Kiểm soát truy cập"
+    }
+  },
+  "billing": {
+    "eyebrow": "Thanh toán",
+    "title": "Quản lý gói cước SaaS và hạn mức không gian làm việc",
+    "description": "Theo dõi hạn mức sử dụng, so sánh các gói cước và chuẩn bị không gian làm việc cho các đợt nâng cấp sau này.",
+    "loadingUsage": "Đang tải mức sử dụng thanh toán...",
+    "latestRequest": "Yêu cầu thay đổi gói cước mới nhất",
+    "requestedBy": "Được yêu cầu bởi {email}",
+    "reviewedBy": "Được duyệt bởi {email}",
+    "cancelRequest": "Hủy yêu cầu",
+    "plansEyebrow": "Các gói cước",
+    "plansTitle": "Chọn gói cước phù hợp cho không gian làm việc",
+    "plansDescription": "Hệ thống thanh toán đã tích hợp Stripe. Trong thời gian chưa mở thanh toán online, các thay đổi gói cước sẽ chuyển thành yêu cầu chờ admin hệ thống phê duyệt.",
+    "stripePlaceholder": "Stripe-ready checkout placeholder",
+    "selectPlan": "Chọn gói cước",
+    "currentPlan": "Gói cước hiện tại",
+    "contactSales": "Liên hệ kinh doanh / yêu cầu",
+    "upgrade": "Nâng cấp / yêu cầu",
+    "downgrade": "Yêu cầu hạ cấp",
+    "requestPending": "Đang chờ xử lý",
+    "preparingCheckout": "Đang chuẩn bị thanh toán...",
+    "success": {
+      "title": "Thanh toán thành công!",
+      "description": "Cảm ơn bạn đã nâng cấp gói cước. Các tính năng và hạn mức mới của bạn đã được kích hoạt.",
+      "returnBtn": "Quay lại trang Thanh toán"
+    },
+    "cancel": {
+      "title": "Thanh toán đã hủy",
+      "description": "Quá trình thanh toán của bạn đã bị hủy. Thẻ của bạn không bị trừ tiền và gói cước của bạn vẫn được giữ nguyên.",
+      "returnBtn": "Quay lại trang Thanh toán"
+    },
+    "plans": {
+      "FREE": {
+        "title": "Free",
+        "description": "Dành cho trải nghiệm CompliPilot với team nhỏ.",
+        "features": [
+          "3 thành viên",
+          "50 tài liệu bằng chứng",
+          "100 MB lưu trữ",
+          "20 lần phân tích AI / tháng",
+          "Không gian làm việc cơ bản"
+        ]
+      },
+      "PRO": {
+        "title": "Pro",
+        "description": "Dành cho các team đang phát triển cần quản lý bằng chứng thực tế.",
+        "features": [
+          "20 thành viên",
+          "1,000 tài liệu bằng chứng",
+          "2 GB lưu trữ",
+          "500 lần phân tích AI / tháng",
+          "Mẫu Framework"
+        ]
+      },
+      "BUSINESS": {
+        "title": "Business",
+        "description": "Dành cho các team tuân thủ với khối lượng bằng chứng lớn.",
+        "features": [
+          "50 thành viên",
+          "10,000 tài liệu bằng chứng",
+          "20 GB lưu trữ",
+          "5,000 lần phân tích AI / tháng",
+          "Roadmap báo cáo Audit-ready"
+        ]
+      },
+      "ENTERPRISE": {
+        "title": "Enterprise",
+        "description": "Dành cho các tổ chức lớn với yêu cầu tuân thủ phức tạp.",
+        "features": [
+          "Hạn mức tùy chỉnh",
+          "Hỗ trợ chuyên biệt",
+          "Roadmap sẵn sàng SSO",
+          "Gói chính sách tùy chỉnh",
+          "Roadmap kiểm soát Enterprise"
+        ]
+      }
     }
   },
   "authShell": {

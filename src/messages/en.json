@@ -20,7 +20,10 @@
     "workspace": "Workspace",
     "title": "Compliance Workspace",
     "searchPlaceholder": "Search controls, evidence, tasks, and audit activity...",
-    "loadingUser": "Loading..."
+    "loadingUser": "Loading...",
+    "modules": "Modules",
+    "management": "Management",
+    "noResults": "No results found."
   },
   "sidebar": {
     "mvpTitle": "Audit-ready workspace",
@@ -106,14 +109,18 @@
       "EVIDENCE_LINK_DELETED": "Evidence link deleted",
       "COMPLIANCE_TASK_CREATED": "Compliance task created",
       "COMPLIANCE_TASK_UPDATED": "Compliance task updated",
-      "COMPLIANCE_TASK_DELETED": "Compliance task deleted"
+      "COMPLIANCE_TASK_DELETED": "Compliance task deleted",
+      "BILLING_PLAN_CHANGE_REQUESTED": "Billing plan change requested",
+      "BILLING_PLAN_CHANGE_APPROVED": "Billing plan change approved",
+      "BILLING_PLAN_CHANGE_REJECTED": "Billing plan change rejected"
     },
     "resourceTypes": {
       "COMPLIANCE_FRAMEWORK": "Compliance framework",
       "COMPLIANCE_ITEM": "Compliance item",
       "EVIDENCE_DOCUMENT": "Evidence document",
       "EVIDENCE_LINK": "Evidence link",
-      "COMPLIANCE_TASK": "Compliance task"
+      "COMPLIANCE_TASK": "Compliance task",
+      "BILLING_PLAN_CHANGE_REQUEST": "Billing plan change request"
     }
   },
   "common": {
@@ -462,6 +469,83 @@
       "requirementCode": "SEC-006",
       "requirementTitle": "Requirement title",
       "category": "Access Control"
+    }
+  },
+  "billing": {
+    "eyebrow": "Billing",
+    "title": "Manage your SaaS plan and workspace usage",
+    "description": "Track usage limits, compare available plans, and prepare the workspace for future subscription upgrades.",
+    "loadingUsage": "Loading billing usage...",
+    "latestRequest": "Latest plan change request",
+    "requestedBy": "Requested by {email}",
+    "reviewedBy": "Reviewed by {email}",
+    "cancelRequest": "Cancel request",
+    "plansEyebrow": "Plans",
+    "plansTitle": "Choose the right plan for your workspace",
+    "plansDescription": "The checkout API is Stripe-ready. Until online checkout is connected, plan changes fall back to a platform-admin approval request.",
+    "stripePlaceholder": "Stripe-ready checkout placeholder",
+    "selectPlan": "Select plan",
+    "currentPlan": "Current plan",
+    "contactSales": "Contact sales / request",
+    "upgrade": "Upgrade / request",
+    "downgrade": "Request downgrade",
+    "requestPending": "Request pending",
+    "preparingCheckout": "Preparing checkout...",
+    "success": {
+      "title": "Payment Successful!",
+      "description": "Thank you for upgrading your subscription. Your new plan limits and features are now active.",
+      "returnBtn": "Return to Billing"
+    },
+    "cancel": {
+      "title": "Payment Cancelled",
+      "description": "Your checkout process was cancelled. No charges were made to your card and your plan remains unchanged.",
+      "returnBtn": "Return to Billing"
+    },
+    "plans": {
+      "FREE": {
+        "title": "Free",
+        "description": "For testing CompliPilot with a small workspace.",
+        "features": [
+          "3 members",
+          "50 evidence documents",
+          "100 MB storage",
+          "20 AI analyses per month",
+          "Basic compliance workspace"
+        ]
+      },
+      "PRO": {
+        "title": "Pro",
+        "description": "For growing teams managing real compliance evidence.",
+        "features": [
+          "20 members",
+          "1,000 evidence documents",
+          "2 GB storage",
+          "500 AI analyses per month",
+          "Framework templates"
+        ]
+      },
+      "BUSINESS": {
+        "title": "Business",
+        "description": "For compliance teams with heavier evidence workflows.",
+        "features": [
+          "50 members",
+          "10,000 evidence documents",
+          "20 GB storage",
+          "5,000 AI analyses per month",
+          "Audit-ready reporting roadmap"
+        ]
+      },
+      "ENTERPRISE": {
+        "title": "Enterprise",
+        "description": "For larger organizations with advanced compliance needs.",
+        "features": [
+          "Custom limits",
+          "Dedicated support",
+          "SSO-ready roadmap",
+          "Custom policy packs",
+          "Enterprise controls roadmap"
+        ]
+      }
     }
   },
   "authShell": {

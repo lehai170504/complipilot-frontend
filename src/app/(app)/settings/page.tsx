@@ -39,10 +39,10 @@ function formatDateTime(value: string) {
 
 function statusTone(status: string) {
   if (status === "ACTIVE") {
-    return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+    return "bg-success/10 text-success hover:bg-success/20";
   }
 
-  return "bg-red-50 text-red-700 hover:bg-red-50";
+  return "bg-destructive/10 text-destructive hover:bg-destructive/20";
 }
 
 export default function SettingsPage() {
@@ -87,29 +87,28 @@ export default function SettingsPage() {
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div className="relative">
-          <div className="absolute -right-20 -top-20 size-56 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="compliance-hero">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
+        
+        <div className="relative z-10 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
+              Workspace settings
+            </p>
 
-          <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-                Workspace settings
-              </p>
+            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+              Manage your workspace profile and controls
+            </h2>
 
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-                Manage your workspace profile and controls
-              </h2>
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+              Update workspace identity, review status metadata, and jump to
+              member or billing management.
+            </p>
+          </div>
 
-              <p className="mt-3 max-w-2xl text-slate-300">
-                Update workspace identity, review status metadata, and jump to
-                member or billing management.
-              </p>
-            </div>
-
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-300 text-slate-950">
-              <Settings className="size-6" />
-            </div>
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
+            <Settings className="size-6" />
           </div>
         </div>
       </section>
@@ -117,12 +116,12 @@ export default function SettingsPage() {
       {settingsQuery.error ? <ErrorAlert error={settingsQuery.error} /> : null}
 
       {isDisabled ? (
-        <div className="rounded-3xl border border-red-200 bg-red-50 p-5 text-red-800">
+        <div className="rounded-3xl border border-destructive/20 bg-destructive/10 p-5 text-destructive">
           <div className="flex items-start gap-3">
             <AlertTriangle className="mt-0.5 size-5 shrink-0" />
             <div>
               <p className="font-semibold">Workspace is disabled</p>
-              <p className="mt-1 text-sm leading-6">
+              <p className="mt-1 text-sm leading-6 opacity-90">
                 This workspace is disabled. Some operations may be restricted.
                 Contact a platform admin if this was a mistake.
               </p>
@@ -144,7 +143,7 @@ export default function SettingsPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <Building2 className="size-5" />
                   </div>
 
@@ -174,7 +173,7 @@ export default function SettingsPage() {
                     ) : null}
 
                     {isDisabled ? (
-                      <p className="text-xs text-red-700">
+                      <p className="text-xs text-destructive">
                         Disabled workspaces cannot be renamed.
                       </p>
                     ) : null}
@@ -210,7 +209,7 @@ export default function SettingsPage() {
             <Card>
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                     <ShieldCheck className="size-5" />
                   </div>
 
@@ -225,14 +224,14 @@ export default function SettingsPage() {
                 </div>
 
                 <div className="mt-6 grid gap-4 md:grid-cols-2">
-                  <div className="rounded-2xl border bg-slate-50 p-4">
+                  <div className="rounded-2xl border border-border/50 bg-muted/30 p-4">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                       Slug
                     </p>
                     <p className="mt-2 font-semibold">/{settings.slug}</p>
                   </div>
 
-                  <div className="rounded-2xl border bg-slate-50 p-4">
+                  <div className="rounded-2xl border border-border/50 bg-muted/30 p-4">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                       Status
                     </p>
@@ -246,20 +245,20 @@ export default function SettingsPage() {
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border bg-slate-50 p-4">
+                  <div className="rounded-2xl border border-border/50 bg-muted/30 p-4">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                       Created
                     </p>
-                    <p className="mt-2 font-semibold">
+                    <p className="mt-2 font-semibold text-foreground">
                       {formatDateTime(settings.createdAt)}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border bg-slate-50 p-4">
+                  <div className="rounded-2xl border border-border/50 bg-muted/30 p-4">
                     <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                       Updated
                     </p>
-                    <p className="mt-2 font-semibold">
+                    <p className="mt-2 font-semibold text-foreground">
                       {formatDateTime(settings.updatedAt)}
                     </p>
                   </div>
@@ -280,11 +279,11 @@ export default function SettingsPage() {
                   <Button
                     asChild
                     variant="outline"
-                    className="h-auto w-full justify-between rounded-2xl p-4"
+                    className="h-auto w-full justify-between rounded-2xl p-4 transition-colors hover:bg-muted/50"
                   >
                     <Link href="/workspaces">
                       <span className="flex items-center gap-3">
-                        <UsersRound className="size-5 text-cyan-700" />
+                        <UsersRound className="size-5 text-primary" />
                         <span className="text-left">
                           <span className="block font-semibold">
                             Members & invitations
@@ -302,11 +301,11 @@ export default function SettingsPage() {
                   <Button
                     asChild
                     variant="outline"
-                    className="h-auto w-full justify-between rounded-2xl p-4"
+                    className="h-auto w-full justify-between rounded-2xl p-4 transition-colors hover:bg-muted/50"
                   >
                     <Link href="/billing">
                       <span className="flex items-center gap-3">
-                        <CreditCard className="size-5 text-cyan-700" />
+                        <CreditCard className="size-5 text-primary" />
                         <span className="text-left">
                           <span className="block font-semibold">
                             Billing & usage
@@ -324,18 +323,18 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-red-200">
+            <Card className="border-destructive/20">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-red-50 text-red-700">
+                  <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">
                     <AlertTriangle className="size-5" />
                   </div>
 
                   <div>
-                    <h3 className="text-lg font-semibold text-red-900">
+                    <h3 className="text-lg font-semibold text-destructive">
                       Danger zone
                     </h3>
-                    <p className="mt-1 text-sm leading-6 text-red-700">
+                    <p className="mt-1 text-sm leading-6 text-destructive/80">
                       Disable this workspace without deleting its data. This
                       action is limited to owners and will be recorded in the
                       audit trail.
@@ -363,7 +362,7 @@ export default function SettingsPage() {
                 ) : null}
 
                 {isDisabled ? (
-                  <p className="mt-2 text-xs text-red-700">
+                  <p className="mt-2 text-xs text-destructive">
                     This workspace has already been disabled.
                   </p>
                 ) : null}

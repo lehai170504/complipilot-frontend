@@ -47,12 +47,12 @@ export function AppSidebar() {
   });
 
   return (
-    <aside className="hidden h-screen w-72 shrink-0 overflow-hidden border-r border-white/6 bg-slate-950 text-white lg:flex lg:flex-col">
+    <aside className="hidden h-screen w-72 shrink-0 overflow-hidden border-r border-sidebar-border bg-sidebar text-sidebar-foreground lg:flex lg:flex-col">
       <div className="relative p-5">
-        <div className="absolute -right-16 -top-16 size-32 rounded-full bg-cyan-400/10 blur-3xl" />
+        <div className="absolute -right-16 -top-16 size-32 rounded-full bg-sidebar-primary/10 blur-3xl" />
 
         <Link className="relative flex items-center gap-3" href="/dashboard">
-          <div className="flex size-10 items-center justify-center rounded-xl bg-linear-to-br from-cyan-400/20 to-cyan-600/20 text-cyan-300 ring-1 ring-cyan-300/20">
+          <div className="flex size-10 items-center justify-center rounded-xl bg-linear-to-br from-sidebar-primary/20 to-sidebar-primary/10 text-sidebar-primary ring-1 ring-sidebar-primary/20">
             <ShieldCheck className="size-5" />
           </div>
 
@@ -60,7 +60,7 @@ export function AppSidebar() {
             <p className="text-base font-bold tracking-tight">
               {tBrand("name")}
             </p>
-            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-slate-500">
+            <p className="text-[11px] font-medium uppercase tracking-[0.2em] text-sidebar-foreground/50">
               {tBrand("shortDescription")}
             </p>
           </div>
@@ -79,9 +79,9 @@ export function AppSidebar() {
           return (
             <Link
               className={cn(
-                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-slate-400 transition-all hover:bg-white/5 hover:text-white",
+                "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium text-sidebar-foreground/70 transition-all hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                 isActive &&
-                  "bg-linear-to-r from-cyan-400/10 to-cyan-600/5 text-cyan-100 ring-1 ring-cyan-300/10",
+                  "bg-linear-to-r from-sidebar-primary/10 to-transparent text-sidebar-primary ring-1 ring-sidebar-primary/10",
               )}
               href={item.href}
               key={item.href}
@@ -89,7 +89,7 @@ export function AppSidebar() {
               <item.icon
                 className={cn(
                   "size-4",
-                  isActive ? "text-cyan-300" : "text-slate-500",
+                  isActive ? "text-sidebar-primary" : "text-sidebar-foreground/50",
                 )}
               />
               {tNavigation(item.labelKey)}
@@ -99,11 +99,11 @@ export function AppSidebar() {
       </nav>
 
       <div className="shrink-0 p-5">
-        <div className="rounded-2xl border border-cyan-300/10 bg-linear-to-br from-cyan-400/5 to-cyan-600/5 p-4">
-          <p className="text-sm font-semibold text-cyan-200">
+        <div className="rounded-2xl border border-sidebar-primary/10 bg-linear-to-br from-sidebar-primary/5 to-transparent p-4">
+          <p className="text-sm font-semibold text-sidebar-primary">
             {tSidebar("mvpTitle")}
           </p>
-          <p className="mt-2 text-xs leading-5 text-slate-400">
+          <p className="mt-2 text-xs leading-5 text-sidebar-foreground/60">
             {tSidebar("mvpDescription")}
           </p>
         </div>

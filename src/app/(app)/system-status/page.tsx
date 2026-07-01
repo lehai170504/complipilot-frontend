@@ -34,26 +34,26 @@ function formatDateTime(value: string) {
 function statusTone(status: SystemComponentStatus) {
   switch (status) {
     case "UP":
-      return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+      return "bg-success/10 text-success hover:bg-success/20";
     case "WARN":
-      return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+      return "bg-warning/10 text-warning hover:bg-warning/20";
     case "DOWN":
-      return "bg-red-50 text-red-700 hover:bg-red-50";
+      return "bg-destructive/10 text-destructive hover:bg-destructive/20";
     default:
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-muted-foreground hover:bg-muted/80";
   }
 }
 
 function StatusIcon({ status }: { status: SystemComponentStatus }) {
   if (status === "UP") {
-    return <CheckCircle2 className="size-5 text-emerald-600" />;
+    return <CheckCircle2 className="size-5 text-success" />;
   }
 
   if (status === "WARN") {
-    return <AlertTriangle className="size-5 text-amber-600" />;
+    return <AlertTriangle className="size-5 text-warning" />;
   }
 
-  return <XCircle className="size-5 text-red-600" />;
+  return <XCircle className="size-5 text-destructive" />;
 }
 
 function renderComponentIcon(key: string) {
@@ -92,7 +92,7 @@ function SystemComponentCard({
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
-            <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
               {renderComponentIcon(component.key)}
             </div>
 
@@ -115,11 +115,11 @@ function SystemComponentCard({
         {details.length > 0 ? (
           <div className="mt-5 grid gap-3 md:grid-cols-2">
             {details.map(([key, value]) => (
-              <div key={key} className="rounded-2xl border bg-slate-50 p-3">
+              <div key={key} className="rounded-2xl border border-border/50 bg-muted/30 p-3">
                 <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                   {key}
                 </p>
-                <p className="mt-1 break-all text-sm font-semibold">
+                <p className="mt-1 break-all text-sm font-semibold text-foreground">
                   {safeDetailValue(value)}
                 </p>
               </div>
@@ -137,29 +137,28 @@ export default function SystemStatusPage() {
 
   return (
     <div className="space-y-6">
-      <section className="overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div className="relative">
-          <div className="absolute -right-20 -top-20 size-56 rounded-full bg-cyan-400/10 blur-3xl" />
+      <section className="compliance-hero">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
 
-          <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-                System Status
-              </p>
+        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
+              System Status
+            </p>
 
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-                Monitor CompliPilot operational health
-              </h2>
+            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+              Monitor CompliPilot operational health
+            </h2>
 
-              <p className="mt-3 max-w-2xl text-slate-300">
-                Review backend, database, storage, AI, and mail configuration
-                health from one internal dashboard.
-              </p>
-            </div>
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+              Review backend, database, storage, AI, and mail configuration
+              health from one internal dashboard.
+            </p>
+          </div>
 
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-300 text-slate-950">
-              <Activity className="size-6" />
-            </div>
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
+            <Activity className="size-6" />
           </div>
         </div>
       </section>
@@ -196,18 +195,18 @@ export default function SystemStatusPage() {
               </div>
 
               <div className="grid gap-3 text-sm md:grid-cols-2">
-                <div className="rounded-2xl border bg-slate-50 px-4 py-3">
+                <div className="rounded-2xl border border-border/50 bg-muted/30 px-4 py-3">
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     Version
                   </p>
-                  <p className="mt-1 font-semibold">{status.version}</p>
+                  <p className="mt-1 font-semibold text-foreground">{status.version}</p>
                 </div>
 
-                <div className="rounded-2xl border bg-slate-50 px-4 py-3">
+                <div className="rounded-2xl border border-border/50 bg-muted/30 px-4 py-3">
                   <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">
                     Checked at
                   </p>
-                  <p className="mt-1 font-semibold">
+                  <p className="mt-1 font-semibold text-foreground">
                     {formatDateTime(status.timestamp)}
                   </p>
                 </div>

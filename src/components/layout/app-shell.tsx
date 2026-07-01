@@ -37,17 +37,20 @@ function AppShellContent({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="h-screen overflow-hidden bg-slate-50">
-      <div className="flex h-screen overflow-hidden">
-        <AppSidebar />
+    <div className="flex h-screen w-full overflow-hidden bg-slate-100/50 dark:bg-slate-950">
+      <AppSidebar />
 
-        <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
-          <AppTopbar organizationId={organizationId} />
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden transition-all duration-300">
+        <AppTopbar organizationId={organizationId} />
 
-          <DisabledWorkspaceBanner organizationId={organizationId} />
+        <DisabledWorkspaceBanner organizationId={organizationId} />
 
-          <main className="min-h-0 flex-1 overflow-y-auto px-4 py-6 xl:px-8">
-            {children}
+        {/* Main Content Area with floating effect */}
+        <div className="flex-1 overflow-hidden p-2 md:p-4">
+          <main className="h-full overflow-y-auto rounded-3xl bg-white shadow-sm ring-1 ring-slate-900/5 dark:bg-slate-900/50 dark:ring-white/10">
+            <div className="mx-auto max-w-7xl px-4 py-6 xl:px-8 xl:py-8">
+              {children}
+            </div>
           </main>
         </div>
       </div>

@@ -23,15 +23,18 @@ export default function WorkspacesPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div>
-          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
+      <section className="compliance-hero">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
+        
+        <div className="relative z-10">
+          <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
             {t("heroEyebrow")}
           </p>
-          <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+          <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
             {t("heroTitle")}
           </h2>
-          <p className="mt-3 max-w-2xl text-slate-300">
+          <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
             {t("heroDescription")}
           </p>
         </div>
@@ -46,7 +49,7 @@ export default function WorkspacesPage() {
       ) : organizations.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center p-10 text-center">
-            <div className="rounded-3xl bg-slate-950 p-4 text-cyan-300">
+            <div className="rounded-3xl bg-primary/10 p-4 text-primary">
               <Building2 className="size-8" />
             </div>
             <h3 className="mt-5 text-xl font-semibold">{t("emptyTitle")}</h3>
@@ -64,18 +67,18 @@ export default function WorkspacesPage() {
             return (
               <Card
                 key={org.organizationId}
-                className={`overflow-hidden transition-all ${
-                  isActive ? "ring-2 ring-cyan-300" : ""
+                className={`overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-md ${
+                  isActive ? "ring-2 ring-primary" : ""
                 }`}
               >
                 <CardContent className="p-0">
                   <div className="flex items-center justify-between p-6">
                     <div className="flex items-center gap-4">
                       <div
-                        className={`flex size-12 items-center justify-center rounded-2xl ${
+                        className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${
                           isActive
-                            ? "bg-slate-950 text-cyan-300"
-                            : "bg-slate-100 text-slate-500"
+                            ? "bg-primary text-primary-foreground shadow-lg shadow-primary/25"
+                            : "bg-muted text-muted-foreground"
                         }`}
                       >
                         {isActive ? (
@@ -93,8 +96,8 @@ export default function WorkspacesPage() {
                           <Badge
                             className={
                               org.role === "OWNER"
-                                ? "bg-cyan-50 text-cyan-700 hover:bg-cyan-50"
-                                : "bg-slate-100 text-slate-600 hover:bg-slate-100"
+                                ? "bg-primary/10 text-primary hover:bg-primary/20"
+                                : "bg-muted text-muted-foreground hover:bg-muted"
                             }
                             variant="secondary"
                           >
@@ -106,7 +109,7 @@ export default function WorkspacesPage() {
                           </span>
 
                           {isActive ? (
-                            <span className="rounded-full bg-emerald-50 px-2 py-0.5 text-xs font-medium text-emerald-700">
+                            <span className="rounded-full bg-success/10 px-2 py-0.5 text-xs font-medium text-success">
                               {t("active")}
                             </span>
                           ) : null}
@@ -120,11 +123,12 @@ export default function WorkspacesPage() {
                           changeActiveOrganization(org.organizationId)
                         }
                         variant="outline"
+                        className="transition-colors hover:bg-primary/5 hover:text-primary"
                       >
                         {t("switch")}
                       </Button>
                     ) : (
-                      <Badge className="bg-emerald-50 text-emerald-700 hover:bg-emerald-50">
+                      <Badge className="bg-success/10 text-success hover:bg-success/20">
                         {t("current")}
                       </Badge>
                     )}

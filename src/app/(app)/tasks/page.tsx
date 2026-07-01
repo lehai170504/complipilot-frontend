@@ -117,26 +117,29 @@ export default function TasksPage() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div className="flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+      <section className="compliance-hero">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
+        
+        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
               {t("heroEyebrow")}
             </p>
-            <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
               {t("heroTitle")}
             </h2>
-            <p className="mt-3 max-w-2xl text-slate-300">
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
               {t("heroDescription")}
             </p>
           </div>
 
           {canManageCompliance ? (
             <Button
-              className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={() => setIsCreateDialogOpen(true)}
             >
-              <Plus className="h-4 w-4" />
+              <Plus className="mr-2 h-4 w-4" />
               {t("createTask")}
             </Button>
           ) : null}
@@ -261,7 +264,7 @@ export default function TasksPage() {
       ) : tasks.length === 0 ? (
         <Card>
           <CardContent className="flex flex-col items-center justify-center p-10 text-center">
-            <div className="rounded-3xl bg-slate-950 p-4 text-cyan-300">
+            <div className="rounded-3xl bg-primary/10 p-4 text-primary">
               <ListChecks className="size-8" />
             </div>
             <h3 className="mt-5 text-xl font-semibold">{t("emptyTitle")}</h3>
@@ -297,7 +300,7 @@ export default function TasksPage() {
         </section>
       )}
 
-      <div className="flex items-center justify-between rounded-3xl border bg-white p-4 shadow-sm">
+      <div className="flex items-center justify-between rounded-3xl border border-border/50 bg-card p-4 shadow-sm">
         <p className="text-sm text-muted-foreground">
           {tPagination("summary", {
             page: page + 1,

@@ -26,70 +26,18 @@ import {
 } from "@/features/billing/hooks/billing-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import type { SubscriptionPlan } from "@/lib/api/api-types";
+import { useTranslations } from "next-intl";
 
 type PlanCard = {
   name: SubscriptionPlan;
-  title: string;
-  price: string;
-  description: string;
   highlight?: boolean;
-  features: string[];
 };
 
 const plans: PlanCard[] = [
-  {
-    name: "FREE",
-    title: "Free",
-    price: "$0",
-    description: "For testing CompliPilot with a small workspace.",
-    features: [
-      "3 members",
-      "50 evidence documents",
-      "100 MB storage",
-      "20 AI analyses per month",
-      "Basic compliance workspace",
-    ],
-  },
-  {
-    name: "PRO",
-    title: "Pro",
-    price: "$19",
-    description: "For growing teams managing real compliance evidence.",
-    highlight: true,
-    features: [
-      "20 members",
-      "1,000 evidence documents",
-      "2 GB storage",
-      "500 AI analyses per month",
-      "Framework templates",
-    ],
-  },
-  {
-    name: "BUSINESS",
-    title: "Business",
-    price: "$99",
-    description: "For compliance teams with heavier evidence workflows.",
-    features: [
-      "50 members",
-      "10,000 evidence documents",
-      "20 GB storage",
-      "5,000 AI analyses per month",
-      "Audit-ready reporting roadmap",
-    ],
-  },
-  {
-    name: "ENTERPRISE",
-    title: "Enterprise",
-    price: "Custom",
-    description: "For larger organizations with advanced compliance needs.",
-    features: [
-      "Custom limits",
-      "Dedicated support",
-      "SSO-ready roadmap",
-      "Custom policy packs",
-      "Enterprise controls roadmap",
-    ],
-  },
+  { name: "FREE" },
+  { name: "PRO", highlight: true },
+  { name: "BUSINESS" },
+  { name: "ENTERPRISE" },
 ];
 
 const planRank: Record<SubscriptionPlan, number> = {
@@ -102,24 +50,25 @@ const planRank: Record<SubscriptionPlan, number> = {
 function getPlanActionLabel(
   currentPlan: SubscriptionPlan | undefined,
   targetPlan: SubscriptionPlan,
+  t: any
 ) {
   if (!currentPlan) {
-    return "Select plan";
+    return t("selectPlan");
   }
 
   if (currentPlan === targetPlan) {
-    return "Current plan";
+    return t("currentPlan");
   }
 
   if (targetPlan === "ENTERPRISE") {
-    return "Contact sales / request";
+    return t("contactSales");
   }
 
   if (planRank[targetPlan] > planRank[currentPlan]) {
-    return "Upgrade / request";
+    return t("upgrade");
   }
 
-  return "Request downgrade";
+  return t("downgrade");
 }
 
 function isUpgrade(
@@ -136,34 +85,36 @@ function isUpgrade(
 function planTone(plan: SubscriptionPlan) {
   switch (plan) {
     case "FREE":
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-muted-foreground hover:bg-muted/80";
     case "PRO":
-      return "bg-cyan-50 text-cyan-700 hover:bg-cyan-50";
+      return "bg-info/10 text-info hover:bg-info/20";
     case "BUSINESS":
-      return "bg-violet-50 text-violet-700 hover:bg-violet-50";
+      return "bg-primary/10 text-primary hover:bg-primary/20";
     case "ENTERPRISE":
-      return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+      return "bg-warning/10 text-warning hover:bg-warning/20";
     default:
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-muted-foreground hover:bg-muted/80";
   }
 }
 
 function requestStatusTone(status: string) {
   switch (status) {
     case "PENDING":
-      return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+      return "bg-warning/10 text-warning hover:bg-warning/20";
     case "APPROVED":
-      return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+      return "bg-success/10 text-success hover:bg-success/20";
     case "REJECTED":
-      return "bg-red-50 text-red-700 hover:bg-red-50";
+      return "bg-destructive/10 text-destructive hover:bg-destructive/20";
     case "CANCELLED":
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-muted-foreground hover:bg-muted/80";
     default:
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-muted-foreground hover:bg-muted/80";
   }
 }
 
 export default function BillingPage() {
+  const t = useTranslations("billing");
+
   const { activeOrganization } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
 
@@ -233,30 +184,27 @@ export default function BillingPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <section className="overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
-        <div className="relative">
-          <div className="absolute -right-20 -top-20 size-56 rounded-full bg-cyan-400/10 blur-3xl" />
+    <div className="animate-in fade-in slide-in-from-bottom-4 space-y-8 duration-700 ease-out pb-10">
+      <section className="compliance-hero">
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
+        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
+        
+        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
+              <Sparkles className="mr-2 inline size-4 -mt-1" />
+              {t("eyebrow")}
+            </p>
+            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+              {t("title")}
+            </h2>
+            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
+              {t("description")}
+            </p>
+          </div>
 
-          <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.28em] text-cyan-300">
-                Billing
-              </p>
-
-              <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
-                Manage your SaaS plan and workspace usage
-              </h2>
-
-              <p className="mt-3 max-w-2xl text-slate-300">
-                Track usage limits, compare available plans, and prepare the
-                workspace for future subscription upgrades.
-              </p>
-            </div>
-
-            <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-cyan-300 text-slate-950">
-              <WalletCards className="size-6" />
-            </div>
+          <div className="group flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25 transition-transform duration-300 hover:scale-110 lg:size-16">
+            <WalletCards className="size-6 transition-transform duration-300 group-hover:rotate-12 lg:size-8" />
           </div>
         </div>
       </section>
@@ -275,7 +223,7 @@ export default function BillingPage() {
         <Card>
           <CardContent className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" />
-            Loading billing usage...
+            {t("loadingUsage")}
           </CardContent>
         </Card>
       ) : usageQuery.data ? (
@@ -294,7 +242,7 @@ export default function BillingPage() {
           <CardContent className="flex flex-col justify-between gap-4 p-5 md:flex-row md:items-center">
             <div>
               <p className="text-sm font-medium text-muted-foreground">
-                Latest plan change request
+                {t("latestRequest")}
               </p>
 
               <h3 className="mt-1 text-lg font-semibold">
@@ -303,12 +251,12 @@ export default function BillingPage() {
               </h3>
 
               <p className="mt-1 text-sm text-muted-foreground">
-                Requested by {latestPlanChangeRequest.requestedByEmail}
+                {t("requestedBy", { email: latestPlanChangeRequest.requestedByEmail })}
               </p>
 
               {latestPlanChangeRequest.reviewedByEmail ? (
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Reviewed by {latestPlanChangeRequest.reviewedByEmail}
+                  {t("reviewedBy", { email: latestPlanChangeRequest.reviewedByEmail })}
                 </p>
               ) : null}
             </div>
@@ -336,7 +284,7 @@ export default function BillingPage() {
                   {cancelPlanChangeRequestMutation.isPending ? (
                     <Loader2 className="mr-2 size-4 animate-spin" />
                   ) : null}
-                  Cancel request
+                  {t("cancelRequest")}
                 </Button>
               ) : null}
             </div>
@@ -344,100 +292,127 @@ export default function BillingPage() {
         </Card>
       ) : null}
 
-      <section id="billing-plans">
-        <div className="mb-4 flex flex-col justify-between gap-3 sm:flex-row sm:items-end">
+      <section id="billing-plans" className="scroll-mt-10">
+        <div className="mb-6 flex flex-col justify-between gap-4 sm:flex-row sm:items-end">
           <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-700">
-              Plans
+            <p className="text-sm font-bold uppercase tracking-[0.2em] text-primary">
+              {t("plansEyebrow")}
             </p>
 
-            <h3 className="mt-1 text-2xl font-semibold tracking-tight">
-              Choose the right plan for your workspace
+            <h3 className="mt-2 text-3xl font-extrabold tracking-tight text-foreground sm:text-4xl">
+              {t("plansTitle")}
             </h3>
 
-            <p className="mt-2 text-sm text-muted-foreground">
-              The checkout API is Stripe-ready. Until online checkout is
-              connected, plan changes fall back to a platform-admin approval
-              request.
+            <p className="mt-3 max-w-xl text-base text-muted-foreground">
+              {t("plansDescription")}
             </p>
           </div>
 
-          <Badge variant="secondary" className="w-fit">
+          <Badge variant="secondary" className="w-fit bg-primary/10 text-primary hover:bg-primary/20">
             <Sparkles className="mr-2 size-3.5" />
-            Stripe-ready checkout placeholder
+            {t("stripePlaceholder")}
           </Badge>
         </div>
 
-        <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-4">
           {plans.map((plan) => {
             const isCurrentPlan = currentPlan === plan.name;
-            const actionLabel = getPlanActionLabel(currentPlan, plan.name);
+            const actionLabel = getPlanActionLabel(currentPlan, plan.name, t);
             const isDisabled =
               !organizationId ||
               isCurrentPlan ||
               hasPendingPlanChangeRequest ||
               checkoutMutation.isPending;
 
+            const planDetails = {
+              price: plan.name === "FREE" ? "$0" : plan.name === "PRO" ? "$19" : plan.name === "BUSINESS" ? "$99" : "Custom",
+              title: t(`plans.${plan.name}.title`),
+              description: t(`plans.${plan.name}.description`),
+              features: t.raw(`plans.${plan.name}.features`) as string[],
+            };
+
             return (
               <Card
                 key={plan.name}
-                className={
-                  isCurrentPlan
-                    ? "border-cyan-300 shadow-sm"
+                className={`relative flex flex-col overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:shadow-xl ${isCurrentPlan
+                    ? "border-primary ring-1 ring-primary shadow-primary/10"
                     : plan.highlight
-                      ? "border-slate-300"
-                      : ""
-                }
+                      ? "border-border shadow-lg"
+                      : "border-border/50 hover:border-border"
+                  }`}
               >
-                <CardContent className="flex h-full flex-col p-5">
+                {/* Decorative Top Accent for Highlighted Plan */}
+                {plan.highlight && !isCurrentPlan && (
+                  <div className="absolute inset-x-0 top-0 h-1.5 bg-gradient-to-r from-primary to-accent" />
+                )}
+
+                {/* Current Plan Top Accent */}
+                {isCurrentPlan && (
+                  <div className="absolute inset-x-0 top-0 h-1.5 bg-primary" />
+                )}
+
+                <CardContent className="flex h-full flex-col p-6 sm:p-8">
                   <div className="flex items-start justify-between gap-3">
                     <div>
                       <div className="flex items-center gap-2">
-                        <p className="text-sm font-semibold text-muted-foreground">
-                          {plan.title}
+                        <p className="text-sm font-bold uppercase tracking-wider text-muted-foreground">
+                          {planDetails.title}
                         </p>
 
-                        {plan.highlight ? (
-                          <Crown className="size-4 text-cyan-700" />
+                        {plan.highlight && !isCurrentPlan ? (
+                          <div className="rounded-full bg-primary/10 p-1 text-primary">
+                            <Crown className="size-3.5" />
+                          </div>
                         ) : null}
                       </div>
 
-                      <h4 className="mt-2 text-3xl font-bold tracking-tight">
-                        {plan.price}
-                      </h4>
+                      <div className="mt-3 flex items-baseline gap-1">
+                        <h4 className="text-4xl font-extrabold tracking-tight text-foreground">
+                          {planDetails.price}
+                        </h4>
+                        {plan.name !== "ENTERPRISE" && (
+                          <span className="text-sm font-medium text-muted-foreground">/mo</span>
+                        )}
+                      </div>
                     </div>
 
                     {isCurrentPlan ? (
                       <Badge
                         variant="secondary"
-                        className={planTone(plan.name)}
+                        className="bg-primary/10 text-primary hover:bg-primary/20"
                       >
-                        Current
+                        {t("currentPlan")}
                       </Badge>
                     ) : null}
                   </div>
 
-                  <p className="mt-4 text-sm leading-6 text-muted-foreground">
-                    {plan.description}
+                  <p className="mt-4 min-h-[3rem] text-sm leading-relaxed text-muted-foreground">
+                    {planDetails.description}
                   </p>
 
-                  <div className="mt-5 space-y-3">
-                    {plan.features.map((feature) => (
+                  <div className="my-8 flex-1 space-y-4">
+                    {planDetails.features.map((feature) => (
                       <div
                         key={feature}
-                        className="flex items-start gap-2 text-sm"
+                        className="flex items-start gap-3 text-sm text-foreground/90"
                       >
-                        <CheckCircle2 className="mt-0.5 size-4 shrink-0 text-cyan-700" />
-                        <span>{feature}</span>
+                        <div className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                          <CheckCircle2 className="size-3.5 text-primary" />
+                        </div>
+                        <span className="leading-snug">{feature}</span>
                       </div>
                     ))}
                   </div>
 
                   <Button
                     type="button"
-                    className="mt-6 w-full"
+                    size="lg"
+                    className={`mt-auto w-full font-semibold transition-all ${plan.highlight && !isCurrentPlan && !isDisabled
+                        ? "bg-primary text-primary-foreground shadow-md hover:shadow-lg hover:shadow-primary/25"
+                        : ""
+                      }`}
                     disabled={isDisabled}
-                    variant={isCurrentPlan ? "secondary" : "outline"}
+                    variant={isCurrentPlan ? "secondary" : plan.highlight ? "default" : "outline"}
                     onClick={() => handlePlanAction(plan.name)}
                   >
                     {checkoutMutation.isPending && !isCurrentPlan ? (
@@ -449,11 +424,11 @@ export default function BillingPage() {
                     )}
 
                     {isCurrentPlan
-                      ? "Current plan"
+                      ? t("currentPlan")
                       : hasPendingPlanChangeRequest
-                        ? "Request pending"
+                        ? t("requestPending")
                         : checkoutMutation.isPending
-                          ? "Preparing checkout..."
+                          ? t("preparingCheckout")
                           : actionLabel}
                   </Button>
                 </CardContent>

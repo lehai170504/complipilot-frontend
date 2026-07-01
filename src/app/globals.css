@@ -196,32 +196,36 @@
 @layer utilities {
   .compliance-grid-bg {
     background-image:
-      linear-gradient(to right, rgb(15 23 42 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(15 23 42 / 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgb(15 23 42 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(15 23 42 / 0.05) 1px, transparent 1px);
     background-size: 32px 32px;
   }
 
   .dark .compliance-grid-bg {
     background-image:
-      linear-gradient(to right, rgb(255 255 255 / 0.06) 1px, transparent 1px),
-      linear-gradient(to bottom, rgb(255 255 255 / 0.06) 1px, transparent 1px);
+      linear-gradient(to right, rgb(255 255 255 / 0.05) 1px, transparent 1px),
+      linear-gradient(to bottom, rgb(255 255 255 / 0.05) 1px, transparent 1px);
   }
 
   .compliance-card-gradient {
     background:
-      radial-gradient(circle at top left, rgb(34 211 238 / 0.16), transparent 34%),
+      radial-gradient(circle at top left, rgb(34 211 238 / 0.15), transparent 40%),
       linear-gradient(135deg, rgb(15 23 42), rgb(2 6 23));
   }
 
+  .compliance-glass {
+    @apply bg-white/60 backdrop-blur-xl border border-white/20 shadow-sm dark:bg-slate-950/60 dark:border-white/10 dark:shadow-none;
+  }
+
   .compliance-surface {
-    @apply border bg-card text-card-foreground shadow-sm;
+    @apply border bg-card text-card-foreground shadow-sm transition-all duration-300 hover:shadow-md;
   }
 
   .compliance-page-shell {
-    @apply space-y-6;
+    @apply space-y-6 animate-in fade-in slide-in-from-bottom-4 duration-700;
   }
 
   .compliance-hero {
-    @apply overflow-hidden rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl;
+    @apply relative overflow-hidden rounded-[2.5rem] bg-gradient-to-br from-card via-background to-card p-8 text-foreground shadow-2xl ring-1 ring-border sm:p-12;
   }
 }
