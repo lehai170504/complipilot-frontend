@@ -10,17 +10,17 @@ export default function BillingCancelPage() {
   const t = useTranslations("billing");
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg border-slate-200">
+      <Card className="compliance-surface w-full max-w-md shadow-lg border-border">
         <CardContent className="flex flex-col items-center p-8 text-center">
-          <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-slate-100 text-slate-500">
+          <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-muted text-muted-foreground">
             <XCircle className="size-10" />
           </div>
           
-          <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900">
+          <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground">
             {t("cancel.title")}
           </h2>
           
-          <p className="mb-8 text-slate-500">
+          <p className="mb-8 text-muted-foreground">
             {t("cancel.description")}
           </p>
           

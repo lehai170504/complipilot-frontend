@@ -41,13 +41,13 @@ export default function WorkspacesPage() {
       </section>
 
       {isLoading ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="p-8 text-muted-foreground">
             {t("loading")}
           </CardContent>
         </Card>
       ) : organizations.length === 0 ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="flex flex-col items-center justify-center p-10 text-center">
             <div className="rounded-3xl bg-primary/10 p-4 text-primary">
               <Building2 className="size-8" />

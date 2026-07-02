@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { ArrowLeft } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -41,9 +42,17 @@ export function LoginForm() {
   }
 
   return (
-    <Card className="border-white/10 bg-white text-slate-950 shadow-2xl">
+    <div className="flex flex-col gap-6 w-full max-w-sm mx-auto">
+      <Link
+        href="/"
+        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-primary transition-colors self-start group"
+      >
+        <ArrowLeft className="size-4 transition-transform group-hover:-translate-x-1" />
+        Back to landing page
+      </Link>
+      <Card className="compliance-surface border-border/50 shadow-2xl shadow-primary/5">
       <CardHeader>
-        <CardTitle className="text-3xl">{t("title")}</CardTitle>
+        <CardTitle className="text-3xl text-foreground">{t("title")}</CardTitle>
         <CardDescription>{t("description")}</CardDescription>
       </CardHeader>
 
@@ -58,7 +67,7 @@ export function LoginForm() {
               {...register("email")}
             />
             {errors.email ? (
-              <p className="text-sm text-red-600">{errors.email.message}</p>
+              <p className="text-sm text-destructive">{errors.email.message}</p>
             ) : null}
           </div>
 
@@ -71,7 +80,7 @@ export function LoginForm() {
               {...register("password")}
             />
             {errors.password ? (
-              <p className="text-sm text-red-600">{errors.password.message}</p>
+              <p className="text-sm text-destructive">{errors.password.message}</p>
             ) : null}
           </div>
 
@@ -88,10 +97,10 @@ export function LoginForm() {
           </Button>
         </form>
 
-        <p className="mt-6 text-center text-sm text-slate-600">
+        <p className="mt-6 text-center text-sm text-muted-foreground">
           {t("noAccount")}{" "}
           <Link
-            className="font-semibold text-cyan-700 hover:text-cyan-800"
+            className="font-semibold text-primary hover:text-primary/80 transition-colors"
             href="/register"
           >
             {t("createOne")}
@@ -99,5 +108,6 @@ export function LoginForm() {
         </p>
       </CardContent>
     </Card>
+    </div>
   );
 }

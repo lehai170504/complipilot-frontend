@@ -69,11 +69,12 @@ export default function AcceptInvitationPage() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-10 text-slate-950">
-      <div className="mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-2xl items-center justify-center">
-        <Card className="w-full border-cyan-200/40 shadow-2xl">
+    <main className="min-h-screen bg-background px-4 py-10 text-foreground relative overflow-hidden">
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_center,var(--color-primary)_0%,transparent_40%)] opacity-10 pointer-events-none" />
+      <div className="relative mx-auto flex min-h-[calc(100vh-5rem)] w-full max-w-2xl items-center justify-center z-10">
+        <Card className="compliance-surface w-full shadow-2xl shadow-primary/5">
           <CardContent className="p-6 sm:p-8">
-            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+            <div className="mx-auto flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary shadow-inner shadow-primary/20">
               <Mail className="size-5" />
             </div>
 
@@ -102,9 +103,9 @@ export default function AcceptInvitationPage() {
               </div>
             ) : invitation ? (
               <div className="mt-8 space-y-6">
-                <div className="rounded-2xl border bg-slate-50 p-4">
+                <div className="rounded-2xl border border-border/50 bg-muted/30 p-4">
                   <div className="flex items-start gap-3">
-                    <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-cyan-100 text-cyan-700">
+                    <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
                       <ShieldCheck className="size-5" />
                     </div>
 
@@ -126,7 +127,7 @@ export default function AcceptInvitationPage() {
                 </div>
 
                 {acceptMutation.isSuccess ? (
-                  <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+                  <div className="rounded-2xl border border-success/30 bg-success/10 p-4 text-sm text-success">
                     <div className="flex items-start gap-3">
                       <CheckCircle2 className="mt-0.5 size-4 shrink-0" />
                       <div>
@@ -168,7 +169,7 @@ export default function AcceptInvitationPage() {
                     ) : null}
 
                     <Button
-                      className="w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200"
+                      className="w-full"
                       type="submit"
                       disabled={
                         acceptMutation.isPending ||
@@ -184,7 +185,7 @@ export default function AcceptInvitationPage() {
                     <p className="text-center text-xs text-muted-foreground">
                       Already have an account?{" "}
                       <Link
-                        className="font-medium text-cyan-700 hover:text-cyan-800"
+                        className="font-medium text-primary hover:text-primary/80 transition-colors"
                         href="/login"
                       >
                         Sign in instead

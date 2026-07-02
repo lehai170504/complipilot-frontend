@@ -25,13 +25,13 @@ function formatDateTime(date: string) {
 
 export function AuditEventCard({ event }: { event: AuditEvent }) {
   return (
-    <Card className="overflow-hidden">
+    <Card className="compliance-surface overflow-hidden">
       <CardContent className="p-5">
         <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <StatusPill status={event.action} />
-              <span className="rounded-full bg-slate-100 px-2 py-0.5 text-xs text-slate-600">
+              <span className="rounded-full bg-muted px-2 py-0.5 text-xs text-muted-foreground">
                 {formatResourceTypeLabel(event.resourceType)}
               </span>
             </div>

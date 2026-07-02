@@ -149,10 +149,10 @@ export function CreateFileEvidenceDialog({
 
             {!file ? (
               <label
-                className="flex cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed bg-slate-50 p-8 text-center hover:bg-slate-100"
+                className="flex cursor-pointer flex-col items-center justify-center rounded-3xl border border-dashed bg-muted/30 p-8 text-center hover:bg-slate-100"
                 htmlFor="evidence-file"
               >
-                <div className="rounded-2xl bg-white p-3 text-cyan-700 shadow-sm">
+                <div className="rounded-2xl bg-background p-3 text-primary shadow-sm">
                   <FileUp className="size-6" />
                 </div>
                 <p className="mt-3 font-medium">{t("chooseFile")}</p>
@@ -161,7 +161,7 @@ export function CreateFileEvidenceDialog({
                 </p>
               </label>
             ) : (
-              <div className="flex items-center justify-between gap-3 rounded-3xl border bg-slate-50 p-4">
+              <div className="flex items-center justify-between gap-3 rounded-3xl border bg-muted/30 p-4">
                 <div className="min-w-0 flex-1">
                   <p className="truncate font-medium" title={file.name}>
                     {file.name}
@@ -240,7 +240,7 @@ export function CreateFileEvidenceDialog({
           </div>
 
           {clientError ? (
-            <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700 break-words">
+            <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-red-700 break-words">
               {clientError}
             </div>
           ) : null}

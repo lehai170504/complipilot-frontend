@@ -10,17 +10,17 @@ export default function BillingSuccessPage() {
   const t = useTranslations("billing");
   return (
     <div className="flex min-h-[60vh] items-center justify-center p-4">
-      <Card className="w-full max-w-md shadow-lg border-emerald-100">
+      <Card className="compliance-surface w-full max-w-md shadow-lg border-emerald-100">
         <CardContent className="flex flex-col items-center p-8 text-center">
-          <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
+          <div className="mb-6 flex size-20 items-center justify-center rounded-full bg-success/20 text-success">
             <CheckCircle2 className="size-10" />
           </div>
           
-          <h2 className="mb-2 text-2xl font-bold tracking-tight text-slate-900">
+          <h2 className="mb-2 text-2xl font-bold tracking-tight text-foreground">
             {t("success.title")}
           </h2>
           
-          <p className="mb-8 text-slate-500">
+          <p className="mb-8 text-muted-foreground">
             {t("success.description")}
           </p>
           

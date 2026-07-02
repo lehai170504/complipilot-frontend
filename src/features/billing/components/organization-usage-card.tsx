@@ -47,19 +47,23 @@ function UsageRow({
   const usagePercent = percent(value, limit);
 
   return (
-    <div className="space-y-2">
-      <div className="flex items-center justify-between gap-3 text-sm">
-        <div className="flex items-center gap-2 font-medium text-slate-700">
+    <div className="flex flex-col justify-between gap-3 rounded-2xl border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50">
+      <div className="flex items-center gap-2 font-medium text-foreground">
+        <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10">
           {icon}
-          {label}
         </div>
-
-        <span className="text-muted-foreground">
-          {formattedValue ?? value} / {formattedLimit ?? limit}
-        </span>
+        <span className="line-clamp-2 text-sm leading-tight">{label}</span>
       </div>
 
-      <Progress value={usagePercent} />
+      <div>
+        <div className="mb-2 flex items-baseline gap-1 text-2xl font-bold text-foreground">
+          {formattedValue ?? value}
+          <span className="text-sm font-normal text-muted-foreground">
+            / {formattedLimit ?? limit}
+          </span>
+        </div>
+        <Progress className="h-1.5" value={usagePercent} />
+      </div>
     </div>
   );
 }
@@ -70,7 +74,7 @@ export function OrganizationUsageCard({
   usage: OrganizationUsageResponse;
 }) {
   return (
-    <Card>
+    <Card className="compliance-surface">
       <CardContent className="space-y-5 p-5">
         <div>
           <p className="text-sm font-medium text-muted-foreground">
@@ -78,26 +82,26 @@ export function OrganizationUsageCard({
           </p>
 
           <div className="mt-1 flex items-end justify-between gap-3">
-            <h3 className="text-2xl font-semibold tracking-tight">
+            <h3 className="text-2xl font-bold tracking-tight text-foreground">
               {usage.plan}
             </h3>
 
-            <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+            <span className="rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
               {usage.subscriptionStatus}
             </span>
           </div>
         </div>
 
-        <div className="space-y-4">
+        <div className="grid gap-6 pt-4 sm:grid-cols-2 md:grid-cols-4">
           <UsageRow
-            icon={<Users className="size-4 text-cyan-700" />}
+            icon={<Users className="size-4 text-primary" />}
             label="Members"
             limit={usage.memberLimit}
             value={usage.memberCount}
           />
 
           <UsageRow
-            icon={<FileCheck2 className="size-4 text-cyan-700" />}
+            icon={<FileCheck2 className="size-4 text-primary" />}
             label="Evidence"
             limit={usage.evidenceDocumentLimit}
             value={usage.evidenceDocumentCount}
@@ -106,14 +110,14 @@ export function OrganizationUsageCard({
           <UsageRow
             formattedLimit={formatBytes(usage.storageLimitBytes)}
             formattedValue={formatBytes(usage.storageUsedBytes)}
-            icon={<HardDrive className="size-4 text-cyan-700" />}
+            icon={<HardDrive className="size-4 text-primary" />}
             label="Storage"
             limit={usage.storageLimitBytes}
             value={usage.storageUsedBytes}
           />
 
           <UsageRow
-            icon={<Sparkles className="size-4 text-cyan-700" />}
+            icon={<Sparkles className="size-4 text-primary" />}
             label="AI analyses this month"
             limit={usage.aiAnalysisLimitPerMonth}
             value={usage.aiAnalysisCountThisMonth}

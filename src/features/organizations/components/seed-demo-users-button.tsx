@@ -29,7 +29,7 @@ export function SeedDemoUsersButton({
       </Button>
 
       {seedMutation.isSuccess ? (
-        <p className="text-xs text-emerald-700">
+        <p className="text-xs text-success">
           {t("seed.success", {
             createdUsers: seedMutation.data.createdUsers,
             createdMemberships: seedMutation.data.createdMemberships,

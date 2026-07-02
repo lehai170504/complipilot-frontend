@@ -1,6 +1,6 @@
 "use client";
 
-import { Link2, UploadCloud } from "lucide-react";
+import { Download, Link2, UploadCloud } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import type {
@@ -46,12 +46,16 @@ export function EvidenceToolbar({
   onChange,
   onCreateUrlClick,
   onCreateFileClick,
+  onExportClick,
+  isExporting,
   canManageCompliance,
 }: {
   value: EvidenceToolbarState;
   onChange: (value: EvidenceToolbarState) => void;
   onCreateUrlClick: () => void;
   onCreateFileClick: () => void;
+  onExportClick?: () => void;
+  isExporting?: boolean;
   canManageCompliance: boolean;
 }) {
   const t = useTranslations("evidenceToolbar");
@@ -81,6 +85,19 @@ export function EvidenceToolbar({
               <Link2 className="mr-2 size-4" />
               {t("url")}
             </Button>
+            {onExportClick && (
+              <Button
+                onClick={onExportClick}
+                size="sm"
+                type="button"
+                variant="outline"
+                disabled={isExporting}
+                className="border-primary/20 bg-primary/5 text-primary hover:bg-primary/10"
+              >
+                <Download className="mr-2 size-4" />
+                {isExporting ? "Exporting..." : "Export CSV"}
+              </Button>
+            )}
           </div>
         ) : undefined
       }

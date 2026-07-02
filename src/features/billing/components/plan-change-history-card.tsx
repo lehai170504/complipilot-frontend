@@ -20,15 +20,15 @@ function formatDateTime(value: string) {
 function statusTone(status: string) {
   switch (status) {
     case "PENDING":
-      return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+      return "bg-warning/10 text-warning hover:bg-amber-50";
     case "APPROVED":
-      return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+      return "bg-success/10 text-success hover:bg-emerald-50";
     case "REJECTED":
-      return "bg-red-50 text-red-700 hover:bg-red-50";
+      return "bg-destructive/10 text-red-700 hover:bg-red-50";
     case "CANCELLED":
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-slate-700 hover:bg-slate-100";
     default:
-      return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+      return "bg-muted text-slate-700 hover:bg-slate-100";
   }
 }
 
@@ -41,11 +41,11 @@ export function PlanChangeHistoryCard({
   const requests = requestsQuery.data?.items ?? [];
 
   return (
-    <Card>
+    <Card className="compliance-surface">
       <CardContent className="p-0">
         <div className="border-b p-5">
           <div className="flex items-start gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-background text-primary">
               <RefreshCcw className="size-5" />
             </div>
 
@@ -102,7 +102,7 @@ export function PlanChangeHistoryCard({
                     ) : null}
 
                     {request.requestNote ? (
-                      <div className="mt-3 rounded-2xl border bg-slate-50 p-3 text-sm">
+                      <div className="mt-3 rounded-2xl border bg-muted/30 p-3 text-sm">
                         <p className="font-medium text-slate-700">
                           Request note
                         </p>

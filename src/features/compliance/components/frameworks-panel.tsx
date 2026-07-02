@@ -45,7 +45,7 @@ function frameworkTone(framework: FrameworkResponse) {
   const code = framework.code.toUpperCase();
 
   if (code.includes("ISO")) {
-    return "bg-cyan-50 text-cyan-700 hover:bg-cyan-50";
+    return "bg-primary/5 text-primary hover:bg-cyan-50";
   }
 
   if (code.includes("SOC")) {
@@ -53,10 +53,10 @@ function frameworkTone(framework: FrameworkResponse) {
   }
 
   if (code.includes("GDPR")) {
-    return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+    return "bg-success/10 text-success hover:bg-emerald-50";
   }
 
-  return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+  return "bg-muted text-slate-700 hover:bg-slate-100";
 }
 
 export function FrameworksPanel({
@@ -103,17 +103,17 @@ export function FrameworksPanel({
   }
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="compliance-surface overflow-hidden">
       <CardContent className="p-0">
-        <div className="border-b bg-white p-6">
+        <div className="border-b bg-background p-6">
           <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-start">
             <div className="flex items-start gap-3">
-              <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+              <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-background text-primary">
                 <Layers3 className="size-5" />
               </div>
 
               <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-700">
+                <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">
                   Framework templates
                 </p>
                 <h3 className="mt-1 text-xl font-semibold tracking-tight">
@@ -129,7 +129,6 @@ export function FrameworksPanel({
             {canManageCompliance ? (
               <Button
                 type="button"
-                className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
                 disabled={
                   !organizationId ||
                   !activeFrameworkId ||
@@ -155,13 +154,13 @@ export function FrameworksPanel({
             ) : null}
 
             {frameworksQuery.isLoading ? (
-              <div className="flex items-center gap-2 rounded-2xl border bg-white p-4 text-sm text-muted-foreground">
+              <div className="flex items-center gap-2 rounded-2xl border bg-background p-4 text-sm text-muted-foreground">
                 <Loader2 className="size-4 animate-spin" />
                 Loading frameworks...
               </div>
             ) : frameworks.length === 0 ? (
-              <div className="rounded-2xl border border-dashed bg-white p-6 text-center">
-                <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+              <div className="rounded-2xl border border-dashed bg-background p-6 text-center">
+                <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-background text-primary">
                   <ClipboardList className="size-5" />
                 </div>
                 <h4 className="mt-4 font-semibold">No frameworks yet</h4>
@@ -181,7 +180,7 @@ export function FrameworksPanel({
                       onClick={() => handleSelectFramework(framework.id)}
                       className={`w-full rounded-2xl border p-4 text-left transition ${
                         isSelected
-                          ? "border-cyan-300 bg-white shadow-sm"
+                          ? "border-cyan-300 bg-background shadow-sm"
                           : "border-transparent bg-white/70 hover:border-slate-200 hover:bg-white"
                       }`}
                     >
@@ -193,7 +192,7 @@ export function FrameworksPanel({
                             </p>
 
                             {isSelected ? (
-                              <CheckCircle2 className="size-4 shrink-0 text-cyan-700" />
+                              <CheckCircle2 className="size-4 shrink-0 text-primary" />
                             ) : null}
                           </div>
 
@@ -225,7 +224,7 @@ export function FrameworksPanel({
           <div className="p-5">
             {!selectedFramework ? (
               <div className="rounded-2xl border border-dashed p-8 text-center">
-                <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-background text-primary">
                   <FileText className="size-5" />
                 </div>
 
@@ -257,7 +256,7 @@ export function FrameworksPanel({
                     ) : null}
                   </div>
 
-                  <div className="rounded-2xl bg-slate-50 px-4 py-3 text-sm">
+                  <div className="rounded-2xl bg-muted/30 px-4 py-3 text-sm">
                     <p className="font-semibold">
                       {requirementsQuery.data?.length ?? 0}
                     </p>
@@ -287,7 +286,7 @@ export function FrameworksPanel({
                       {(requirementsQuery.data ?? []).map((requirement) => (
                         <div
                           key={requirement.id}
-                          className="rounded-2xl border bg-white p-4"
+                          className="rounded-2xl border bg-background p-4"
                         >
                           <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
                             <div className="min-w-0">
@@ -314,7 +313,7 @@ export function FrameworksPanel({
                               ) : null}
                             </div>
 
-                            <div className="shrink-0 rounded-xl bg-slate-50 px-3 py-2 text-xs text-muted-foreground">
+                            <div className="shrink-0 rounded-xl bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
                               Order {requirement.sortOrder}
                             </div>
                           </div>

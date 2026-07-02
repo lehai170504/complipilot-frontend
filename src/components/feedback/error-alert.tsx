@@ -15,7 +15,7 @@ export function ErrorAlert({
   return (
     <div
       className={cn(
-        "rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-700",
+        "rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-red-700",
         className,
       )}
     >

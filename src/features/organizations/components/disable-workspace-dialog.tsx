@@ -69,7 +69,7 @@ export function DisableWorkspaceDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-red-900">
-            <AlertTriangle className="size-5 text-red-600" />
+            <AlertTriangle className="size-5 text-destructive" />
             Disable workspace
           </DialogTitle>
           <DialogDescription>
@@ -79,7 +79,7 @@ export function DisableWorkspaceDialog({
           </DialogDescription>
         </DialogHeader>
 
-        <div className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+        <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-red-800">
           <p className="font-semibold">Danger zone action</p>
           <p className="mt-1 leading-6">
             You are about to disable{" "}

@@ -9,9 +9,9 @@ const riskClassNameMap: Record<
   ComplianceEvidenceSuggestionResponse["riskLevel"],
   string
 > = {
-  LOW: "bg-emerald-50 text-emerald-700 hover:bg-emerald-50",
-  MEDIUM: "bg-amber-50 text-amber-700 hover:bg-amber-50",
-  HIGH: "bg-red-50 text-red-700 hover:bg-red-50",
+  LOW: "bg-success/10 text-success hover:bg-emerald-50",
+  MEDIUM: "bg-warning/10 text-warning hover:bg-amber-50",
+  HIGH: "bg-destructive/10 text-red-700 hover:bg-red-50",
   CRITICAL: "bg-red-100 text-red-800 hover:bg-red-100",
 };
 
@@ -19,10 +19,10 @@ const coverageClassNameMap: Record<
   ComplianceEvidenceSuggestionResponse["coverageLevel"],
   string
 > = {
-  NONE: "bg-red-50 text-red-700 hover:bg-red-50",
-  WEAK: "bg-amber-50 text-amber-700 hover:bg-amber-50",
+  NONE: "bg-destructive/10 text-red-700 hover:bg-red-50",
+  WEAK: "bg-warning/10 text-warning hover:bg-amber-50",
   PARTIAL: "bg-blue-50 text-blue-700 hover:bg-blue-50",
-  STRONG: "bg-emerald-50 text-emerald-700 hover:bg-emerald-50",
+  STRONG: "bg-success/10 text-success hover:bg-emerald-50",
 };
 
 export function ComplianceAiSuggestionPanel({
@@ -34,16 +34,16 @@ export function ComplianceAiSuggestionPanel({
   const tRiskLevels = useTranslations("ai.riskLevels");
   const tCoverageLevels = useTranslations("ai.coverageLevels");
   return (
-    <Card className="border-cyan-200 bg-cyan-50/60">
+    <Card className="compliance-surface border-primary/30 bg-cyan-50/60">
       <CardContent className="space-y-4 p-5">
         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
           <div className="flex items-start gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-background text-primary">
               <Sparkles className="size-5" />
             </div>
 
             <div>
-              <p className="font-semibold text-slate-950">{t("panelTitle")}</p>
+              <p className="font-semibold text-foreground">{t("panelTitle")}</p>
               <p className="mt-1 text-sm leading-6 text-slate-700">
                 {suggestion.summary}
               </p>
@@ -79,8 +79,8 @@ export function ComplianceAiSuggestionPanel({
 
         {suggestion.existingEvidenceAssessment.length > 0 ? (
           <div>
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
-              <CheckCircle2 className="size-4 text-emerald-600" />
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
+              <CheckCircle2 className="size-4 text-success" />
               {t("existingEvidenceAssessment")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
@@ -93,7 +93,7 @@ export function ComplianceAiSuggestionPanel({
 
         {suggestion.missingEvidence.length > 0 ? (
           <div>
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
               <AlertTriangle className="size-4 text-amber-600" />
               {t("missingEvidence")}
             </div>
@@ -107,8 +107,8 @@ export function ComplianceAiSuggestionPanel({
 
         {suggestion.suggestedActions.length > 0 ? (
           <div>
-            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
-              <Lightbulb className="size-4 text-cyan-700" />
+            <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
+              <Lightbulb className="size-4 text-primary" />
               {t("suggestedActions")}
             </div>
             <ul className="space-y-1 text-sm leading-6 text-slate-700">
@@ -119,7 +119,7 @@ export function ComplianceAiSuggestionPanel({
           </div>
         ) : null}
 
-        <div className="rounded-2xl border border-cyan-200 bg-white p-3 text-sm leading-6 text-slate-600">
+        <div className="rounded-2xl border border-primary/30 bg-background p-3 text-sm leading-6 text-muted-foreground">
           {suggestion.reviewerNote}
         </div>
       </CardContent>

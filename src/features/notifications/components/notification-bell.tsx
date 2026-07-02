@@ -50,10 +50,10 @@ function formatRelativeTime(value: string) {
 
 function getNotificationTone(notification: NotificationResponse) {
   if (notification.read) {
-    return "bg-white";
+    return "bg-background";
   }
 
-  return "bg-cyan-50";
+  return "bg-primary/5";
 }
 
 export function NotificationBell({
@@ -115,7 +115,7 @@ export function NotificationBell({
           </div>
         ) : notifications.length === 0 ? (
           <div className="p-8 text-center">
-            <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+            <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-background text-primary">
               <Bell className="size-5" />
             </div>
             <p className="mt-3 text-sm font-medium">No notifications yet</p>

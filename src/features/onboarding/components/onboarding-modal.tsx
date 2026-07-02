@@ -118,7 +118,7 @@ export function OnboardingModal({
     <Dialog open={open} onOpenChange={handleOpenChange}>
       <DialogContent className="overflow-hidden p-0 sm:max-w-4xl">
         <div className="grid min-h-[620px] lg:grid-cols-[0.85fr_1.15fr]">
-          <aside className="relative overflow-hidden bg-slate-950 p-6 text-white">
+          <aside className="relative overflow-hidden bg-background p-6 text-white">
             <div className="absolute -left-24 -top-24 size-72 rounded-full bg-cyan-400/20 blur-3xl" />
             <div className="absolute -bottom-28 right-0 size-72 rounded-full bg-blue-500/10 blur-3xl" />
 
@@ -126,13 +126,13 @@ export function OnboardingModal({
               <DialogHeader>
                 <div className="flex items-start justify-between gap-4">
                   <div>
-                    <p className="text-sm font-semibold uppercase tracking-[0.26em] text-cyan-300">
+                    <p className="text-sm font-semibold uppercase tracking-[0.26em] text-primary">
                       {t("eyebrow")}
                     </p>
                     <DialogTitle className="mt-3 text-3xl font-bold tracking-tight text-white">
                       {t("title")}
                     </DialogTitle>
-                    <DialogDescription className="mt-3 max-w-sm text-sm leading-6 text-slate-300">
+                    <DialogDescription className="mt-3 max-w-sm text-sm leading-6 text-muted-foreground">
                       {t("description")}
                     </DialogDescription>
                   </div>
@@ -141,7 +141,7 @@ export function OnboardingModal({
                     type="button"
                     size="icon"
                     variant="ghost"
-                    className="text-slate-400 hover:bg-white/10 hover:text-white lg:hidden"
+                    className="text-muted-foreground hover:bg-white/10 hover:text-white lg:hidden"
                     onClick={() => onOpenChange(false)}
                   >
                     <X className="size-5" />
@@ -164,15 +164,15 @@ export function OnboardingModal({
                         "flex w-full items-center gap-3 rounded-2xl border p-3 text-left transition-all",
                         isActive
                           ? "border-cyan-300/30 bg-cyan-300/10 text-white"
-                          : "border-white/10 bg-white/5 text-slate-400 hover:bg-white/10 hover:text-white",
+                          : "border-border/50 bg-white/5 text-muted-foreground hover:bg-white/10 hover:text-white",
                       )}
                     >
                       <div
                         className={cn(
                           "flex size-9 shrink-0 items-center justify-center rounded-xl",
                           isActive || isCompleted
-                            ? "bg-cyan-300 text-slate-950"
-                            : "bg-white/10 text-slate-400",
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-white/10 text-muted-foreground",
                         )}
                       >
                         {isCompleted ? (
@@ -186,7 +186,7 @@ export function OnboardingModal({
                         <p className="truncate text-sm font-semibold">
                           {t(`slides.${slide.key}.title` as never)}
                         </p>
-                        <p className="mt-0.5 text-xs text-slate-500">
+                        <p className="mt-0.5 text-xs text-muted-foreground">
                           {t("actions.stepCounter", {
                             current: index + 1,
                             total: onboardingSlides.length,
@@ -198,17 +198,17 @@ export function OnboardingModal({
                 })}
               </div>
 
-              <div className="relative mt-8 rounded-2xl border border-cyan-300/10 bg-cyan-300/10 p-4 text-sm text-cyan-100">
+              <div className="relative mt-8 rounded-2xl border border-primary/20 bg-cyan-300/10 p-4 text-sm text-cyan-100">
                 {t("tip")}
               </div>
             </div>
           </aside>
 
-          <section className="relative flex flex-col bg-white">
+          <section className="relative flex flex-col bg-background">
             <div className="flex flex-1 flex-col justify-between p-6 md:p-8">
               <div>
                 <div className="flex items-center justify-between gap-4 pr-10">
-                  <div className="rounded-full bg-slate-100 px-3 py-1 text-xs font-semibold text-slate-600">
+                  <div className="rounded-full bg-muted px-3 py-1 text-xs font-semibold text-muted-foreground">
                     {t("actions.stepCounter", {
                       current: activeIndex + 1,
                       total: onboardingSlides.length,
@@ -234,25 +234,25 @@ export function OnboardingModal({
                 </div>
 
                 <div className="mt-10">
-                  <div className="flex size-16 items-center justify-center rounded-3xl bg-slate-950 text-cyan-300 shadow-xl shadow-cyan-950/10">
+                  <div className="flex size-16 items-center justify-center rounded-3xl bg-background text-primary shadow-xl shadow-cyan-950/10">
                     <ActiveIcon className="size-8" />
                   </div>
 
-                  <h3 className="mt-6 max-w-xl text-3xl font-bold tracking-tight text-slate-950 md:text-4xl">
+                  <h3 className="mt-6 max-w-xl text-3xl font-bold tracking-tight text-foreground md:text-4xl">
                     {t(`slides.${activeSlide.key}.title` as never)}
                   </h3>
 
-                  <p className="mt-4 max-w-xl text-base leading-7 text-slate-600">
+                  <p className="mt-4 max-w-xl text-base leading-7 text-muted-foreground">
                     {t(`slides.${activeSlide.key}.description` as never)}
                   </p>
 
-                  <div className="mt-6 rounded-2xl border border-cyan-200 bg-cyan-50 p-4 text-sm leading-6 text-cyan-900">
+                  <div className="mt-6 rounded-2xl border border-primary/30 bg-primary/5 p-4 text-sm leading-6 text-cyan-900">
                     {t(`slides.${activeSlide.key}.highlight` as never)}
                   </div>
                 </div>
 
                 {seedDemoWorkspaceMutation.isSuccess ? (
-                  <div className="mt-6 rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+                  <div className="mt-6 rounded-2xl border border-success/30 bg-success/10 p-4 text-sm text-success">
                     {t("success", {
                       createdCount: seedDemoWorkspaceMutation.data.createdCount,
                       skippedCount: seedDemoWorkspaceMutation.data.skippedCount,
@@ -273,7 +273,7 @@ export function OnboardingModal({
                     type="button"
                     variant="ghost"
                     onClick={handleDismissPermanently}
-                    className="justify-start text-slate-500 hover:text-slate-700"
+                    className="justify-start text-muted-foreground hover:text-slate-700"
                   >
                     {t("actions.dontShowAgain")}
                   </Button>
@@ -293,7 +293,6 @@ export function OnboardingModal({
                       disabled={
                         !organizationId || seedDemoWorkspaceMutation.isPending
                       }
-                      className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
                     >
                       <DatabaseZap className="mr-2 size-4" />
                       {seedDemoWorkspaceMutation.isPending
@@ -317,7 +316,7 @@ export function OnboardingModal({
                   <Button
                     type="button"
                     onClick={handleNext}
-                    className="bg-slate-950 text-white hover:bg-slate-800"
+                    className="bg-background text-white hover:bg-slate-800"
                   >
                     {isLastSlide ? t("actions.finish") : t("actions.next")}
                     {!isLastSlide ? (

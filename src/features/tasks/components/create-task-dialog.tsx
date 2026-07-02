@@ -104,7 +104,7 @@ export function CreateTaskDialog({
               placeholder={t("placeholders.title")}
             />
             {errors.title ? (
-              <p className="text-sm text-red-600">{errors.title.message}</p>
+              <p className="text-sm text-destructive">{errors.title.message}</p>
             ) : null}
           </div>
 
@@ -112,7 +112,7 @@ export function CreateTaskDialog({
             <Label htmlFor="task-desc">{t("fields.description")}</Label>
             <Textarea id="task-desc" {...register("description")} rows={3} />
             {errors.description ? (
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-destructive">
                 {errors.description.message}
               </p>
             ) : null}

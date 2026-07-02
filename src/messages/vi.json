@@ -14,7 +14,11 @@
     "platformAdmin": "Quản trị nền tảng",
     "settings": "Cài đặt",
     "profile": "Hồ sơ",
-    "systemStatus": "Trạng thái hệ thống"
+    "systemStatus": "Trạng thái hệ thống",
+    "overview": "Tổng quan",
+    "workspace": "Không gian làm việc",
+    "management": "Quản trị",
+    "platform": "Nền tảng"
   },
   "topbar": {
     "workspace": "Không gian làm việc",
@@ -826,5 +830,85 @@
       "risk": "Rủi ro {risk}",
       "confidence": "Độ tin cậy {confidence}%"
     }
+  },
+  "profileModal": {
+    "title": "Hồ sơ tài khoản",
+    "description": "Quản lý thông tin cá nhân, cài đặt bảo mật và siêu dữ liệu.",
+    "details": {
+      "title": "Chi tiết hồ sơ",
+      "description": "Cập nhật tên hiển thị trong không gian làm việc.",
+      "fullName": "Họ và tên",
+      "email": "Email",
+      "emailHelp": "Hiện chưa hỗ trợ thay đổi email.",
+      "save": "Lưu thay đổi"
+    },
+    "metadata": {
+      "title": "Thông tin hệ thống",
+      "description": "Chi tiết tài khoản (chỉ đọc).",
+      "userId": "ID NGƯỜI DÙNG",
+      "status": "TRẠNG THÁI",
+      "created": "NGÀY TẠO",
+      "updated": "CẬP NHẬT"
+    },
+    "identity": {
+      "title": "Định danh đăng nhập",
+      "description": "Email được sử dụng để đăng nhập, nhận lời mời, ghi nhận hoạt động và nhận thông báo."
+    },
+    "security": {
+      "title": "Bảo mật",
+      "description": "Đổi mật khẩu và quản lý phiên đăng nhập.",
+      "changePassword": "Đổi mật khẩu"
+    },
+    "audit": {
+      "title": "Ghi nhận hoạt động",
+      "description": "Các hành động của bạn sẽ được ghi lại bằng email để đảm bảo tính minh bạch cho hệ thống log."
+    }
+  },
+  "settingsModal": {
+    "title": "Cài đặt không gian làm việc",
+    "description": "Quản lý cấu hình, thông tin trạng thái và vòng đời của không gian làm việc.",
+    "disabledAlert": {
+      "title": "Không gian làm việc đã bị vô hiệu hóa",
+      "description": "Không gian làm việc này đã bị vô hiệu hóa. Một số tính năng sẽ bị hạn chế. Vui lòng liên hệ quản trị viên."
+    },
+    "loading": "Đang tải cài đặt...",
+    "profile": {
+      "title": "Hồ sơ không gian làm việc",
+      "description": "Cập nhật tên và thông tin cơ bản của không gian làm việc.",
+      "name": "Tên không gian làm việc",
+      "save": "Lưu thay đổi"
+    },
+    "metadata": {
+      "title": "Siêu dữ liệu",
+      "description": "Các thông tin do hệ thống tạo ra.",
+      "id": "ID KHÔNG GIAN LÀM VIỆC",
+      "role": "VAI TRÒ",
+      "created": "NGÀY TẠO",
+      "updated": "CẬP NHẬT"
+    },
+    "quickActions": {
+      "title": "Hành động nhanh",
+      "description": "Các phím tắt quản lý phổ biến.",
+      "members": "Quản lý thành viên",
+      "membersDesc": "Mời và quản lý thành viên",
+      "billing": "Thanh toán & Gói cước",
+      "billingDesc": "Quản lý gói cước và giới hạn sử dụng"
+    },
+    "dangerZone": {
+      "title": "Khu vực nguy hiểm",
+      "description": "Các hành động có tính phá hủy hoặc không thể hoàn tác.",
+      "disable": "Vô hiệu hóa Không gian làm việc",
+      "disableDesc": "Tạm thời chặn truy cập vào không gian làm việc này.",
+      "enable": "Kích hoạt Không gian làm việc",
+      "enableDesc": "Khôi phục truy cập."
+    }
+  },
+  "billingPage": {
+    "title": "Thanh toán & Sử dụng",
+    "description": "Theo dõi giới hạn sử dụng và xem lịch sử giao dịch. Để thay đổi gói cước, hãy sử dụng menu người dùng trên thanh điều hướng."
+  },
+  "upgradePlanModal": {
+    "title": "Nâng cấp Gói cước",
+    "description": "Chọn gói cước phù hợp cho không gian làm việc của bạn."
   }
 }

@@ -120,7 +120,7 @@ export function CreateOrganizationInvitationDialog({
 
         {createdInviteUrl ? (
           <div className="space-y-4">
-            <div className="rounded-2xl border border-emerald-200 bg-emerald-50 p-4 text-sm text-emerald-800">
+            <div className="rounded-2xl border border-success/30 bg-success/10 p-4 text-sm text-success">
               <p className="font-semibold">Invitation created</p>
               <p className="mt-1">
                 Copy this link and send it to the invited member.

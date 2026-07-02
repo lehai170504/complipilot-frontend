@@ -27,18 +27,18 @@ function actionLabel(action: string) {
 
 function actionTone(action: string) {
   if (action.includes("DELETED") || action.includes("ARCHIVED")) {
-    return "bg-red-50 text-red-700 hover:bg-red-50";
+    return "bg-destructive/10 text-red-700 hover:bg-red-50";
   }
 
   if (action.includes("CREATED") || action.includes("APPLIED")) {
-    return "bg-emerald-50 text-emerald-700 hover:bg-emerald-50";
+    return "bg-success/10 text-success hover:bg-emerald-50";
   }
 
   if (action.includes("UPDATED")) {
-    return "bg-cyan-50 text-cyan-700 hover:bg-cyan-50";
+    return "bg-primary/5 text-primary hover:bg-cyan-50";
   }
 
-  return "bg-slate-100 text-slate-700 hover:bg-slate-100";
+  return "bg-muted text-slate-700 hover:bg-slate-100";
 }
 
 export function ProfileActivityCard() {
@@ -47,10 +47,10 @@ export function ProfileActivityCard() {
   const activities = activityQuery.data?.items ?? [];
 
   return (
-    <Card>
+    <Card className="compliance-surface">
       <CardContent className="p-6">
         <div className="flex items-start gap-3">
-          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+          <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-background text-primary">
             <Activity className="size-5" />
           </div>
 
@@ -75,7 +75,7 @@ export function ProfileActivityCard() {
           </div>
         ) : activities.length === 0 ? (
           <div className="mt-5 rounded-2xl border border-dashed p-6 text-center">
-            <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+            <div className="mx-auto flex size-11 items-center justify-center rounded-2xl bg-background text-primary">
               <Activity className="size-5" />
             </div>
             <p className="mt-3 font-medium">No activity yet</p>
@@ -88,7 +88,7 @@ export function ProfileActivityCard() {
             {activities.map((activity) => (
               <div
                 key={activity.id}
-                className="rounded-2xl border bg-white p-4"
+                className="rounded-2xl border bg-background p-4"
               >
                 <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                   <div className="min-w-0">

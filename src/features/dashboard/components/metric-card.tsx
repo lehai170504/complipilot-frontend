@@ -14,7 +14,7 @@ export function MetricCard({
   icon: LucideIcon;
 }) {
   return (
-    <Card className="transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
+    <Card className="compliance-surface transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
       <CardContent className="flex items-start justify-between p-6">
         <div>
           <p className="text-sm font-medium text-muted-foreground">{title}</p>

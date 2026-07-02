@@ -26,7 +26,6 @@ export function SeedDemoWorkspaceButton({
   return (
     <div className="space-y-3">
       <Button
-        className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
         disabled={!organizationId || seedDemoWorkspaceMutation.isPending}
         onClick={handleSeedDemoWorkspace}
         type="button"
@@ -36,7 +35,7 @@ export function SeedDemoWorkspaceButton({
       </Button>
 
       {seedDemoWorkspaceMutation.isSuccess ? (
-        <p className="text-sm text-cyan-100">
+        <p className="text-sm text-primary/80">
           {t("success", {
             createdCount: seedDemoWorkspaceMutation.data.createdCount,
             skippedCount: seedDemoWorkspaceMutation.data.skippedCount,

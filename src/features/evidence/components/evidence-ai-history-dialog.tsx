@@ -54,14 +54,14 @@ export function EvidenceAiHistoryDialog({
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="size-5 text-cyan-700" />
+            <Sparkles className="size-5 text-primary" />
             {tHistory("title")}
           </DialogTitle>
           <DialogDescription>{tHistory("description")}</DialogDescription>
         </DialogHeader>
 
         {historyQuery.isLoading ? (
-          <div className="rounded-2xl border bg-slate-50 p-5 text-sm text-muted-foreground">
+          <div className="rounded-2xl border bg-muted/30 p-5 text-sm text-muted-foreground">
             {tHistory("loading")}
           </div>
         ) : null}
@@ -69,14 +69,14 @@ export function EvidenceAiHistoryDialog({
         {historyQuery.error ? <ErrorAlert error={historyQuery.error} /> : null}
 
         {!historyQuery.isLoading && analyses.length === 0 ? (
-          <div className="rounded-2xl border bg-slate-50 p-5 text-sm text-muted-foreground">
+          <div className="rounded-2xl border bg-muted/30 p-5 text-sm text-muted-foreground">
             {tHistory("empty")}
           </div>
         ) : null}
 
         <div className="max-h-[60vh] space-y-3 overflow-y-auto pr-1">
           {analyses.map((analysis) => (
-            <div key={analysis.id} className="rounded-2xl border bg-white p-4">
+            <div key={analysis.id} className="rounded-2xl border bg-background p-4">
               <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
                 <div>
                   <div className="flex flex-wrap items-center gap-2">
@@ -115,7 +115,7 @@ export function EvidenceAiHistoryDialog({
               </div>
 
               {analysis.missingInformation.length > 0 ? (
-                <div className="mt-3 rounded-xl bg-amber-50 p-3 text-sm text-amber-800">
+                <div className="mt-3 rounded-xl bg-warning/10 p-3 text-sm text-warning">
                   <p className="font-medium">
                     {tEvidenceAi("missingInformation")}
                   </p>
@@ -128,7 +128,7 @@ export function EvidenceAiHistoryDialog({
               ) : null}
 
               {analysis.suggestedActions.length > 0 ? (
-                <div className="mt-3 rounded-xl bg-cyan-50 p-3 text-sm text-cyan-900">
+                <div className="mt-3 rounded-xl bg-primary/5 p-3 text-sm text-cyan-900">
                   <p className="font-medium">
                     {tEvidenceAi("suggestedActions")}
                   </p>

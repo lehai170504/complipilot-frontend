@@ -129,12 +129,12 @@ export function EvidenceCard({
 
   return (
     <>
-      <Card className="overflow-hidden">
+      <Card className="compliance-surface overflow-hidden">
         <CardContent className="p-0">
           <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <div className="flex size-10 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+                <div className="flex size-10 items-center justify-center rounded-2xl bg-background text-primary">
                   <FileCheck2 className="size-5" />
                 </div>
                 <EvidenceTypeBadge type={evidence.evidenceType} />
@@ -150,7 +150,7 @@ export function EvidenceCard({
               </p>
 
               {evidence.sourceType === "FILE" ? (
-                <div className="mt-4 rounded-2xl border bg-slate-50 p-4 text-sm">
+                <div className="mt-4 rounded-2xl border bg-muted/30 p-4 text-sm">
                   <p className="font-medium text-slate-700">
                     {t("storedFile")}
                   </p>
@@ -168,7 +168,7 @@ export function EvidenceCard({
 
               {evidence.externalUrl ? (
                 <a
-                  className="mt-4 inline-flex items-center text-sm font-medium text-cyan-700 hover:text-cyan-800"
+                  className="mt-4 inline-flex items-center text-sm font-medium text-primary hover:text-cyan-800"
                   href={evidence.externalUrl}
                   rel="noreferrer"
                   target="_blank"
@@ -236,7 +236,7 @@ export function EvidenceCard({
                   </Button>
                 </DropdownMenuTrigger>
 
-                <DropdownMenuContent align="end">
+                <DropdownMenuContent align="end" className="w-48">
                   {canManageCompliance ? (
                     <DropdownMenuItem onClick={onEdit}>
                       <Pencil className="mr-2 size-4" />
@@ -253,7 +253,7 @@ export function EvidenceCard({
                     <>
                       <DropdownMenuSeparator />
                       <DropdownMenuItem
-                        className="text-red-600 focus:bg-red-50 focus:text-red-600"
+                        className="text-destructive focus:bg-red-50 focus:text-red-600"
                         disabled={archiveMutation.isPending}
                         onClick={handleArchive}
                       >
@@ -270,19 +270,19 @@ export function EvidenceCard({
           </div>
 
           {downloadUrlMutation.error ? (
-            <div className="border-t bg-red-50 p-5">
+            <div className="border-t bg-destructive/10 p-5">
               <ErrorAlert error={downloadUrlMutation.error} />
             </div>
           ) : null}
 
           {archiveMutation.error ? (
-            <div className="border-t bg-red-50 p-5">
+            <div className="border-t bg-destructive/10 p-5">
               <ErrorAlert error={archiveMutation.error} />
             </div>
           ) : null}
 
           {analysis && isAnalysisVisible ? (
-            <div className="border-t bg-white p-5">
+            <div className="border-t bg-background p-5">
               <EvidenceAiAnalysisPanel
                 analysis={analysis}
                 onClose={handleCloseAnalysis}
@@ -291,7 +291,7 @@ export function EvidenceCard({
           ) : null}
 
           {shouldShowAnalyzeError ? (
-            <div className="border-t bg-red-50 p-5">
+            <div className="border-t bg-destructive/10 p-5">
               <ErrorAlert error={analyzeMutation.error} />
             </div>
           ) : null}

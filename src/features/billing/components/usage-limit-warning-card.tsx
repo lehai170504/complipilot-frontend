@@ -71,10 +71,10 @@ function iconFor(type: UsageWarning["icon"]) {
 
 function levelTone(level: UsageWarning["level"]) {
   if (level === "danger") {
-    return "bg-red-50 text-red-700 hover:bg-red-50";
+    return "bg-destructive/10 text-red-700 hover:bg-red-50";
   }
 
-  return "bg-amber-50 text-amber-700 hover:bg-amber-50";
+  return "bg-warning/10 text-warning hover:bg-amber-50";
 }
 
 function buildWarnings(usage: OrganizationUsageResponse): UsageWarning[] {
@@ -161,15 +161,15 @@ export function UsageLimitWarningCard({
   const hasDanger = warnings.some((warning) => warning.level === "danger");
 
   return (
-    <Card className={hasDanger ? "border-red-200" : "border-amber-200"}>
+    <Card className={hasDanger ? "border-destructive/30" : "border-warning/30"}>
       <CardContent className="p-5">
         <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
           <div className="flex items-start gap-3">
             <div
               className={
                 hasDanger
-                  ? "flex size-10 shrink-0 items-center justify-center rounded-2xl bg-red-50 text-red-700"
-                  : "flex size-10 shrink-0 items-center justify-center rounded-2xl bg-amber-50 text-amber-700"
+                  ? "flex size-10 shrink-0 items-center justify-center rounded-2xl bg-destructive/10 text-red-700"
+                  : "flex size-10 shrink-0 items-center justify-center rounded-2xl bg-warning/10 text-warning"
               }
             >
               <AlertTriangle className="size-5" />
@@ -197,7 +197,7 @@ export function UsageLimitWarningCard({
           {warnings.map((warning) => (
             <div
               key={warning.key}
-              className="rounded-2xl border bg-slate-50 p-4"
+              className="rounded-2xl border bg-muted/30 p-4"
             >
               <div className="flex items-center justify-between gap-3">
                 <div className="flex items-center gap-2 text-sm font-medium">

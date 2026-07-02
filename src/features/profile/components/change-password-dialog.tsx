@@ -76,7 +76,7 @@ export function ChangePasswordDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <LockKeyhole className="size-5 text-cyan-700" />
+            <LockKeyhole className="size-5 text-primary" />
             Change password
           </DialogTitle>
           <DialogDescription>

@@ -11,12 +11,12 @@ function AuthGuardLoading() {
   const t = useTranslations("authGuard");
 
   return (
-    <main className="flex h-screen items-center justify-center bg-slate-50">
-      <div className="rounded-3xl border bg-white p-8 shadow-sm">
-        <p className="text-sm font-medium text-slate-500">
+    <main className="flex h-screen items-center justify-center bg-muted/30">
+      <div className="rounded-3xl border bg-background p-8 shadow-sm">
+        <p className="text-sm font-medium text-muted-foreground">
           {t("loadingWorkspace")}
         </p>
-        <div className="mt-4 h-2 w-64 overflow-hidden rounded-full bg-slate-100">
+        <div className="mt-4 h-2 w-64 overflow-hidden rounded-full bg-muted">
           <div className="h-full w-1/2 animate-pulse rounded-full bg-cyan-500" />
         </div>
       </div>

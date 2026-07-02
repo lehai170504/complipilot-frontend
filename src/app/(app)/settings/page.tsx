@@ -131,7 +131,7 @@ export default function SettingsPage() {
       ) : null}
 
       {settingsQuery.isLoading ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" />
             Loading workspace settings...
@@ -140,7 +140,7 @@ export default function SettingsPage() {
       ) : settings ? (
         <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <div className="space-y-6">
-            <Card>
+            <Card className="compliance-surface">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -206,7 +206,7 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="compliance-surface">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -268,7 +268,7 @@ export default function SettingsPage() {
           </div>
 
           <div className="space-y-6">
-            <Card>
+            <Card className="compliance-surface">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold">Quick actions</h3>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -323,7 +323,7 @@ export default function SettingsPage() {
               </CardContent>
             </Card>
 
-            <Card className="border-destructive/20">
+            <Card className="compliance-surface border-destructive/20">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-destructive/10 text-destructive">

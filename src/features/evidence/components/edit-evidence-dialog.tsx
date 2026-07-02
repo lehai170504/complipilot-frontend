@@ -106,7 +106,7 @@ export function EditEvidenceDialog({
             <Label htmlFor="edit-evidence-title">{t("titleLabel")}</Label>
             <Input id="edit-evidence-title" {...register("title")} />
             {errors.title ? (
-              <p className="text-sm text-red-600">{errors.title.message}</p>
+              <p className="text-sm text-destructive">{errors.title.message}</p>
             ) : null}
           </div>
 
@@ -141,7 +141,7 @@ export function EditEvidenceDialog({
                 {...register("externalUrl")}
               />
               {errors.externalUrl ? (
-                <p className="text-sm text-red-600">
+                <p className="text-sm text-destructive">
                   {errors.externalUrl.message}
                 </p>
               ) : null}
@@ -156,7 +156,7 @@ export function EditEvidenceDialog({
               rows={4}
             />
             {errors.description ? (
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-destructive">
                 {errors.description.message}
               </p>
             ) : null}

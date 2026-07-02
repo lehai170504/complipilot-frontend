@@ -43,18 +43,15 @@ export function EvidenceSelector({
   const evidenceItems = evidenceQuery.data?.items ?? [];
 
   return (
-    <Card className="h-fit xl:sticky xl:top-6">
+    <Card className="compliance-surface h-fit xl:sticky xl:top-6">
       <CardContent className="p-5">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold">{t("title")}</h3>
-          <Button onClick={onClose} size="sm" variant="ghost">
-            {t("close")}
-          </Button>
         </div>
 
         <div className="mt-3">
           <input
-            className="w-full rounded-xl border bg-slate-50 px-3 py-2 text-sm outline-none focus:border-cyan-300 focus:bg-white"
+            className="w-full rounded-xl border bg-muted/30 px-3 py-2 text-sm outline-none focus:border-cyan-300 focus:bg-white"
             placeholder={t("searchPlaceholder")}
             value={search}
             onChange={(event) => setSearch(event.target.value)}
@@ -71,7 +68,7 @@ export function EvidenceSelector({
               return (
                 <div
                   key={evidence.id}
-                  className="rounded-xl border bg-slate-50 p-3"
+                  className="rounded-xl border bg-muted/30 p-3"
                 >
                   <div className="flex items-start justify-between gap-2">
                     <div className="min-w-0 flex-1">

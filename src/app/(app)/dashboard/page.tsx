@@ -28,8 +28,6 @@ import {
 } from "@/features/tasks/hooks/tasks-hooks";
 import { useAuditEventsQuery } from "@/features/audit/hooks/audit-hooks";
 import { ErrorAlert } from "@/components/feedback/error-alert";
-import { OrganizationUsageCard } from "@/features/billing/components/organization-usage-card";
-import { useOrganizationUsageQuery } from "@/features/billing/hooks/billing-hooks";
 
 function formatDate(date: string | null) {
   if (!date) return "No due date";
@@ -62,7 +60,6 @@ export default function DashboardPage() {
   const dueSoonQuery = useDueSoonComplianceItemsQuery(organizationId);
   const overdueQuery = useOverdueComplianceItemsQuery(organizationId);
   const taskSummaryQuery = useTaskSummaryQuery(organizationId);
-  const organizationUsageQuery = useOrganizationUsageQuery(organizationId);
 
   const openTasksQuery = useTasksQuery(
     organizationId
@@ -180,22 +177,10 @@ export default function DashboardPage() {
         />
       </section>
 
-      <section>
-        {organizationUsageQuery.isLoading ? (
-          <Card>
-            <CardContent className="p-5 text-sm text-muted-foreground">
-              Loading plan usage...
-            </CardContent>
-          </Card>
-        ) : organizationUsageQuery.error ? (
-          <ErrorAlert error={organizationUsageQuery.error} />
-        ) : organizationUsageQuery.data ? (
-          <OrganizationUsageCard usage={organizationUsageQuery.data} />
-        ) : null}
-      </section>
+
 
       <section className="grid gap-6 xl:grid-cols-[1fr_420px]">
-        <Card>
+        <Card className="compliance-surface">
           <CardHeader>
             <CardTitle>{t("openTasksTitle")}</CardTitle>
           </CardHeader>
@@ -239,7 +224,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="compliance-surface">
           <CardHeader>
             <CardTitle>{t("complianceStatus")}</CardTitle>
           </CardHeader>
@@ -279,7 +264,7 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid gap-6 xl:grid-cols-2">
-        <Card>
+        <Card className="compliance-surface">
           <CardHeader>
             <CardTitle>{t("dueSoonControls")}</CardTitle>
           </CardHeader>
@@ -317,7 +302,7 @@ export default function DashboardPage() {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="compliance-surface">
           <CardHeader>
             <CardTitle>{t("recentAuditActivity")}</CardTitle>
           </CardHeader>

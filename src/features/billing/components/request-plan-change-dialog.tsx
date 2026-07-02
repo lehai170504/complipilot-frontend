@@ -114,7 +114,7 @@ export function RequestPlanChangeDialog({
       <DialogContent className="sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
-            <Sparkles className="size-5 text-cyan-700" />
+            <Sparkles className="size-5 text-primary" />
             Request plan change
           </DialogTitle>
           <DialogDescription>
@@ -140,7 +140,7 @@ export function RequestPlanChangeDialog({
           </p>
         </div>
 
-        <div className="rounded-2xl border bg-slate-50 p-4 text-sm">
+        <div className="rounded-2xl border bg-muted/30 p-4 text-sm">
           <p className="text-muted-foreground">Current plan</p>
           <div className="mt-2">
             <Badge variant="secondary">{currentPlan ?? "UNKNOWN"}</Badge>

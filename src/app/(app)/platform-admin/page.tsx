@@ -99,7 +99,7 @@ function PlatformMetricCard({
   icon: typeof Building2;
 }) {
   return (
-    <Card>
+    <Card className="compliance-surface">
       <CardContent className="flex items-start justify-between gap-4 p-5">
         <div>
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
@@ -223,7 +223,7 @@ export default function PlatformAdminPage() {
       <BillingPlanChangeRequestsPanel />
 
       <section className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-        <Card className="overflow-hidden">
+        <Card className="compliance-surface overflow-hidden">
           <CardContent className="p-0">
             <div className="border-b p-5">
               <div className="flex items-center gap-3">
@@ -320,7 +320,7 @@ export default function PlatformAdminPage() {
         </Card>
 
         <div className="space-y-6">
-          <Card>
+          <Card className="compliance-surface">
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -442,7 +442,7 @@ export default function PlatformAdminPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="compliance-surface">
             <CardContent className="p-5">
               <div className="flex items-center gap-3">
                 <div className="flex size-10 items-center justify-center rounded-2xl bg-primary/10 text-primary">

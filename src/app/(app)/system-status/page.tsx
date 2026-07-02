@@ -88,7 +88,7 @@ function SystemComponentCard({
 }) {
   const details = Object.entries(component.details ?? {});
   return (
-    <Card>
+    <Card className="compliance-surface">
       <CardContent className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="flex items-start gap-3">
@@ -166,7 +166,7 @@ export default function SystemStatusPage() {
       {statusQuery.error ? <ErrorAlert error={statusQuery.error} /> : null}
 
       {statusQuery.isLoading ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" />
             Loading system status...
@@ -174,7 +174,7 @@ export default function SystemStatusPage() {
         </Card>
       ) : status ? (
         <>
-          <Card>
+          <Card className="compliance-surface">
             <CardContent className="flex flex-col justify-between gap-4 p-5 md:flex-row md:items-center">
               <div>
                 <p className="text-sm font-medium text-muted-foreground">

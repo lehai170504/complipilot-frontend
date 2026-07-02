@@ -16,9 +16,9 @@ const riskClassNameMap: Record<
   EvidenceAiAnalysisResponse["riskLevel"],
   string
 > = {
-  LOW: "bg-emerald-50 text-emerald-700 hover:bg-emerald-50",
-  MEDIUM: "bg-amber-50 text-amber-700 hover:bg-amber-50",
-  HIGH: "bg-red-50 text-red-700 hover:bg-red-50",
+  LOW: "bg-success/10 text-success hover:bg-emerald-50",
+  MEDIUM: "bg-warning/10 text-warning hover:bg-amber-50",
+  HIGH: "bg-destructive/10 text-red-700 hover:bg-red-50",
   CRITICAL: "bg-red-100 text-red-800 hover:bg-red-100",
 };
 
@@ -42,23 +42,23 @@ export function EvidenceAiAnalysisPanel({
     : 0;
 
   return (
-    <Card className="border-cyan-200 bg-cyan-50/60">
+    <Card className="compliance-surface border-primary/30 bg-cyan-50/60">
       <CardContent className="space-y-4 p-5">
         <div className="flex flex-col justify-between gap-3 sm:flex-row sm:items-start">
           <div className="flex items-start gap-3">
-            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-background text-primary">
               <Sparkles className="size-5" />
             </div>
 
             <div>
-              <p className="font-semibold text-slate-950">{t("title")}</p>
+              <p className="font-semibold text-foreground">{t("title")}</p>
 
               <p className="mt-1 text-sm leading-6 text-slate-700">
                 {analysis.summary}
               </p>
 
               {analysis.analyzedAt ? (
-                <p className="mt-2 text-xs text-slate-500">
+                <p className="mt-2 text-xs text-muted-foreground">
                   {t("analyzedAt", {
                     date: new Intl.DateTimeFormat(locale, {
                       month: "short",
@@ -109,7 +109,7 @@ export function EvidenceAiAnalysisPanel({
 
         {findings.length > 0 ? (
           <AnalysisList
-            icon={<CheckCircle2 className="size-4 text-emerald-600" />}
+            icon={<CheckCircle2 className="size-4 text-success" />}
             items={findings}
             title={t("findings")}
           />
@@ -125,7 +125,7 @@ export function EvidenceAiAnalysisPanel({
 
         {suggestedActions.length > 0 ? (
           <AnalysisList
-            icon={<Lightbulb className="size-4 text-cyan-700" />}
+            icon={<Lightbulb className="size-4 text-primary" />}
             items={suggestedActions}
             title={t("suggestedActions")}
           />
@@ -146,7 +146,7 @@ function AnalysisList({
 }) {
   return (
     <div>
-      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-slate-800">
+      <div className="mb-2 flex items-center gap-2 text-sm font-semibold text-foreground">
         {icon}
         {title}
       </div>

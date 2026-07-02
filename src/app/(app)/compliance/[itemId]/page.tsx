@@ -25,6 +25,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
 import { ComplianceStatusBadge } from "@/features/compliance/components/compliance-status-badge";
 import {
@@ -159,7 +160,7 @@ export default function ComplianceItemDetailPage() {
 
   if (complianceItemsQuery.isLoading) {
     return (
-      <div className="rounded-3xl border bg-white p-8 text-muted-foreground shadow-sm">
+      <div className="rounded-3xl border bg-background p-8 text-muted-foreground shadow-sm">
         {t("loading")}
       </div>
     );
@@ -167,7 +168,7 @@ export default function ComplianceItemDetailPage() {
 
   if (!item) {
     return (
-      <Card>
+      <Card className="compliance-surface">
         <CardContent className="flex flex-col items-center justify-center p-10 text-center">
           <h3 className="text-xl font-semibold">{t("notFoundTitle")}</h3>
           <p className="mt-2 text-muted-foreground">
@@ -198,11 +199,11 @@ export default function ComplianceItemDetailPage() {
         {t("back")}
       </Button>
 
-      <section className="rounded-[2rem] bg-slate-950 p-6 text-white shadow-xl">
+      <section className="rounded-[2rem] bg-background p-6 text-foreground shadow-xl">
         <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-start">
           <div>
             <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-cyan-300/15 px-3 py-1 text-xs font-semibold text-cyan-200">
+              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
                 {item.requirementCode}
               </span>
               <ComplianceStatusBadge status={item.status} />
@@ -212,11 +213,13 @@ export default function ComplianceItemDetailPage() {
               {item.requirementTitle}
             </h2>
 
-            <div className="mt-3 flex items-center gap-2 text-slate-300">
+            <div className="mt-3 flex items-center gap-2 text-muted-foreground">
               <CalendarDays className="size-4" />
-              {t("due", {
-                date: formatDate(item.dueDate, locale, t("noDueDate")),
-              })}
+              {item.dueDate
+                ? t("due", {
+                  date: formatDate(item.dueDate, locale, ""),
+                })
+                : t("noDueDate")}
             </div>
           </div>
 
@@ -225,7 +228,6 @@ export default function ComplianceItemDetailPage() {
               type="button"
               onClick={handleSuggestEvidence}
               disabled={suggestEvidenceMutation.isPending}
-              className="bg-cyan-300 text-slate-950 hover:bg-cyan-200"
             >
               <Sparkles className="mr-2 size-4" />
               {suggestEvidenceMutation.isPending
@@ -240,7 +242,6 @@ export default function ComplianceItemDetailPage() {
                 type="button"
                 variant="outline"
                 onClick={() => setIsAiSuggestionVisible(true)}
-                className="border-white/20 bg-white/5 text-white hover:bg-white/10 hover:text-white"
               >
                 {tAiActions("viewSuggestion")}
               </Button>
@@ -250,14 +251,14 @@ export default function ComplianceItemDetailPage() {
       </section>
 
       {suggestEvidenceMutation.data && isAiSuggestionVisible ? (
-        <section className="rounded-[2rem] border border-cyan-200 bg-white p-4 shadow-sm">
+        <section className="rounded-[2rem] border border-primary/30 bg-background p-4 shadow-sm">
           <div className="mb-4 flex items-center justify-between gap-3">
             <div className="flex items-center gap-2">
-              <div className="flex size-9 items-center justify-center rounded-2xl bg-slate-950 text-cyan-300">
+              <div className="flex size-9 items-center justify-center rounded-2xl bg-background text-primary">
                 <Sparkles className="size-4" />
               </div>
               <div>
-                <h3 className="font-semibold text-slate-950">
+                <h3 className="font-semibold text-foreground">
                   {tAiSuggestion("title")}
                 </h3>
                 <p className="text-sm text-muted-foreground">
@@ -271,7 +272,7 @@ export default function ComplianceItemDetailPage() {
               size="sm"
               variant="ghost"
               onClick={() => setIsAiSuggestionVisible(false)}
-              className="text-slate-500 hover:text-slate-700"
+              className="text-muted-foreground hover:text-slate-700"
             >
               <X className="mr-2 size-4" />
               {tAiActions("close")}
@@ -285,14 +286,14 @@ export default function ComplianceItemDetailPage() {
       ) : null}
 
       {suggestEvidenceMutation.error && isAiSuggestionVisible ? (
-        <section className="rounded-[2rem] border border-red-200 bg-red-50 p-5 shadow-sm">
+        <section className="rounded-[2rem] border border-destructive/30 bg-destructive/10 p-5 shadow-sm">
           <div className="mb-3 flex justify-end">
             <Button
               type="button"
               size="sm"
               variant="ghost"
               onClick={() => setIsAiSuggestionVisible(false)}
-              className="text-slate-500 hover:text-slate-700"
+              className="text-muted-foreground hover:text-slate-700"
             >
               <X className="mr-2 size-4" />
               Close
@@ -303,9 +304,9 @@ export default function ComplianceItemDetailPage() {
         </section>
       ) : null}
 
-      <div className="grid gap-6 xl:grid-cols-[1fr_380px]">
+      <div className="grid gap-6">
         <div className="space-y-6">
-          <Card>
+          <Card className="compliance-surface">
             <CardContent className="p-6">
               <h3 className="text-lg font-semibold">{t("notesStatus")}</h3>
 
@@ -374,7 +375,7 @@ export default function ComplianceItemDetailPage() {
             </CardContent>
           </Card>
 
-          <Card>
+          <Card className="compliance-surface">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <h3 className="text-lg font-semibold">
@@ -408,7 +409,7 @@ export default function ComplianceItemDetailPage() {
                   {linkedEvidence.map((link) => (
                     <div
                       key={link.linkId}
-                      className="rounded-2xl border bg-slate-50 p-4"
+                      className="rounded-2xl border bg-muted/30 p-4"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
@@ -438,7 +439,7 @@ export default function ComplianceItemDetailPage() {
                             ) : null}
                             {link.evidence.externalUrl ? (
                               <a
-                                className="inline-flex items-center text-cyan-700 hover:text-cyan-800"
+                                className="inline-flex items-center text-primary hover:text-cyan-800"
                                 href={link.evidence.externalUrl}
                                 target="_blank"
                                 rel="noreferrer"
@@ -480,7 +481,16 @@ export default function ComplianceItemDetailPage() {
           </Card>
         </div>
 
-        {showEvidenceSelector ? (
+        {linkMutation.error ? (
+          <div className="mt-4">
+            <ErrorAlert error={linkMutation.error} />
+          </div>
+        ) : null}
+      </div>
+
+      <Dialog open={showEvidenceSelector} onOpenChange={setShowEvidenceSelector}>
+        <DialogContent className="max-w-2xl p-0 border-none bg-transparent shadow-none">
+          <DialogTitle className="sr-only">Select Evidence to Link</DialogTitle>
           <EvidenceSelector
             organizationId={organizationId}
             linkedEvidenceIds={linkedEvidenceIds}
@@ -488,14 +498,8 @@ export default function ComplianceItemDetailPage() {
             onClose={() => setShowEvidenceSelector(false)}
             isLinking={linkMutation.isPending}
           />
-        ) : null}
-
-        {linkMutation.error ? (
-          <div className="xl:col-span-2">
-            <ErrorAlert error={linkMutation.error} />
-          </div>
-        ) : null}
-      </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

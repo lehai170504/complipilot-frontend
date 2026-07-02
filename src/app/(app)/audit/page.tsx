@@ -123,7 +123,7 @@ export default function AuditPage() {
 
   if (!canViewAudit) {
     return (
-      <Card>
+      <Card className="compliance-surface">
         <CardContent className="p-8 text-muted-foreground">
           You do not have permission to view audit events.
         </CardContent>
@@ -265,13 +265,13 @@ export default function AuditPage() {
       ) : null}
 
       {auditQuery.isLoading ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="p-8 text-muted-foreground">
             {t("state.loading")}
           </CardContent>
         </Card>
       ) : events.length === 0 ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="flex flex-col items-center justify-center p-10 text-center">
             <div className="rounded-3xl bg-primary/10 p-4 text-primary">
               <ScrollText className="size-8" />

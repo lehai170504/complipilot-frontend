@@ -3,6 +3,7 @@
 import { useMemo, useState } from "react";
 import { FileCheck2, Download } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,8 @@ export default function EvidencePage() {
     sortBy: "createdAt",
     sortDirection: "DESC",
   });
+
+  const [parent] = useAutoAnimate();
 
   const organizationId = activeOrganization?.organizationId;
 
@@ -106,19 +109,25 @@ export default function EvidencePage() {
         onChange={handleToolbarChange}
         onCreateUrlClick={() => setIsCreateUrlDialogOpen(true)}
         onCreateFileClick={() => setIsCreateFileDialogOpen(true)}
+        onExportClick={() => {
+          if (organizationId) {
+            exportEvidenceCsvMutation.mutate(organizationId);
+          }
+        }}
+        isExporting={exportEvidenceCsvMutation.isPending}
         canManageCompliance={canManageCompliance}
       />
 
       {evidenceQuery.error ? <ErrorAlert error={evidenceQuery.error} /> : null}
 
       {evidenceQuery.isLoading ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="p-8 text-muted-foreground">
             {t("loading")}
           </CardContent>
         </Card>
       ) : evidenceItems.length === 0 ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="flex flex-col items-center justify-center p-10 text-center">
             <div className="rounded-3xl bg-primary/10 p-4 text-primary">
               <FileCheck2 className="size-8" />
@@ -139,31 +148,12 @@ export default function EvidencePage() {
                 >
                   {t("addUrl")}
                 </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={
-                    !organizationId || exportEvidenceCsvMutation.isPending
-                  }
-                  onClick={() => {
-                    if (!organizationId) {
-                      return;
-                    }
-
-                    exportEvidenceCsvMutation.mutate(organizationId);
-                  }}
-                >
-                  <Download className="mr-2 size-4" />
-                  {exportEvidenceCsvMutation.isPending
-                    ? "Exporting..."
-                    : "Export CSV"}
-                </Button>
               </div>
             ) : null}
           </CardContent>
         </Card>
       ) : (
-        <section className="grid gap-4">
+        <section ref={parent} className="grid gap-4">
           {evidenceItems.map((evidence) => (
             <EvidenceCard
               key={evidence.id}

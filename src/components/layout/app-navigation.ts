@@ -7,9 +7,8 @@ import {
   ListChecks,
   ScrollText,
   ServerCog,
-  Settings,
   Shield,
-  UserCircle,
+  type LucideIcon,
 } from "lucide-react";
 
 export type AppNavigationPermission =
@@ -17,71 +16,91 @@ export type AppNavigationPermission =
   | "canViewAudit"
   | "canViewPlatformAdmin";
 
-export const appNavigationItems = [
+export type NavigationItem = {
+  labelKey: string;
+  href: string;
+  icon: LucideIcon;
+  permission: AppNavigationPermission;
+};
+
+export type NavigationGroup = {
+  groupLabelKey?: string;
+  items: NavigationItem[];
+};
+
+export const appNavigationGroups: NavigationGroup[] = [
   {
-    labelKey: "dashboard",
-    href: "/dashboard",
-    icon: Gauge,
-    permission: "all",
+    groupLabelKey: "overview",
+    items: [
+      {
+        labelKey: "dashboard",
+        href: "/dashboard",
+        icon: Gauge,
+        permission: "all",
+      },
+      {
+        labelKey: "tasks",
+        href: "/tasks",
+        icon: ListChecks,
+        permission: "all",
+      },
+    ],
   },
   {
-    labelKey: "compliance",
-    href: "/compliance",
-    icon: ClipboardCheck,
-    permission: "all",
+    groupLabelKey: "workspace",
+    items: [
+      {
+        labelKey: "compliance",
+        href: "/compliance",
+        icon: ClipboardCheck,
+        permission: "all",
+      },
+      {
+        labelKey: "evidence",
+        href: "/evidence",
+        icon: FileCheck2,
+        permission: "all",
+      },
+    ],
   },
   {
-    labelKey: "evidence",
-    href: "/evidence",
-    icon: FileCheck2,
-    permission: "all",
+    groupLabelKey: "management",
+    items: [
+      {
+        labelKey: "workspaces",
+        href: "/workspaces",
+        icon: Building2,
+        permission: "all",
+      },
+      {
+        labelKey: "billing",
+        href: "/billing",
+        icon: CreditCard,
+        permission: "all",
+      },
+      {
+        labelKey: "audit",
+        href: "/audit",
+        icon: ScrollText,
+        permission: "canViewAudit",
+      },
+    ],
   },
   {
-    labelKey: "tasks",
-    href: "/tasks",
-    icon: ListChecks,
-    permission: "all",
+    groupLabelKey: "platform",
+    items: [
+      {
+        labelKey: "platformAdmin",
+        href: "/platform-admin",
+        icon: Shield,
+        permission: "canViewPlatformAdmin",
+      },
+      {
+        labelKey: "systemStatus",
+        href: "/system-status",
+        icon: ServerCog,
+        permission: "canViewPlatformAdmin",
+      },
+    ],
   },
-  {
-    labelKey: "billing",
-    href: "/billing",
-    icon: CreditCard,
-    permission: "all",
-  },
-  {
-    labelKey: "settings",
-    href: "/settings",
-    icon: Settings,
-    permission: "all",
-  },
-  {
-    labelKey: "profile",
-    href: "/profile",
-    icon: UserCircle,
-    permission: "all",
-  },
-  {
-    labelKey: "audit",
-    href: "/audit",
-    icon: ScrollText,
-    permission: "canViewAudit",
-  },
-  {
-    labelKey: "platformAdmin",
-    href: "/platform-admin",
-    icon: Shield,
-    permission: "canViewPlatformAdmin",
-  },
-  {
-    labelKey: "workspaces",
-    href: "/workspaces",
-    icon: Building2,
-    permission: "all",
-  },
-  {
-    labelKey: "systemStatus",
-    href: "/system-status",
-    icon: ServerCog,
-    permission: "canViewPlatformAdmin",
-  },
-] as const;
+];

@@ -125,7 +125,7 @@ export function TaskCard({
 
   if (isEditing) {
     return (
-      <Card className="overflow-hidden ring-2 ring-cyan-300">
+      <Card className="compliance-surface overflow-hidden ring-2 ring-cyan-300">
         <CardContent className="p-5">
           <div className="space-y-4">
             <div className="space-y-2">
@@ -224,7 +224,7 @@ export function TaskCard({
   }
 
   return (
-    <Card className="overflow-hidden">
+    <Card className="compliance-surface overflow-hidden">
       <CardContent className="p-0">
         <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 flex-1">
@@ -232,10 +232,10 @@ export function TaskCard({
               <div
                 className={`flex size-10 items-center justify-center rounded-2xl ${
                   task.status === "DONE"
-                    ? "bg-emerald-100 text-emerald-600"
+                    ? "bg-success/20 text-success"
                     : task.status === "IN_PROGRESS"
                       ? "bg-blue-100 text-blue-600"
-                      : "bg-slate-950 text-cyan-300"
+                      : "bg-background text-primary"
                 }`}
               >
                 {task.status === "DONE" ? (
@@ -298,7 +298,7 @@ export function TaskCard({
         </div>
 
         {showDeleteConfirm ? (
-          <div className="border-t bg-red-50 p-4">
+          <div className="border-t bg-destructive/10 p-4">
             <p className="text-sm font-medium text-red-800">
               {t("deleteConfirm", { title: task.title })}
             </p>

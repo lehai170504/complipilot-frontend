@@ -96,7 +96,7 @@ export function CreateUrlEvidenceDialog({
             <Label htmlFor="evidence-title">{t("titleLabel")}</Label>
             <Input id="evidence-title" {...register("title")} />
             {errors.title ? (
-              <p className="text-sm text-red-600">{errors.title.message}</p>
+              <p className="text-sm text-destructive">{errors.title.message}</p>
             ) : null}
           </div>
 
@@ -126,7 +126,7 @@ export function CreateUrlEvidenceDialog({
             <Label htmlFor="external-url">{t("externalUrl")}</Label>
             <Input id="external-url" type="url" {...register("externalUrl")} />
             {errors.externalUrl ? (
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-destructive">
                 {errors.externalUrl.message}
               </p>
             ) : null}
@@ -142,7 +142,7 @@ export function CreateUrlEvidenceDialog({
               rows={4}
             />
             {errors.description ? (
-              <p className="text-sm text-red-600">
+              <p className="text-sm text-destructive">
                 {errors.description.message}
               </p>
             ) : null}

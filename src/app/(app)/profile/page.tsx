@@ -112,7 +112,7 @@ export default function ProfilePage() {
       {profileQuery.error ? <ErrorAlert error={profileQuery.error} /> : null}
 
       {profileQuery.isLoading ? (
-        <Card>
+        <Card className="compliance-surface">
           <CardContent className="flex items-center gap-2 p-6 text-sm text-muted-foreground">
             <Loader2 className="size-4 animate-spin" />
             Loading profile...
@@ -121,7 +121,7 @@ export default function ProfilePage() {
       ) : profile ? (
         <section className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
           <div className="space-y-6">
-            <Card>
+            <Card className="compliance-surface">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -180,7 +180,7 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="compliance-surface">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -244,7 +244,7 @@ export default function ProfilePage() {
           </div>
 
           <div className="space-y-6">
-            <Card>
+            <Card className="compliance-surface">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -271,7 +271,7 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
 
-            <Card>
+            <Card className="compliance-surface">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-primary/10 text-primary">
@@ -297,7 +297,7 @@ export default function ProfilePage() {
               </CardContent>
             </Card>
 
-            <Card className="border-info/20 bg-info/5">
+            <Card className="compliance-surface border-info/20 bg-info/5">
               <CardContent className="p-6">
                 <div className="flex items-start gap-3">
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-info/10 text-info">

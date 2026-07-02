@@ -14,7 +14,11 @@
     "platformAdmin": "Platform Admin",
     "settings": "Settings",
     "profile": "Profile",
-    "systemStatus": "System Status"
+    "systemStatus": "System Status",
+    "overview": "Overview",
+    "workspace": "Workspace",
+    "management": "Management",
+    "platform": "Platform"
   },
   "topbar": {
     "workspace": "Workspace",
@@ -826,5 +830,85 @@
       "risk": "{risk} risk",
       "confidence": "{confidence}% confidence"
     }
+  },
+  "profileModal": {
+    "title": "Account Profile",
+    "description": "Manage your personal account details, security settings, and read-only metadata.",
+    "details": {
+      "title": "Profile details",
+      "description": "Update the name shown across your workspace activity.",
+      "fullName": "Full name",
+      "email": "Email",
+      "emailHelp": "Email changes are not supported yet.",
+      "save": "Save changes"
+    },
+    "metadata": {
+      "title": "Account metadata",
+      "description": "Read-only account details.",
+      "userId": "USER ID",
+      "status": "STATUS",
+      "created": "CREATED",
+      "updated": "UPDATED"
+    },
+    "identity": {
+      "title": "Login identity",
+      "description": "Your email is used for login, invitations, audit attribution, and notification delivery."
+    },
+    "security": {
+      "title": "Security",
+      "description": "Password change and session management.",
+      "changePassword": "Change password"
+    },
+    "audit": {
+      "title": "Audit attribution",
+      "description": "Actions you perform are recorded using your account email so audit logs remain traceable and reviewer-friendly."
+    }
+  },
+  "settingsModal": {
+    "title": "Workspace Settings",
+    "description": "Manage your workspace profile, review status metadata, and control workspace lifecycle.",
+    "disabledAlert": {
+      "title": "Workspace is disabled",
+      "description": "This workspace is disabled. Some operations may be restricted. Contact a platform admin if this was a mistake."
+    },
+    "loading": "Loading workspace settings...",
+    "profile": {
+      "title": "Workspace Profile",
+      "description": "Update the workspace name and primary identity.",
+      "name": "Workspace name",
+      "save": "Save changes"
+    },
+    "metadata": {
+      "title": "Workspace metadata",
+      "description": "System-generated workspace metadata.",
+      "id": "WORKSPACE ID",
+      "role": "ROLE",
+      "created": "CREATED",
+      "updated": "UPDATED"
+    },
+    "quickActions": {
+      "title": "Quick Actions",
+      "description": "Common workspace management tasks.",
+      "members": "Manage members",
+      "membersDesc": "Invite and manage members",
+      "billing": "Billing & Plans",
+      "billingDesc": "Manage subscription and usage limits"
+    },
+    "dangerZone": {
+      "title": "Danger Zone",
+      "description": "Irreversible or destructive workspace actions.",
+      "disable": "Disable Workspace",
+      "disableDesc": "Temporarily disable access to this workspace.",
+      "enable": "Enable Workspace",
+      "enableDesc": "Restore access to this workspace."
+    }
+  },
+  "billingPage": {
+    "title": "Billing & Usage",
+    "description": "Monitor your workspace usage limits and view past billing transactions. To change your plan, use the user menu in the top bar."
+  },
+  "upgradePlanModal": {
+    "title": "Upgrade Plan",
+    "description": "Choose the right plan for your workspace."
   }
 }

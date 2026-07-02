@@ -18,7 +18,7 @@ export function DisabledWorkspaceBanner({
   }
 
   return (
-    <div className="border-b border-red-200 bg-red-50 px-4 py-3 xl:px-8">
+    <div className="border-b border-destructive/30 bg-destructive/10 px-4 py-3 xl:px-8">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3 text-red-800">
           <AlertTriangle className="mt-0.5 size-5 shrink-0" />
@@ -36,7 +36,7 @@ export function DisabledWorkspaceBanner({
           asChild
           size="sm"
           variant="outline"
-          className="border-red-200 bg-white text-red-700 hover:bg-red-100 hover:text-red-800"
+          className="border-destructive/30 bg-background text-red-700 hover:bg-red-100 hover:text-red-800"
         >
           <Link href="/settings">
             View settings

@@ -14,6 +14,7 @@ import { useTranslations } from "next-intl";
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ComplianceItemCard } from "@/features/compliance/components/compliance-item-card";
 import { CreateComplianceItemDialog } from "@/features/compliance/components/create-compliance-item-dialog";
 import { FrameworksPanel } from "@/features/compliance/components/frameworks-panel";
@@ -44,8 +45,8 @@ export default function CompliancePage() {
   const readyPercent =
     summary && summary.totalItems > 0
       ? Math.round(
-          ((summary.compliant + summary.waived) / summary.totalItems) * 100,
-        )
+        ((summary.compliant + summary.waived) / summary.totalItems) * 100,
+      )
       : 0;
 
   return (
@@ -105,83 +106,95 @@ export default function CompliancePage() {
         </div>
       </section>
 
-      <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
-        <MetricCard
-          title={t("ready")}
-          value={`${readyPercent}%`}
-          description={t("readyDescription", {
-            count: summary?.compliant ?? 0,
-          })}
-          icon={ShieldCheck}
-        />
-        <MetricCard
-          title={t("totalControls")}
-          value={summary?.totalItems ?? 0}
-          description={t("totalControlsDescription")}
-          icon={ClipboardCheck}
-        />
-        <MetricCard
-          title={t("needsWork")}
-          value={(summary?.open ?? 0) + (summary?.inProgress ?? 0)}
-          description={t("needsWorkDescription")}
-          icon={FileClock}
-        />
-        <MetricCard
-          title={t("nonCompliant")}
-          value={summary?.nonCompliant ?? 0}
-          description={t("nonCompliantDescription")}
-          icon={AlertTriangle}
-        />
-      </section>
+      <Tabs defaultValue="active" className="w-full">
+        <div className="flex items-center justify-between mb-6">
+          <TabsList>
+            <TabsTrigger value="active">Active Controls</TabsTrigger>
+            <TabsTrigger value="frameworks">Framework Templates</TabsTrigger>
+          </TabsList>
+        </div>
 
-      {complianceItemsQuery.error ? (
-        <ErrorAlert error={complianceItemsQuery.error} />
-      ) : null}
-
-      {complianceItemsQuery.isLoading ? (
-        <Card>
-          <CardContent className="p-8 text-muted-foreground">
-            {t("loading")}
-          </CardContent>
-        </Card>
-      ) : items.length === 0 ? (
-        <Card>
-          <CardContent className="p-8">
-            <div className="max-w-2xl">
-              <h3 className="text-xl font-semibold">{t("emptyTitle")}</h3>
-              <p className="mt-2 text-muted-foreground">
-                {t("emptyDescription")}
-              </p>
-
-              {canManageCompliance ? (
-                <div className="mt-5">
-                  <SeedDemoWorkspaceButton organizationId={organizationId} />
-                </div>
-              ) : (
-                <Button className="mt-5" disabled>
-                  {t("askAdmin")}
-                </Button>
-              )}
-            </div>
-          </CardContent>
-        </Card>
-      ) : (
-        <section className="grid gap-4">
-          {items.map((item) => (
-            <ComplianceItemCard
-              canManageCompliance={canManageCompliance}
-              item={item}
-              key={item.id}
-              organizationId={organizationId}
+        <TabsContent value="active" className="mt-0 space-y-6">
+          <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
+            <MetricCard
+              title={t("ready")}
+              value={`${readyPercent}%`}
+              description={t("readyDescription", {
+                count: summary?.compliant ?? 0,
+              })}
+              icon={ShieldCheck}
             />
-          ))}
-        </section>
-      )}
+            <MetricCard
+              title={t("totalControls")}
+              value={summary?.totalItems ?? 0}
+              description={t("totalControlsDescription")}
+              icon={ClipboardCheck}
+            />
+            <MetricCard
+              title={t("needsWork")}
+              value={(summary?.open ?? 0) + (summary?.inProgress ?? 0)}
+              description={t("needsWorkDescription")}
+              icon={FileClock}
+            />
+            <MetricCard
+              title={t("nonCompliant")}
+              value={summary?.nonCompliant ?? 0}
+              description={t("nonCompliantDescription")}
+              icon={AlertTriangle}
+            />
+          </section>
+          {complianceItemsQuery.error ? (
+            <ErrorAlert error={complianceItemsQuery.error} />
+          ) : null}
 
-      <FrameworksPanel
-        organizationId={organizationId}
-        canManageCompliance={canManageCompliance}
-      />
+          {complianceItemsQuery.isLoading ? (
+            <Card className="compliance-surface">
+              <CardContent className="p-8 text-muted-foreground">
+                {t("loading")}
+              </CardContent>
+            </Card>
+          ) : items.length === 0 ? (
+            <Card className="compliance-surface">
+              <CardContent className="p-8">
+                <div className="max-w-2xl">
+                  <h3 className="text-xl font-semibold">{t("emptyTitle")}</h3>
+                  <p className="mt-2 text-muted-foreground">
+                    {t("emptyDescription")}
+                  </p>
+
+                  {canManageCompliance ? (
+                    <div className="mt-5">
+                      <SeedDemoWorkspaceButton organizationId={organizationId} />
+                    </div>
+                  ) : (
+                    <Button className="mt-5" disabled>
+                      {t("askAdmin")}
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          ) : (
+            <div className="grid gap-4">
+              {items.map((item) => (
+                <ComplianceItemCard
+                  canManageCompliance={canManageCompliance}
+                  item={item}
+                  key={item.id}
+                  organizationId={organizationId}
+                />
+              ))}
+            </div>
+          )}
+        </TabsContent>
+
+        <TabsContent value="frameworks" className="mt-0">
+          <FrameworksPanel
+            organizationId={organizationId}
+            canManageCompliance={canManageCompliance}
+          />
+        </TabsContent>
+      </Tabs>
 
       <CreateComplianceItemDialog
         open={isCreateItemDialogOpen}
