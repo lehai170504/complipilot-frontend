@@ -506,6 +506,10 @@ export type CheckoutSessionResponse = {
   message: string;
 };
 
+export type CustomerPortalResponse = {
+  url: string;
+};
+
 export type SearchResultItemDto = {
   id: string;
   title: string;

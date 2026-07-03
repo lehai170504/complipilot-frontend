@@ -1,8 +1,11 @@
-import type { ReactNode } from "react";
-import { FileCheck2, HardDrive, Sparkles, Users } from "lucide-react";
+import { useState, type ReactNode } from "react";
+import { toast } from "sonner";
+import { FileCheck2, HardDrive, Sparkles, Users, ExternalLink, Loader2 } from "lucide-react";
 
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
+import { createCustomerPortalSession } from "@/features/billing/api/billing-api";
 import type { OrganizationUsageResponse } from "@/lib/api/api-types";
 
 function formatBytes(bytes: number) {
@@ -73,23 +76,53 @@ export function OrganizationUsageCard({
 }: {
   usage: OrganizationUsageResponse;
 }) {
+  const [isManagingBilling, setIsManagingBilling] = useState(false);
+
+  const handleManageBilling = async () => {
+    try {
+      setIsManagingBilling(true);
+      const response = await createCustomerPortalSession(usage.organizationId);
+      window.location.href = response.url;
+    } catch (error) {
+      toast.error("Failed to open billing portal. You may need to upgrade first.");
+      setIsManagingBilling(false);
+    }
+  };
+
   return (
     <Card className="compliance-surface">
       <CardContent className="space-y-5 p-5">
-        <div>
-          <p className="text-sm font-medium text-muted-foreground">
-            Current plan
-          </p>
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">
+              Current plan
+            </p>
 
-          <div className="mt-1 flex items-end justify-between gap-3">
-            <h3 className="text-2xl font-bold tracking-tight text-foreground">
-              {usage.plan}
-            </h3>
+            <div className="mt-1 flex items-end gap-3">
+              <h3 className="text-2xl font-bold tracking-tight text-foreground">
+                {usage.plan}
+              </h3>
 
-            <span className="rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
-              {usage.subscriptionStatus}
-            </span>
+              <span className="rounded-full bg-success/10 px-3 py-1 text-xs font-medium text-success">
+                {usage.subscriptionStatus}
+              </span>
+            </div>
           </div>
+
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={handleManageBilling}
+            disabled={isManagingBilling}
+            className="gap-2"
+          >
+            {isManagingBilling ? (
+              <Loader2 className="size-4 animate-spin" />
+            ) : (
+              <ExternalLink className="size-4" />
+            )}
+            Manage Billing
+          </Button>
         </div>
 
         <div className="grid gap-6 pt-4 sm:grid-cols-2 md:grid-cols-4">

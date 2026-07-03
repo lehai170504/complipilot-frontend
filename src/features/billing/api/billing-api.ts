@@ -2,6 +2,7 @@ import { apiClient } from "@/lib/api/api-client";
 import type {
   BillingPlanChangeRequestResponse,
   CheckoutSessionResponse,
+  CustomerPortalResponse,
   CreateBillingPlanChangeRequest,
   CreateCheckoutSessionRequest,
   OrganizationUsageResponse,
@@ -46,6 +47,17 @@ export function createCheckoutSession(
     {
       method: "POST",
       body: JSON.stringify(request),
+    },
+  );
+}
+
+export function createCustomerPortalSession(
+  organizationId: string,
+): Promise<CustomerPortalResponse> {
+  return apiClient<CustomerPortalResponse>(
+    `/api/v1/organizations/${organizationId}/billing/customer-portal`,
+    {
+      method: "POST",
     },
   );
 }

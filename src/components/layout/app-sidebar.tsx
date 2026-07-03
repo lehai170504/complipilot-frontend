@@ -59,7 +59,7 @@ export function AppSidebar() {
         <WorkspaceSelector />
       </div>
 
-      <nav className="flex-1 overflow-y-auto px-4 pb-6 space-y-6">
+      <nav className="flex-1 overflow-y-auto px-4 pb-6 space-y-6 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
         {appNavigationGroups.map((group, index) => {
           const visibleItems = group.items.filter((item) => {
             if (item.permission === "canViewAudit") return canViewAudit;
