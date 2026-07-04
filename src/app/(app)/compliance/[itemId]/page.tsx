@@ -209,7 +209,7 @@ export default function ComplianceItemDetailPage() {
               <ComplianceStatusBadge status={item.status} />
             </div>
 
-            <h2 className="mt-4 max-w-3xl text-3xl font-bold tracking-tight md:text-4xl">
+            <h2 className="mt-4 max-w-3xl text-2xl font-bold tracking-tight text-foreground">
               {item.requirementTitle}
             </h2>
 

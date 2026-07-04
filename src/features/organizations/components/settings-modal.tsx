@@ -55,7 +55,7 @@ export function SettingsModal({
 }) {
   const tModal = useTranslations("settingsModal");
   const tStatus = useTranslations("status");
-  const { activeOrganization, canManageMembers } = useActiveOrganization();
+  const { activeOrganization, canManageMembers, canDisableWorkspace } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
 
   const settingsQuery = useOrganizationSettingsQuery(organizationId);
@@ -331,13 +331,13 @@ export function SettingsModal({
                         variant="destructive"
                         size="sm"
                         className="mt-4 w-full"
-                        disabled={!canManageWorkspace || isDisabled || !organizationId}
+                        disabled={!canDisableWorkspace || isDisabled || !organizationId}
                         onClick={() => setIsDisableDialogOpen(true)}
                       >
                         {tModal("dangerZone.disable")}
                       </Button>
 
-                      {!canManageWorkspace ? (
+                      {!canDisableWorkspace ? (
                         <p className="mt-2 text-[10px] text-muted-foreground text-center">
                           Requires owner permissions.
                         </p>

@@ -93,7 +93,7 @@ export default function ProfilePage() {
               Account profile
             </p>
 
-            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
               Manage your personal account details
             </h2>
 

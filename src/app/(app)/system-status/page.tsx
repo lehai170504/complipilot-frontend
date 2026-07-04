@@ -4,6 +4,7 @@ import {
   Activity,
   AlertTriangle,
   CheckCircle2,
+  CreditCard,
   Database,
   Loader2,
   Mail,
@@ -64,6 +65,8 @@ function renderComponentIcon(key: string) {
       return <Sparkles className="size-5" />;
     case "mail":
       return <Mail className="size-5" />;
+    case "billing":
+      return <CreditCard className="size-5" />;
     default:
       return <ServerCog className="size-5" />;
   }
@@ -147,7 +150,7 @@ export default function SystemStatusPage() {
               System Status
             </p>
 
-            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
               Monitor CompliPilot operational health
             </h2>
 
@@ -214,7 +217,7 @@ export default function SystemStatusPage() {
             </CardContent>
           </Card>
 
-          <section className="grid gap-4">
+          <section className="grid gap-6 xl:grid-cols-2">
             {status.components.map((component) => (
               <SystemComponentCard key={component.key} component={component} />
             ))}

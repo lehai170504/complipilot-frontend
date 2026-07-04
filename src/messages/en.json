@@ -682,6 +682,80 @@
       "description": "Start with a workspace, apply baseline controls, upload evidence, use AI to detect gaps, and keep every important action recorded.",
       "primary": "Create account",
       "secondary": "Sign in"
+    },
+    "heroNew": {
+      "eyebrow": "AI Compliance & Evidence OS",
+      "title": "Build audit-ready compliance workflows faster.",
+      "description": "CompliPilot helps teams manage compliance controls, evidence, audit trails, AI analysis, workspace settings, and SaaS operations in one clean platform.",
+      "primaryCta": "Start your workspace",
+      "secondaryCta": "Go to dashboard"
+    },
+    "featuresNew": {
+      "eyebrow": "Features",
+      "title": "Everything needed for an MVP compliance SaaS.",
+      "description": "Designed for teams that need structured controls, evidence, traceability, and production operations from day one.",
+      "items": [
+        {
+          "title": "Framework templates",
+          "description": "Start from compliance baselines and apply requirements directly to a workspace."
+        },
+        {
+          "title": "Evidence vault",
+          "description": "Upload, organize, review, and export evidence for audit-ready workflows."
+        },
+        {
+          "title": "AI evidence analysis",
+          "description": "Use AI to summarize evidence, detect risk, and suggest missing information."
+        },
+        {
+          "title": "Audit trail",
+          "description": "Track important actions across compliance, evidence, tasks, and workspace settings."
+        },
+        {
+          "title": "SaaS operations",
+          "description": "Manage billing usage, platform organizations, notifications, and system status."
+        },
+        {
+          "title": "Secure workspace controls",
+          "description": "Role-based access, invitation flows, disabled workspace guard, and account security."
+        }
+      ]
+    },
+    "highlightsNew": {
+      "eyebrow": "Built for SaaS",
+      "title": "Ready for product demos, testing, and future billing.",
+      "description": "The product includes key SaaS foundations such as workspace lifecycle, role-based access, notifications, usage limits, platform admin controls, and system diagnostics.",
+      "cta": "Explore Architecture",
+      "items": [
+        "Compliance workspace management",
+        "Evidence upload and download links",
+        "Member invitations and regenerate links",
+        "Billing-ready plan and usage limits",
+        "Platform admin console",
+        "CSV export for audit review"
+      ]
+    },
+    "mockupNew": {
+      "readiness": "Readiness",
+      "evidence": "Evidence",
+      "thisWeek": "+12 this week",
+      "aiInsights": "AI Insights",
+      "riskDetected": "Risk detected"
+    },
+    "footerNew": {
+      "description": "Evidence-first compliance operating system.",
+      "product": "Product",
+      "features": "Features",
+      "security": "Security",
+      "pricing": "Pricing",
+      "company": "Company",
+      "about": "About",
+      "blog": "Blog",
+      "contact": "Contact",
+      "legal": "Legal",
+      "privacy": "Privacy Policy",
+      "terms": "Terms of Service",
+      "rights": "All rights reserved."
     }
   },
   "onboarding": {

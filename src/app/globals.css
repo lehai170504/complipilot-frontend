@@ -185,7 +185,7 @@
 
   button,
   a {
-    @apply transition-colors;
+    @apply transition-all duration-200 active:scale-[0.98];
   }
 
   ::selection {
@@ -221,6 +221,6 @@
   }
 
   .compliance-hero {
-    @apply relative overflow-hidden rounded-3xl bg-gradient-to-br from-background via-card to-background p-8 text-foreground shadow-2xl ring-1 ring-border sm:p-12;
+    @apply relative overflow-hidden rounded-3xl bg-gradient-to-br from-background via-card to-background p-6 text-foreground shadow-2xl ring-1 ring-border sm:px-8 sm:py-6;
   }
 }

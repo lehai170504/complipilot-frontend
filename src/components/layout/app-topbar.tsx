@@ -27,6 +27,7 @@ import {
   useCurrentUserQuery,
   useLogoutMutation,
 } from "@/features/auth/hooks/auth-hooks";
+import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 import { NotificationBell } from "@/features/notifications/components/notification-bell";
 import { OrganizationUsageDialog } from "@/features/billing/components/organization-usage-dialog";
 import { ProfileModal } from "@/features/profile/components/profile-modal";
@@ -38,6 +39,7 @@ export function AppTopbar({
 }: {
   organizationId?: string;
 }) {
+  const { canManageBilling, canManageMembers } = useActiveOrganization();
   const currentUserQuery = useCurrentUserQuery();
   const logoutMutation = useLogoutMutation();
 
@@ -56,12 +58,12 @@ export function AppTopbar({
             <Menu className="size-5" />
           </Button>
 
-          <div>
-            <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-muted-foreground">
+          <div className="flex flex-col justify-center">
+            <p className="mb-0.5 text-[10px] font-semibold uppercase leading-none tracking-[0.1em] text-muted-foreground">
               {tTopbar("workspace")}
             </p>
 
-            <h1 className="text-xl font-bold tracking-tight text-foreground">
+            <h1 className="text-base font-bold leading-none tracking-tight text-foreground">
               {tTopbar("title")}
             </h1>
           </div>
@@ -81,11 +83,11 @@ export function AppTopbar({
                 <div className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <UserCircle className="size-5" />
                 </div>
-                <div className="hidden text-left sm:block">
+                <div className="hidden flex-col items-start gap-1 text-left sm:flex">
                   <p className="text-sm font-semibold leading-none text-foreground">
                     {currentUserQuery.data?.fullName ?? tTopbar("loadingUser")}
                   </p>
-                  <p className="mt-1.5 text-xs leading-none text-muted-foreground">
+                  <p className="text-xs leading-none text-muted-foreground">
                     {currentUserQuery.data?.email}
                   </p>
                 </div>
@@ -99,15 +101,21 @@ export function AppTopbar({
                 <UserCircle className="mr-2 size-4" />
                 Profile
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsSettingsModalOpen(true)}>
-                <Settings className="mr-2 size-4" />
-                Workspace Settings
-              </DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setIsUpgradeModalOpen(true)}>
-                <Crown className="mr-2 size-4 text-amber-500" />
-                <span className="font-medium text-amber-600">Upgrade Plan</span>
-              </DropdownMenuItem>
-              <DropdownMenuSeparator />
+              {canManageMembers ? (
+                <DropdownMenuItem onClick={() => setIsSettingsModalOpen(true)}>
+                  <Settings className="mr-2 size-4" />
+                  Workspace Settings
+                </DropdownMenuItem>
+              ) : null}
+              {canManageBilling ? (
+                <DropdownMenuItem onClick={() => setIsUpgradeModalOpen(true)}>
+                  <Crown className="mr-2 size-4 text-amber-500" />
+                  <span className="font-medium text-amber-600">Upgrade Plan</span>
+                </DropdownMenuItem>
+              ) : null}
+              {canManageMembers || canManageBilling ? (
+                <DropdownMenuSeparator />
+              ) : null}
               <DropdownMenuItem
                 onClick={() => logoutMutation.mutate()}
                 disabled={logoutMutation.isPending}

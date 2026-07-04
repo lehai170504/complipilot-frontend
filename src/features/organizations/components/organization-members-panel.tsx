@@ -26,7 +26,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { CreateOrganizationInvitationDialog } from "@/features/organizations/components/create-organization-invitation-dialog";
-import { SeedDemoUsersButton } from "@/features/organizations/components/seed-demo-users-button";
 import type {
   OrganizationMemberRole,
   OrganizationMemberStatus,
@@ -218,8 +217,6 @@ export function OrganizationMembersPanel({
 
             {canManageMembers ? (
               <div className="flex flex-col gap-2 sm:flex-row xl:justify-end">
-                <SeedDemoUsersButton organizationId={organizationId} />
-
                 <Button
                   type="button"
                   size="sm"
@@ -241,7 +238,7 @@ export function OrganizationMembersPanel({
               onClick={() => setActiveTab("members")}
             >
               Members
-              <span className="ml-2 rounded-full bg-white/80 px-2 py-0.5 text-xs text-slate-700">
+              <span className="ml-2 rounded-full bg-background shadow-sm px-2 py-0.5 text-xs text-foreground">
                 {members.length}
               </span>
             </Button>
@@ -254,7 +251,7 @@ export function OrganizationMembersPanel({
               onClick={() => setActiveTab("invitations")}
             >
               Invitations
-              <span className="ml-2 rounded-full bg-white/80 px-2 py-0.5 text-xs text-slate-700">
+              <span className="ml-2 rounded-full bg-background shadow-sm px-2 py-0.5 text-xs text-foreground">
                 {invitations.length}
               </span>
             </Button>
@@ -285,18 +282,28 @@ export function OrganizationMembersPanel({
                 </div>
               ) : (
                 <div className="overflow-hidden rounded-2xl border">
-                  <div className="hidden grid-cols-[minmax(260px,1.4fr)_180px_160px_90px] gap-3 border-b bg-muted/30 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:grid">
+                  <div
+                    className={`hidden gap-3 border-b bg-muted/30 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:grid ${canManageMembers
+                      ? "grid-cols-[minmax(260px,1.4fr)_180px_160px_90px]"
+                      : "grid-cols-[minmax(260px,1.4fr)_180px_160px]"
+                      }`}
+                  >
                     <span>{t("columns.member")}</span>
                     <span>{t("columns.role")}</span>
                     <span>{t("columns.status")}</span>
-                    <span className="text-right">{t("columns.actions")}</span>
+                    {canManageMembers ? (
+                      <span className="text-right">{t("columns.actions")}</span>
+                    ) : null}
                   </div>
 
                   <div className="divide-y">
                     {members.map((member) => (
                       <div
                         key={member.id}
-                        className="grid gap-4 px-4 py-4 lg:grid-cols-[minmax(260px,1.4fr)_180px_160px_90px] lg:items-center"
+                        className={`grid gap-4 px-4 py-4 lg:items-center ${canManageMembers
+                          ? "lg:grid-cols-[minmax(260px,1.4fr)_180px_160px_90px]"
+                          : "lg:grid-cols-[minmax(260px,1.4fr)_180px_160px]"
+                          }`}
                       >
                         <div className="min-w-0">
                           <div className="flex items-center gap-2">
@@ -372,8 +379,8 @@ export function OrganizationMembersPanel({
                           </span>
                         )}
 
-                        <div className="flex justify-end">
-                          {canManageMembers ? (
+                        {canManageMembers ? (
+                          <div className="flex justify-end">
                             <Button
                               type="button"
                               variant="ghost"
@@ -383,8 +390,8 @@ export function OrganizationMembersPanel({
                             >
                               <Trash2 className="size-4 text-destructive" />
                             </Button>
-                          ) : null}
-                        </div>
+                          </div>
+                        ) : null}
                       </div>
                     ))}
                   </div>

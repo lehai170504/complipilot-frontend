@@ -31,7 +31,6 @@ import type {
   PlatformOrganizationResponse,
   SubscriptionPlan,
 } from "@/lib/api/api-types";
-import { BillingPlanChangeRequestsPanel } from "@/features/platform-admin/components/billing-plan-change-requests-panel";
 
 const planOptions: SubscriptionPlan[] = [
   "FREE",
@@ -166,7 +165,7 @@ export default function PlatformAdminPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
               Platform Admin
             </p>
-            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
               Manage CompliPilot SaaS operations
             </h2>
             <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
@@ -220,7 +219,6 @@ export default function PlatformAdminPage() {
         />
       </section>
 
-      <BillingPlanChangeRequestsPanel />
 
       <section className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
         <Card className="compliance-surface overflow-hidden">
@@ -259,9 +257,8 @@ export default function PlatformAdminPage() {
                       <button
                         key={organization.id}
                         type="button"
-                        className={`w-full p-5 text-left transition hover:bg-muted/30 ${
-                          isSelected ? "bg-primary/5" : "bg-card"
-                        }`}
+                        className={`w-full p-5 text-left transition hover:bg-muted/30 ${isSelected ? "bg-primary/5" : "bg-card"
+                          }`}
                         onClick={() =>
                           setSelectedOrganizationId(organization.id)
                         }

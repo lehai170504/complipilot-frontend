@@ -40,9 +40,6 @@ const auditActionOptions: AuditAction[] = [
   "COMPLIANCE_TASK_CREATED",
   "COMPLIANCE_TASK_UPDATED",
   "COMPLIANCE_TASK_DELETED",
-  "BILLING_PLAN_CHANGE_REQUESTED",
-  "BILLING_PLAN_CHANGE_APPROVED",
-  "BILLING_PLAN_CHANGE_REJECTED",
 ];
 
 const auditResourceTypeOptions: AuditResourceType[] = [
@@ -51,7 +48,6 @@ const auditResourceTypeOptions: AuditResourceType[] = [
   "EVIDENCE_DOCUMENT",
   "EVIDENCE_LINK",
   "COMPLIANCE_TASK",
-  "BILLING_PLAN_CHANGE_REQUEST",
 ];
 
 const auditSortOptions = [
@@ -143,7 +139,7 @@ export default function AuditPage() {
               {t("heroEyebrow")}
             </p>
 
-            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
               {t("heroTitle")}
             </h2>
 
@@ -287,11 +283,44 @@ export default function AuditPage() {
           </CardContent>
         </Card>
       ) : (
-        <section className="grid gap-3">
-          {events.map((event) => (
-            <AuditEventCard key={event.id} event={event} />
-          ))}
-        </section>
+        <Card className="compliance-surface overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
+              <thead className="border-b border-border/50 bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+                <tr>
+                  <th className="px-4 py-3 font-medium">{t("sort.timestamp")}</th>
+                  <th className="px-4 py-3 font-medium">{t("sort.actorEmail")}</th>
+                  <th className="px-4 py-3 font-medium">{t("sort.action")}</th>
+                  <th className="px-4 py-3 font-medium">{t("sort.resourceType")}</th>
+                  <th className="px-4 py-3 font-medium">Details</th>
+                </tr>
+              </thead>
+              <tbody className="divide-y divide-border/50">
+                {events.map((event) => (
+                  <tr key={event.id} className="transition-colors hover:bg-muted/30">
+                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
+                      {new Intl.DateTimeFormat("en", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(event.createdAt))}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 font-medium">
+                      {event.actorEmail || "System"}
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3">
+                      <div className="inline-flex items-center rounded-full border border-border/50 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
+                        {event.action.replaceAll("_", " ")}
+                      </div>
+                    </td>
+                    <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
+                      {event.resourceType.replaceAll("_", " ")}
+                    </td>
+                    <td className="px-4 py-3 text-muted-foreground max-w-[300px] truncate">
+                      {event.summary}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </Card>
       )}
 
       <div className="flex flex-col gap-4 rounded-3xl border border-border/50 bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">

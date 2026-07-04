@@ -90,7 +90,7 @@ export function GlobalSearch() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="hidden max-w-sm flex-1 items-center rounded-2xl border border-border/80 bg-muted/50 px-3 py-2 text-sm text-muted-foreground shadow-inner transition-all hover:bg-muted focus-within:border-primary focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10 dark:hover:bg-muted/80 md:flex"
+        className="hidden max-w-xs flex-1 items-center rounded-xl border border-border/80 bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground shadow-inner transition-all hover:bg-muted focus-within:border-primary focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10 dark:hover:bg-muted/80 md:flex"
       >
         <Search className="mr-2 size-4 text-muted-foreground" />
         <span className="opacity-80 flex-1 text-left">

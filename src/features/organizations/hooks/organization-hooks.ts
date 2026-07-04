@@ -50,6 +50,7 @@ export function useActiveOrganization() {
 
     setActiveOrganization(organization);
     setSelectedOrganizationId(organization.organizationId);
+    window.location.reload();
   }
 
   const canManageMembers = useMemo(() => {
@@ -60,7 +61,6 @@ export function useActiveOrganization() {
     return ["OWNER", "ADMIN"].includes(activeOrganization.role);
   }, [activeOrganization]);
 
-  const canSeedDemoUsers = activeOrganization?.role === "OWNER";
 
   const canManageCompliance = useMemo(() => {
     if (!activeOrganization) {
@@ -77,6 +77,20 @@ export function useActiveOrganization() {
   const canViewAudit = Boolean(activeOrganization);
   const isReadOnly = activeOrganization?.role === "AUDITOR";
 
+  const canManageBilling = useMemo(() => {
+    if (!activeOrganization) {
+      return false;
+    }
+    return ["OWNER", "ADMIN"].includes(activeOrganization.role);
+  }, [activeOrganization]);
+
+  const canDisableWorkspace = useMemo(() => {
+    if (!activeOrganization) {
+      return false;
+    }
+    return ["OWNER"].includes(activeOrganization.role);
+  }, [activeOrganization]);
+
   return {
     activeOrganization,
     organizations: organizationsQuery.data ?? [],
@@ -87,8 +101,9 @@ export function useActiveOrganization() {
     canManageEvidence,
     canManageTasks,
     canManageMembers,
-    canSeedDemoUsers,
     canViewAudit,
+    canManageBilling,
+    canDisableWorkspace,
     isReadOnly,
   };
 }

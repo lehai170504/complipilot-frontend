@@ -133,11 +133,7 @@ export type AuditAction =
   | "COMPLIANCE_TASK_CREATED"
   | "COMPLIANCE_TASK_UPDATED"
   | "COMPLIANCE_TASK_DELETED"
-  | "ORGANIZATION_DISABLED"
-  | "BILLING_PLAN_CHANGE_REQUESTED"
-  | "BILLING_PLAN_CHANGE_APPROVED"
-  | "BILLING_PLAN_CHANGE_REJECTED"
-  | "BILLING_PLAN_CHANGE_CANCELLED";
+  | "ORGANIZATION_DISABLED";
 
 export type AuditResourceType =
   | "COMPLIANCE_FRAMEWORK"
@@ -145,9 +141,7 @@ export type AuditResourceType =
   | "EVIDENCE_DOCUMENT"
   | "EVIDENCE_LINK"
   | "COMPLIANCE_TASK"
-  | "ORGANIZATION"
-  | "BILLING_PLAN_CHANGE_REQUEST"
-  | "BILLING_PLAN_CHANGE_CANCELLED";
+  | "ORGANIZATION";
 
 export type AuditEventResponse = {
   id: string;
@@ -329,8 +323,8 @@ export type CreateOrganizationInvitationRequest = {
 
 export type AcceptOrganizationInvitationRequest = {
   email: string;
-  fullName: string;
-  password: string;
+  fullName?: string;
+  password?: string;
 };
 
 export type OrganizationInvitationResponse = {
@@ -360,11 +354,7 @@ export type NotificationType =
   | "AI_ANALYSIS_COMPLETED"
   | "TASK_CREATED"
   | "TASK_ASSIGNED"
-  | "COMPLIANCE_ITEM_UPDATED"
-  | "BILLING_PLAN_CHANGE_REQUESTED"
-  | "BILLING_PLAN_CHANGE_APPROVED"
-  | "BILLING_PLAN_CHANGE_REJECTED"
-  | "BILLING_PLAN_CHANGE_CANCELLED";
+  | "COMPLIANCE_ITEM_UPDATED";
 
 export type NotificationResponse = {
   id: string;
@@ -465,33 +455,6 @@ export type SystemStatusResponse = {
   components: SystemStatusComponentResponse[];
 };
 
-export type BillingPlanChangeRequestStatus =
-  | "PENDING"
-  | "APPROVED"
-  | "REJECTED"
-  | "CANCELLED";
-
-export type BillingPlanChangeRequestResponse = {
-  id: string;
-  organizationId: string;
-  organizationName: string;
-  requestedByUserId: string;
-  requestedByEmail: string;
-  currentPlan: SubscriptionPlan;
-  requestedPlan: SubscriptionPlan;
-  requestNote: string | null;
-  status: BillingPlanChangeRequestStatus;
-  reviewedByUserId: string | null;
-  reviewedByEmail: string | null;
-  reviewedAt: string | null;
-  createdAt: string;
-  updatedAt: string;
-};
-
-export type CreateBillingPlanChangeRequest = {
-  requestedPlan: SubscriptionPlan;
-  requestNote?: string | null;
-};
 
 export type BillingCheckoutProvider = "MANUAL" | "STRIPE";
 

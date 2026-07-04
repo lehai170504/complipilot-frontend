@@ -14,6 +14,7 @@ import {
 export type AppNavigationPermission =
   | "all"
   | "canViewAudit"
+  | "canManageBilling"
   | "canViewPlatformAdmin";
 
 export type NavigationItem = {
@@ -76,7 +77,7 @@ export const appNavigationGroups: NavigationGroup[] = [
         labelKey: "billing",
         href: "/billing",
         icon: CreditCard,
-        permission: "all",
+        permission: "canManageBilling",
       },
       {
         labelKey: "audit",

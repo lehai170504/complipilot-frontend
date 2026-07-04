@@ -76,7 +76,7 @@ export default function EvidencePage() {
   const totalItems = evidenceQuery.data?.totalItems ?? 0;
 
   return (
-    <div className="space-y-6">
+    <div className="compliance-page-shell">
       <section className="compliance-hero">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
         <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
@@ -86,7 +86,7 @@ export default function EvidencePage() {
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
               {t("heroEyebrow")}
             </p>
-            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
               {t("heroTitle")}
             </h2>
             <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
@@ -104,19 +104,21 @@ export default function EvidencePage() {
         </div>
       </section>
 
-      <EvidenceToolbar
-        value={toolbarState}
-        onChange={handleToolbarChange}
-        onCreateUrlClick={() => setIsCreateUrlDialogOpen(true)}
-        onCreateFileClick={() => setIsCreateFileDialogOpen(true)}
-        onExportClick={() => {
-          if (organizationId) {
-            exportEvidenceCsvMutation.mutate(organizationId);
-          }
-        }}
-        isExporting={exportEvidenceCsvMutation.isPending}
-        canManageCompliance={canManageCompliance}
-      />
+      <div className="sticky top-0 z-30 -mx-2 px-2 py-4 bg-background/80 backdrop-blur-md border-b border-border/40 shadow-sm">
+        <EvidenceToolbar
+          value={toolbarState}
+          onChange={handleToolbarChange}
+          onCreateUrlClick={() => setIsCreateUrlDialogOpen(true)}
+          onCreateFileClick={() => setIsCreateFileDialogOpen(true)}
+          onExportClick={() => {
+            if (organizationId) {
+              exportEvidenceCsvMutation.mutate(organizationId);
+            }
+          }}
+          isExporting={exportEvidenceCsvMutation.isPending}
+          canManageCompliance={canManageCompliance}
+        />
+      </div>
 
       {evidenceQuery.error ? <ErrorAlert error={evidenceQuery.error} /> : null}
 

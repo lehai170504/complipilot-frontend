@@ -25,7 +25,7 @@ export function AppSidebar() {
   const tNavigation = useTranslations("navigation");
   const tSidebar = useTranslations("sidebar");
 
-  const { canViewAudit } = useActiveOrganization();
+  const { canViewAudit, canManageBilling } = useActiveOrganization();
   const currentUserQuery = useCurrentUserQuery();
 
   const currentUserEmail = currentUserQuery.data?.email?.toLowerCase();
@@ -63,6 +63,7 @@ export function AppSidebar() {
         {appNavigationGroups.map((group, index) => {
           const visibleItems = group.items.filter((item) => {
             if (item.permission === "canViewAudit") return canViewAudit;
+            if (item.permission === "canManageBilling") return canManageBilling;
             if (item.permission === "canViewPlatformAdmin") return canViewPlatformAdmin;
             return true;
           });

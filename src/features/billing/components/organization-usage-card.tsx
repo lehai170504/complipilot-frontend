@@ -7,6 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Progress } from "@/components/ui/progress";
 import { createCustomerPortalSession } from "@/features/billing/api/billing-api";
 import type { OrganizationUsageResponse } from "@/lib/api/api-types";
+import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
 
 function formatBytes(bytes: number) {
   if (bytes < 1024) {
@@ -76,6 +77,7 @@ export function OrganizationUsageCard({
 }: {
   usage: OrganizationUsageResponse;
 }) {
+  const { canManageBilling } = useActiveOrganization();
   const [isManagingBilling, setIsManagingBilling] = useState(false);
 
   const handleManageBilling = async () => {
@@ -109,23 +111,25 @@ export function OrganizationUsageCard({
             </div>
           </div>
 
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={handleManageBilling}
-            disabled={isManagingBilling}
-            className="gap-2"
-          >
-            {isManagingBilling ? (
-              <Loader2 className="size-4 animate-spin" />
-            ) : (
-              <ExternalLink className="size-4" />
-            )}
-            Manage Billing
-          </Button>
+          {canManageBilling ? (
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleManageBilling}
+              disabled={isManagingBilling}
+              className="gap-2"
+            >
+              {isManagingBilling ? (
+                <Loader2 className="size-4 animate-spin" />
+              ) : (
+                <ExternalLink className="size-4" />
+              )}
+              Manage Billing
+            </Button>
+          ) : null}
         </div>
 
-        <div className="grid gap-6 pt-4 sm:grid-cols-2 md:grid-cols-4">
+        <div className="grid gap-6 pt-4 sm:grid-cols-2 2xl:grid-cols-4">
           <UsageRow
             icon={<Users className="size-4 text-primary" />}
             label="Members"

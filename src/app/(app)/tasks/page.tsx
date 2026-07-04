@@ -126,7 +126,7 @@ export default function TasksPage() {
             <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
               {t("heroEyebrow")}
             </p>
-            <h2 className="mt-4 max-w-3xl bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-3xl font-extrabold tracking-tight text-transparent md:text-4xl">
+            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
               {t("heroTitle")}
             </h2>
             <p className="mt-3 max-w-2xl text-lg text-muted-foreground">

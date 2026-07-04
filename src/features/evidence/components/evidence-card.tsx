@@ -129,7 +129,7 @@ export function EvidenceCard({
 
   return (
     <>
-      <Card className="compliance-surface overflow-hidden">
+      <Card className="compliance-surface overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:-translate-y-0.5">
         <CardContent className="p-0">
           <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">

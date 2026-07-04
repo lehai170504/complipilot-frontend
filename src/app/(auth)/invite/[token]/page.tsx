@@ -14,6 +14,7 @@ import {
   useAcceptOrganizationInvitationMutation,
   useOrganizationInvitationByTokenQuery,
 } from "@/features/organizations/hooks/organization-invitation-hooks";
+import { useCurrentUserQuery } from "@/features/auth/hooks/auth-hooks";
 
 function roleLabel(role: string) {
   return role
@@ -41,6 +42,7 @@ export default function AcceptInvitationPage() {
 
   const invitationQuery = useOrganizationInvitationByTokenQuery(token);
   const acceptMutation = useAcceptOrganizationInvitationMutation(token);
+  const { data: currentUser } = useCurrentUserQuery();
 
   const [fullName, setFullName] = useState("");
   const [password, setPassword] = useState("");
@@ -54,15 +56,23 @@ export default function AcceptInvitationPage() {
       return;
     }
 
+    const isCurrentUserMatched =
+      currentUser?.email.toLowerCase() === invitation.email.toLowerCase();
+
     acceptMutation.mutate(
       {
         email: invitation.email,
-        fullName: fullName.trim(),
-        password,
+        ...(isCurrentUserMatched
+          ? {}
+          : { fullName: fullName.trim(), password }),
       },
       {
         onSuccess: () => {
-          router.push("/login?invitationAccepted=true");
+          if (isCurrentUserMatched) {
+            router.push("/dashboard?invitationAccepted=true");
+          } else {
+            router.push("/login?invitationAccepted=true");
+          }
         },
       },
     );
@@ -133,36 +143,44 @@ export default function AcceptInvitationPage() {
                       <div>
                         <p className="font-semibold">Invitation accepted</p>
                         <p className="mt-1">
-                          Redirecting you to the login page...
+                          Redirecting you to the dashboard...
                         </p>
                       </div>
                     </div>
                   </div>
                 ) : (
                   <form className="space-y-5" onSubmit={handleSubmit}>
-                    <div className="space-y-2">
-                      <Label htmlFor="full-name">Full name</Label>
-                      <Input
-                        id="full-name"
-                        value={fullName}
-                        onChange={(event) => setFullName(event.target.value)}
-                        placeholder="Your full name"
-                        required
-                      />
-                    </div>
+                    {currentUser?.email.toLowerCase() === invitation.email.toLowerCase() ? (
+                      <div className="rounded-xl bg-primary/5 p-4 text-sm text-primary">
+                        You are already logged in as <strong>{currentUser.email}</strong>. You can accept this invitation directly.
+                      </div>
+                    ) : (
+                      <>
+                        <div className="space-y-2">
+                          <Label htmlFor="full-name">Full name</Label>
+                          <Input
+                            id="full-name"
+                            value={fullName}
+                            onChange={(event) => setFullName(event.target.value)}
+                            placeholder="Your full name"
+                            required
+                          />
+                        </div>
 
-                    <div className="space-y-2">
-                      <Label htmlFor="password">Password</Label>
-                      <Input
-                        id="password"
-                        type="password"
-                        value={password}
-                        onChange={(event) => setPassword(event.target.value)}
-                        placeholder="At least 8 characters"
-                        minLength={8}
-                        required
-                      />
-                    </div>
+                        <div className="space-y-2">
+                          <Label htmlFor="password">Password</Label>
+                          <Input
+                            id="password"
+                            type="password"
+                            value={password}
+                            onChange={(event) => setPassword(event.target.value)}
+                            placeholder="At least 8 characters"
+                            minLength={8}
+                            required
+                          />
+                        </div>
+                      </>
+                    )}
 
                     {acceptMutation.error ? (
                       <ErrorAlert error={acceptMutation.error} />
@@ -173,8 +191,7 @@ export default function AcceptInvitationPage() {
                       type="submit"
                       disabled={
                         acceptMutation.isPending ||
-                        !fullName.trim() ||
-                        password.length < 8
+                        (currentUser?.email.toLowerCase() !== invitation.email.toLowerCase() && (!fullName.trim() || password.length < 8))
                       }
                     >
                       {acceptMutation.isPending
@@ -182,15 +199,17 @@ export default function AcceptInvitationPage() {
                         : "Accept invitation"}
                     </Button>
 
-                    <p className="text-center text-xs text-muted-foreground">
-                      Already have an account?{" "}
-                      <Link
-                        className="font-medium text-primary hover:text-primary/80 transition-colors"
-                        href="/login"
-                      >
-                        Sign in instead
-                      </Link>
-                    </p>
+                    {currentUser?.email.toLowerCase() !== invitation.email.toLowerCase() ? (
+                      <p className="text-center text-xs text-muted-foreground">
+                        Already have an account?{" "}
+                        <Link
+                          className="font-medium text-primary hover:text-primary/80 transition-colors"
+                          href="/login"
+                        >
+                          Sign in instead
+                        </Link>
+                      </p>
+                    ) : null}
                   </form>
                 )}
               </div>
