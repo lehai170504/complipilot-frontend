@@ -43,9 +43,7 @@ export function SeedDemoWorkspaceButton({
         </p>
       ) : null}
 
-      {seedDemoWorkspaceMutation.error ? (
-        <ErrorAlert error={seedDemoWorkspaceMutation.error} />
-      ) : null}
+
     </div>
   );
 }

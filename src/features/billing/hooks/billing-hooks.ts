@@ -89,8 +89,10 @@ export function useCreateCheckoutSessionMutation(
         description: data.message,
       });
     },
-    onError: () => {
-      toast.error("Failed to start checkout");
+    onError: (error: any) => {
+      toast.error("Failed to start checkout", {
+        description: error?.message || "Please try again later.",
+      });
     },
   });
 }

@@ -102,8 +102,10 @@ export function useSeedDemoWorkspaceMutation() {
         queryClient.invalidateQueries({ queryKey: ["audit-events"] }),
       ]);
     },
-    onError: () => {
-      toast.error("Failed to seed workspace");
+    onError: (error: any) => {
+      toast.error("Failed to seed workspace", {
+        description: error?.message || "Please try again later.",
+      });
     },
   });
 }

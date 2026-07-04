@@ -96,7 +96,12 @@ export async function applyFrameworkToOrganization(
 export async function seedDemoWorkspace(
   organizationId: string,
 ): Promise<ApplyFrameworkResponse> {
-  const framework = await seedSecurityBaselineFramework();
+  const frameworks = await listFrameworks();
+  let framework = frameworks.find((f) => f.code === "SME-SECURITY-BASELINE");
+
+  if (!framework) {
+    framework = await seedSecurityBaselineFramework();
+  }
 
   return applyFrameworkToOrganization(organizationId, framework.id);
 }
