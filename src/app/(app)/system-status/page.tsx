@@ -12,18 +12,20 @@ import {
   Sparkles,
   XCircle,
 } from "lucide-react";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { useSystemStatusQuery } from "@/features/system/hooks/system-status-hooks";
 import type {
   SystemComponentStatus,
   SystemStatusComponentResponse,
 } from "@/lib/api/api-types";
 
-function formatDateTime(value: string) {
-  return new Intl.DateTimeFormat("en", {
+function formatDateTime(value: string, locale: string) {
+  return new Intl.DateTimeFormat(locale, {
     month: "short",
     day: "numeric",
     year: "numeric",
@@ -135,36 +137,19 @@ function SystemComponentCard({
 }
 
 export default function SystemStatusPage() {
+  const locale = useLocale();
+  const tHeader = useTranslations("managementHeaders.systemStatus");
   const statusQuery = useSystemStatusQuery();
   const status = statusQuery.data;
 
   return (
-    <div className="space-y-6">
-      <section className="compliance-hero">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
-
-        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
-              System Status
-            </p>
-
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-              Monitor CompliPilot operational health
-            </h2>
-
-            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-              Review backend, database, storage, AI, and mail configuration
-              health from one internal dashboard.
-            </p>
-          </div>
-
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
-            <Activity className="size-6" />
-          </div>
-        </div>
-      </section>
+    <div className="compliance-page-shell">
+      <ManagementPageHeader
+        eyebrow={tHeader("eyebrow")}
+        title={tHeader("title")}
+        description={tHeader("description")}
+        icon={Activity}
+      />
 
       {statusQuery.error ? <ErrorAlert error={statusQuery.error} /> : null}
 
@@ -210,7 +195,7 @@ export default function SystemStatusPage() {
                     Checked at
                   </p>
                   <p className="mt-1 font-semibold text-foreground">
-                    {formatDateTime(status.timestamp)}
+                    {formatDateTime(status.timestamp, locale)}
                   </p>
                 </div>
               </div>

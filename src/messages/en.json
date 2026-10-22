@@ -48,6 +48,34 @@
   "auth": {
     "logout": "Logout"
   },
+  "managementHeaders": {
+    "workspaceSettings": {
+      "eyebrow": "Workspace settings",
+      "title": "Manage your workspace profile and controls",
+      "description": "Update workspace identity, review status metadata, and jump to member or billing management."
+    },
+    "profile": {
+      "eyebrow": "Account profile",
+      "title": "Manage your personal account details",
+      "description": "Update your name, review account status, and manage account security."
+    },
+    "systemStatus": {
+      "eyebrow": "System status",
+      "title": "Monitor CompliPilot operational health",
+      "description": "Review backend, database, storage, AI, and mail configuration health from one internal dashboard."
+    },
+    "platformAdmin": {
+      "eyebrow": "Platform admin",
+      "title": "Manage CompliPilot SaaS operations",
+      "description": "Review organizations, users, subscriptions, and current usage across the platform.",
+      "signedInAs": "Signed in as"
+    },
+    "billingAccessDenied": {
+      "eyebrow": "Access denied",
+      "title": "Insufficient permissions",
+      "description": "Only the owner of this workspace can manage billing and subscriptions."
+    }
+  },
   "status": {
     "ACTIVE": "Active",
     "INVITED": "Invited",
@@ -250,6 +278,8 @@
   },
   "compliancePage": {
     "heroEyebrow": "Compliance controls",
+    "activeControls": "Active controls",
+    "frameworkTemplates": "Framework templates",
     "heroTitle": "Manage your control readiness from one workspace.",
     "heroDescription": "Review baseline requirements, update statuses, capture notes, and prepare each control for evidence review.",
     "createItem": "Create item",
@@ -281,6 +311,7 @@
     "noNotes": "No notes recorded for this control.",
     "linkedEvidence": "Linked evidence ({count})",
     "linkEvidence": "Link evidence",
+    "unlinkEvidence": "Unlink evidence",
     "loadingLinkedEvidence": "Loading linked evidence...",
     "noLinkedEvidence": "No evidence linked to this control yet.",
     "noDescription": "No description",

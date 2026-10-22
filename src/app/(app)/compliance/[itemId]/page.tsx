@@ -15,6 +15,7 @@ import {
 import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
@@ -189,7 +190,7 @@ export default function ComplianceItemDetailPage() {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="compliance-page-shell">
       <Button
         variant="ghost"
         onClick={() => router.push("/compliance")}
@@ -199,31 +200,25 @@ export default function ComplianceItemDetailPage() {
         {t("back")}
       </Button>
 
-      <section className="rounded-[2rem] bg-background p-6 text-foreground shadow-xl">
-        <div className="flex flex-col justify-between gap-5 lg:flex-row lg:items-start">
-          <div>
-            <div className="flex flex-wrap items-center gap-2">
-              <span className="rounded-full bg-primary/10 px-3 py-1 text-xs font-semibold text-primary">
-                {item.requirementCode}
-              </span>
-              <ComplianceStatusBadge status={item.status} />
-            </div>
-
-            <h2 className="mt-4 max-w-3xl text-2xl font-bold tracking-tight text-foreground">
-              {item.requirementTitle}
-            </h2>
-
-            <div className="mt-3 flex items-center gap-2 text-muted-foreground">
-              <CalendarDays className="size-4" />
-              {item.dueDate
-                ? t("due", {
-                  date: formatDate(item.dueDate, locale, ""),
-                })
-                : t("noDueDate")}
-            </div>
-          </div>
-
-          <div className="flex shrink-0 flex-col gap-2 sm:flex-row lg:flex-col">
+      <ManagementPageHeader
+        eyebrow={
+          <span className="flex flex-wrap items-center gap-2">
+            <span>{item.requirementCode}</span>
+            <ComplianceStatusBadge status={item.status} />
+          </span>
+        }
+        title={item.requirementTitle}
+        description={
+          <span className="inline-flex items-center gap-2">
+            <CalendarDays className="size-4 shrink-0" />
+            {item.dueDate
+              ? t("due", { date: formatDate(item.dueDate, locale, "") })
+              : t("noDueDate")}
+          </span>
+        }
+        icon={CalendarDays}
+        actions={
+          <>
             <Button
               type="button"
               onClick={handleSuggestEvidence}
@@ -246,9 +241,9 @@ export default function ComplianceItemDetailPage() {
                 {tAiActions("viewSuggestion")}
               </Button>
             ) : null}
-          </div>
-        </div>
-      </section>
+          </>
+        }
+      />
 
       {suggestEvidenceMutation.data && isAiSuggestionVisible ? (
         <section className="rounded-[2rem] border border-primary/30 bg-background p-4 shadow-sm">
@@ -304,10 +299,9 @@ export default function ComplianceItemDetailPage() {
         </section>
       ) : null}
 
-      <div className="grid gap-6">
-        <div className="space-y-6">
-          <Card className="compliance-surface">
-            <CardContent className="p-6">
+      <div className="grid gap-6 xl:grid-cols-2">
+        <Card className="compliance-surface">
+          <CardContent className="p-4 sm:p-6">
               <h3 className="text-lg font-semibold">{t("notesStatus")}</h3>
 
               {canManageCompliance ? (
@@ -373,11 +367,11 @@ export default function ComplianceItemDetailPage() {
                 </div>
               )}
             </CardContent>
-          </Card>
+        </Card>
 
-          <Card className="compliance-surface">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
+        <Card className="compliance-surface">
+          <CardContent className="p-4 sm:p-6">
+              <div className="flex flex-wrap items-center justify-between gap-3">
                 <h3 className="text-lg font-semibold">
                   {t("linkedEvidence", {
                     count: linkedEvidence.length,
@@ -409,7 +403,7 @@ export default function ComplianceItemDetailPage() {
                   {linkedEvidence.map((link) => (
                     <div
                       key={link.linkId}
-                      className="rounded-2xl border bg-muted/30 p-4"
+                      className="rounded-xl border border-border bg-background p-4"
                     >
                       <div className="flex items-start justify-between gap-3">
                         <div className="min-w-0 flex-1">
@@ -439,7 +433,7 @@ export default function ComplianceItemDetailPage() {
                             ) : null}
                             {link.evidence.externalUrl ? (
                               <a
-                                className="inline-flex items-center text-primary hover:text-cyan-800"
+                                className="inline-flex items-center text-primary hover:underline"
                                 href={link.evidence.externalUrl}
                                 target="_blank"
                                 rel="noreferrer"
@@ -458,6 +452,7 @@ export default function ComplianceItemDetailPage() {
 
                         {canManageCompliance ? (
                           <Button
+                            aria-label={t("unlinkEvidence")}
                             onClick={() => handleUnlink(link.evidence.id)}
                             disabled={unlinkMutation.isPending}
                             size="sm"
@@ -478,11 +473,9 @@ export default function ComplianceItemDetailPage() {
                 </div>
               ) : null}
             </CardContent>
-          </Card>
-        </div>
-
+        </Card>
         {linkMutation.error ? (
-          <div className="mt-4">
+          <div className="mt-4 xl:col-span-2">
             <ErrorAlert error={linkMutation.error} />
           </div>
         ) : null}

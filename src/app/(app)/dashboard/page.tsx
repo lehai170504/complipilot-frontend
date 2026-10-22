@@ -2,6 +2,7 @@
 
 import {
   AlertTriangle,
+  Building2,
   ClipboardCheck,
   FileClock,
   ListChecks,
@@ -9,6 +10,7 @@ import {
 import { useTranslations } from "next-intl";
 
 import { MetricCard } from "@/features/dashboard/components/metric-card";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { DashboardOpenTasks } from "@/features/dashboard/components/dashboard-open-tasks";
 import { DashboardRecentAuditActivity } from "@/features/dashboard/components/dashboard-recent-audit-activity";
 import { DashboardComplianceStatus } from "@/features/dashboard/components/dashboard-compliance-status";
@@ -53,22 +55,15 @@ export default function DashboardPage() {
 
   return (
     <div className="space-y-6 sm:space-y-8">
-      <section className="flex flex-col justify-between gap-5 border-b border-border pb-6 sm:flex-row sm:items-end">
-        <div className="min-w-0">
-            <p className="text-xs font-semibold uppercase tracking-[0.14em] text-primary">
-              {canManageCompliance ? t("managerWorkspace") : t("memberWorkspace")}
-            </p>
-            <h2 className="mt-2 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">
-              {t("welcome", {
-                name: currentUserQuery.data?.fullName ?? t("fallbackName"),
-              })}
-            </h2>
-            <p className="mt-2 max-w-2xl text-sm leading-6 text-muted-foreground">
-              {t("description")}
-            </p>
-        </div>
-
-          <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-card px-4 py-3 sm:min-w-64">
+      <ManagementPageHeader
+        eyebrow={canManageCompliance ? t("managerWorkspace") : t("memberWorkspace")}
+        title={t("welcome", {
+          name: currentUserQuery.data?.fullName ?? t("fallbackName"),
+        })}
+        description={t("description")}
+        icon={Building2}
+        actions={
+          <div className="flex w-full flex-wrap items-center justify-between gap-4 rounded-xl border border-border bg-background/80 px-4 py-3 sm:min-w-64">
             <div className="min-w-0">
               <p className="text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
                 {t("activeOrganization")}
@@ -85,7 +80,8 @@ export default function DashboardPage() {
               <SeedDemoWorkspaceButton organizationId={organizationId} />
             ) : null}
           </div>
-      </section>
+        }
+      />
 
       <section className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
         <MetricCard
@@ -124,7 +120,7 @@ export default function DashboardPage() {
 
 
 
-      <div className="grid gap-5 2xl:grid-cols-[minmax(0,1.5fr)_minmax(20rem,0.85fr)]">
+      <div className="grid gap-4 xl:grid-cols-[minmax(0,1.5fr)_minmax(18rem,0.85fr)] 2xl:gap-5">
         <div className="flex min-w-0 flex-col gap-5">
           <DashboardOpenTasks organizationId={organizationId} />
           <DashboardRecentAuditActivity organizationId={organizationId} />

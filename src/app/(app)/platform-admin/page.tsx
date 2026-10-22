@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   Building2,
   Database,
@@ -13,6 +14,7 @@ import {
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import {
   Select,
   SelectContent,
@@ -115,6 +117,7 @@ function PlatformMetricCard({
 }
 
 export default function PlatformAdminPage() {
+  const tHeader = useTranslations("managementHeaders.platformAdmin");
   const currentUserQuery = useCurrentUserQuery();
 
   const organizationsQuery = usePlatformOrganizationsQuery();
@@ -155,33 +158,23 @@ export default function PlatformAdminPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <section className="compliance-hero">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
-
-        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
-              Platform Admin
+    <div className="compliance-page-shell">
+      <ManagementPageHeader
+        eyebrow={tHeader("eyebrow")}
+        title={tHeader("title")}
+        description={tHeader("description")}
+        icon={Building2}
+        actions={
+          <div className="rounded-xl border border-border bg-background/80 px-4 py-3">
+            <p className="text-sm text-muted-foreground">
+              {tHeader("signedInAs")}
             </p>
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-              Manage CompliPilot SaaS operations
-            </h2>
-            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-              Review organizations, users, subscriptions, and current usage
-              across the platform.
-            </p>
-          </div>
-
-          <div className="rounded-2xl border border-border/50 bg-muted/30 px-5 py-4 backdrop-blur-md">
-            <p className="text-sm text-muted-foreground">Signed in as</p>
             <p className="mt-1 font-semibold text-foreground">
               {currentUserQuery.data?.email ?? "loading..."}
             </p>
           </div>
-        </div>
-      </section>
+        }
+      />
 
       {organizationsQuery.error ? (
         <ErrorAlert error={organizationsQuery.error} />

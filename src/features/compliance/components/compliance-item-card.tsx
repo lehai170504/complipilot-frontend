@@ -74,7 +74,7 @@ export function ComplianceItemCard({
   return (
     <Card className="compliance-surface overflow-hidden">
       <CardContent className="p-0">
-        <div className="border-b bg-background p-5">
+        <div className="border-b border-border bg-card p-4 sm:p-5">
           <div className="flex flex-col justify-between gap-4 lg:flex-row lg:items-start">
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
@@ -84,7 +84,7 @@ export function ComplianceItemCard({
                 <ComplianceStatusBadge status={item.status} />
               </div>
 
-              <h3 className="mt-3 truncate text-lg font-semibold tracking-tight">
+              <h3 className="mt-3 break-words text-base font-semibold tracking-tight sm:text-lg">
                 {item.requirementTitle}
               </h3>
 
@@ -133,7 +133,7 @@ export function ComplianceItemCard({
           </div>
         </div>
 
-        <div className="space-y-4 bg-muted/30 p-5">
+        <div className="space-y-4 bg-muted/20 p-4 sm:p-5">
           <div className="space-y-2">
             <Label>{t("notes")}</Label>
             <Textarea

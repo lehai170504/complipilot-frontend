@@ -2,10 +2,11 @@
 
 import { useMemo, useState } from "react";
 import { Download, ScrollText } from "lucide-react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { FilterBar } from "@/components/layout/filter-bar";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -16,7 +17,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { AuditEventCard } from "@/features/audit/components/audit-event-card";
 import { useAuditEventsQuery } from "@/features/audit/hooks/audit-hooks";
 import { useExportAuditEventsCsvMutation } from "@/features/exports/hooks/export-hooks";
 import { useActiveOrganization } from "@/features/organizations/hooks/organization-hooks";
@@ -60,6 +60,7 @@ const auditSortOptions = [
 type AuditSortBy = "createdAt" | "action" | "resourceType" | "actorEmail";
 
 export default function AuditPage() {
+  const locale = useLocale();
   const t = useTranslations("audit");
 
   const { activeOrganization, canViewAudit } = useActiveOrganization();
@@ -128,26 +129,13 @@ export default function AuditPage() {
   }
 
   return (
-    <div className="space-y-6">
-      <section className="compliance-hero">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
-
-        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
-              {t("heroEyebrow")}
-            </p>
-
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-              {t("heroTitle")}
-            </h2>
-
-            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-              {t("heroDescription")}
-            </p>
-          </div>
-
+    <div className="compliance-page-shell">
+      <ManagementPageHeader
+        eyebrow={t("heroEyebrow")}
+        title={t("heroTitle")}
+        description={t("heroDescription")}
+        icon={ScrollText}
+        actions={
           <Button
             type="button"
             variant="outline"
@@ -158,8 +146,8 @@ export default function AuditPage() {
             <Download className="mr-2 size-4" />
             {exportAuditCsvMutation.isPending ? "Exporting..." : "Export CSV"}
           </Button>
-        </div>
-      </section>
+        }
+      />
 
       <FilterBar>
         <Input
@@ -284,8 +272,39 @@ export default function AuditPage() {
         </Card>
       ) : (
         <Card className="compliance-surface overflow-hidden">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+          <section className="grid gap-3 p-3 sm:hidden">
+            {events.map((event) => (
+              <article
+                key={event.id}
+                className="rounded-xl border border-border bg-background p-4"
+              >
+                <div className="flex flex-wrap items-start justify-between gap-2">
+                  <span className="inline-flex max-w-full rounded-md bg-primary/8 px-2 py-1 text-xs font-semibold text-primary">
+                    {t(`actions.${event.action}`)}
+                  </span>
+                  <time className="text-xs text-muted-foreground">
+                    {new Intl.DateTimeFormat(locale, {
+                      month: "short",
+                      day: "numeric",
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    }).format(new Date(event.createdAt))}
+                  </time>
+                </div>
+                <p className="mt-3 break-all text-sm font-medium text-foreground">
+                  {event.actorEmail || "System"}
+                </p>
+                <p className="mt-1 text-xs text-muted-foreground">
+                  {t(`resourceTypes.${event.resourceType}`)}
+                </p>
+                <p className="mt-3 break-words text-sm leading-6 text-muted-foreground">
+                  {event.summary}
+                </p>
+              </article>
+            ))}
+          </section>
+          <div className="hidden overflow-x-auto sm:block">
+            <table className="w-full min-w-[720px] text-left text-sm">
               <thead className="border-b border-border/50 bg-muted/50 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 <tr>
                   <th className="px-4 py-3 font-medium">{t("sort.timestamp")}</th>
@@ -297,20 +316,20 @@ export default function AuditPage() {
               </thead>
               <tbody className="divide-y divide-border/50">
                 {events.map((event) => (
-                  <tr key={event.id} className="transition-colors hover:bg-muted/30">
+                  <tr key={event.id} className="transition-colors hover:bg-muted/40">
                     <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                      {new Intl.DateTimeFormat("en", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(event.createdAt))}
+                      {new Intl.DateTimeFormat(locale, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }).format(new Date(event.createdAt))}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 font-medium">
                       {event.actorEmail || "System"}
                     </td>
                     <td className="whitespace-nowrap px-4 py-3">
                       <div className="inline-flex items-center rounded-full border border-border/50 bg-primary/10 px-2 py-0.5 text-[10px] font-semibold text-primary">
-                        {event.action.replaceAll("_", " ")}
+                        {t(`actions.${event.action}`)}
                       </div>
                     </td>
                     <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
-                      {event.resourceType.replaceAll("_", " ")}
+                      {t(`resourceTypes.${event.resourceType}`)}
                     </td>
                     <td className="px-4 py-3 text-muted-foreground max-w-[300px] truncate">
                       {event.summary}
@@ -323,7 +342,7 @@ export default function AuditPage() {
         </Card>
       )}
 
-      <div className="flex flex-col gap-4 rounded-3xl border border-border/50 bg-card p-4 shadow-sm sm:flex-row sm:items-center sm:justify-between">
+      <div className="management-pagination">
         <p className="text-sm text-muted-foreground">
           {t("pagination.page")} {page + 1} {t("pagination.of")}{" "}
           {Math.max(totalPages, 1)} · {totalItems} {t("pagination.events")}

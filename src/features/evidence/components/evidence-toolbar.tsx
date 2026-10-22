@@ -71,7 +71,7 @@ export function EvidenceToolbar({
     <FilterBar
       actions={
         canManageCompliance ? (
-          <div className="flex gap-2">
+          <div className="flex flex-wrap justify-end gap-2">
             <Button onClick={onCreateFileClick} size="sm" type="button">
               <UploadCloud className="mr-2 size-4" />
               {t("upload")}

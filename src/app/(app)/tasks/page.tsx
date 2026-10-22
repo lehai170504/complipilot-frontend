@@ -1,11 +1,18 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ListChecks, Plus } from "lucide-react";
+import {
+  AlertTriangle,
+  CircleDot,
+  Clock3,
+  ListChecks,
+  Plus,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
 import { FilterBar } from "@/components/layout/filter-bar";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { MetricCard } from "@/features/dashboard/components/metric-card";
 import { CreateTaskDialog } from "@/features/tasks/components/create-task-dialog";
 import { TaskCard } from "@/features/tasks/components/task-card";
@@ -116,35 +123,21 @@ export default function TasksPage() {
   const summary = summaryQuery.data;
 
   return (
-    <div className="space-y-6">
-      <section className="compliance-hero">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
-        
-        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
-              {t("heroEyebrow")}
-            </p>
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-              {t("heroTitle")}
-            </h2>
-            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-              {t("heroDescription")}
-            </p>
-          </div>
-
-          {canManageCompliance ? (
+    <div className="compliance-page-shell">
+      <ManagementPageHeader
+        eyebrow={t("heroEyebrow")}
+        title={t("heroTitle")}
+        description={t("heroDescription")}
+        icon={ListChecks}
+        actions={canManageCompliance ? (
             <Button
-              className="bg-primary text-primary-foreground hover:bg-primary/90"
               onClick={() => setIsCreateDialogOpen(true)}
             >
               <Plus className="mr-2 h-4 w-4" />
               {t("createTask")}
             </Button>
-          ) : null}
-        </div>
-      </section>
+          ) : undefined}
+      />
 
       <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
         <MetricCard
@@ -155,17 +148,17 @@ export default function TasksPage() {
         <MetricCard
           title={t("open")}
           value={summary?.open ?? 0}
-          icon={ListChecks}
+          icon={CircleDot}
         />
         <MetricCard
           title={t("inProgress")}
           value={summary?.inProgress ?? 0}
-          icon={ListChecks}
+          icon={Clock3}
         />
         <MetricCard
           title={t("overdue")}
           value={summary?.overdue ?? 0}
-          icon={ListChecks}
+          icon={AlertTriangle}
         />
       </section>
 
@@ -300,7 +293,7 @@ export default function TasksPage() {
         </section>
       )}
 
-      <div className="flex items-center justify-between rounded-3xl border border-border/50 bg-card p-4 shadow-sm">
+      <div className="management-pagination">
         <p className="text-sm text-muted-foreground">
           {tPagination("summary", {
             page: page + 1,

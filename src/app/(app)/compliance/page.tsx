@@ -12,6 +12,7 @@ import {
 import { useTranslations } from "next-intl";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -50,26 +51,14 @@ export default function CompliancePage() {
       : 0;
 
   return (
-    <div className="space-y-6">
-      <section className="compliance-hero">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
-
-        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
-              {t("heroEyebrow")}
-            </p>
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-              {t("heroTitle")}
-            </h2>
-            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-              {t("heroDescription")}
-            </p>
-          </div>
-
-          {canManageCompliance ? (
-            <div className="flex flex-col gap-2 sm:flex-row">
+    <div className="compliance-page-shell">
+      <ManagementPageHeader
+        eyebrow={t("heroEyebrow")}
+        title={t("heroTitle")}
+        description={t("heroDescription")}
+        icon={ShieldCheck}
+        actions={canManageCompliance ? (
+            <>
               <Button
                 type="button"
                 variant="outline"
@@ -95,22 +84,19 @@ export default function CompliancePage() {
 
               <Button
                 onClick={() => setIsCreateItemDialogOpen(true)}
-                variant="default"
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 <Plus className="mr-2 size-4" />
                 {t("createItem")}
               </Button>
-            </div>
-          ) : null}
-        </div>
-      </section>
+            </>
+          ) : undefined}
+      />
 
       <Tabs defaultValue="active" className="w-full">
-        <div className="flex items-center justify-between mb-6">
-          <TabsList>
-            <TabsTrigger value="active">Active Controls</TabsTrigger>
-            <TabsTrigger value="frameworks">Framework Templates</TabsTrigger>
+        <div className="mb-5 flex items-center justify-between">
+          <TabsList className="h-11 w-full justify-start rounded-xl border border-border bg-muted/50 p-1 sm:w-auto">
+            <TabsTrigger className="flex-1 rounded-lg px-4 sm:flex-none" value="active">{t("activeControls")}</TabsTrigger>
+            <TabsTrigger className="flex-1 rounded-lg px-4 sm:flex-none" value="frameworks">{t("frameworkTemplates")}</TabsTrigger>
           </TabsList>
         </div>
 

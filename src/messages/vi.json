@@ -48,6 +48,34 @@
   "auth": {
     "logout": "Đăng xuất"
   },
+  "managementHeaders": {
+    "workspaceSettings": {
+      "eyebrow": "Cài đặt workspace",
+      "title": "Quản lý hồ sơ và cấu hình workspace",
+      "description": "Cập nhật thông tin nhận diện, xem trạng thái và truy cập nhanh đến quản lý thành viên hoặc thanh toán."
+    },
+    "profile": {
+      "eyebrow": "Hồ sơ tài khoản",
+      "title": "Quản lý thông tin tài khoản cá nhân",
+      "description": "Cập nhật tên, xem trạng thái tài khoản và quản lý bảo mật."
+    },
+    "systemStatus": {
+      "eyebrow": "Trạng thái hệ thống",
+      "title": "Theo dõi hoạt động CompliPilot",
+      "description": "Kiểm tra tình trạng backend, cơ sở dữ liệu, lưu trữ, AI và email trên một bảng điều khiển."
+    },
+    "platformAdmin": {
+      "eyebrow": "Quản trị nền tảng",
+      "title": "Quản lý hoạt động SaaS CompliPilot",
+      "description": "Theo dõi tổ chức, người dùng, gói đăng ký và mức sử dụng trên toàn nền tảng.",
+      "signedInAs": "Đang đăng nhập"
+    },
+    "billingAccessDenied": {
+      "eyebrow": "Không có quyền truy cập",
+      "title": "Không đủ quyền hạn",
+      "description": "Chỉ chủ sở hữu workspace mới có thể quản lý thanh toán và gói đăng ký."
+    }
+  },
   "status": {
     "ACTIVE": "Đang hoạt động",
     "INVITED": "Đã mời",
@@ -250,6 +278,8 @@
   },
   "compliancePage": {
     "heroEyebrow": "Controls tuân thủ",
+    "activeControls": "Controls đang áp dụng",
+    "frameworkTemplates": "Mẫu framework",
     "heroTitle": "Quản lý mức độ sẵn sàng tuân thủ trong một workspace.",
     "heroDescription": "Rà soát baseline requirements, cập nhật trạng thái, ghi chú và chuẩn bị từng control cho quá trình kiểm tra bằng chứng.",
     "createItem": "Tạo control",
@@ -281,6 +311,7 @@
     "noNotes": "Chưa có ghi chú cho control này.",
     "linkedEvidence": "Bằng chứng đã liên kết ({count})",
     "linkEvidence": "Liên kết bằng chứng",
+    "unlinkEvidence": "Hủy liên kết bằng chứng",
     "loadingLinkedEvidence": "Đang tải bằng chứng đã liên kết...",
     "noLinkedEvidence": "Chưa có bằng chứng nào được liên kết với control này.",
     "noDescription": "Chưa có mô tả",

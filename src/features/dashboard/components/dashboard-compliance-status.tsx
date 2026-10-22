@@ -43,7 +43,7 @@ export function DashboardComplianceStatus({
             [t("statusBreakdown.waived"), complianceSummary?.waived ?? 0],
           ].map(([label, value]) => (
             <div
-              className="flex items-center justify-between rounded-xl border border-border/50 bg-muted/30 px-4 py-3 transition-colors hover:bg-muted/50"
+              className="flex items-center justify-between rounded-xl border border-border bg-background px-4 py-3 transition-colors hover:bg-muted/30"
               key={label as string}
             >
               <span className="text-sm font-medium text-muted-foreground">{label}</span>

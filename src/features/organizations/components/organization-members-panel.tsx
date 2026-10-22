@@ -200,7 +200,7 @@ export function OrganizationMembersPanel({
   return (
     <Card className="compliance-surface overflow-hidden">
       <CardContent className="p-0">
-        <div className="border-b bg-background p-6">
+        <div className="border-b border-border bg-card p-4 sm:p-6">
           <div className="flex flex-col justify-between gap-5 xl:flex-row xl:items-start">
             <div className="flex items-start gap-3">
               <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-background text-primary">
@@ -229,36 +229,49 @@ export function OrganizationMembersPanel({
             ) : null}
           </div>
 
-          <div className="mt-6 inline-flex rounded-2xl border bg-muted/30 p-1">
+          <div
+            aria-label={t("title")}
+            className="mt-5 inline-flex w-full rounded-xl border border-border bg-muted/40 p-1 sm:w-auto"
+            role="group"
+          >
             <Button
+              id="workspace-members-tab"
+              aria-controls="workspace-members-panel"
+              aria-pressed={activeTab === "members"}
               type="button"
               size="sm"
               variant={activeTab === "members" ? "default" : "ghost"}
-              className="rounded-xl"
+              className="flex-1 rounded-lg sm:flex-none"
               onClick={() => setActiveTab("members")}
             >
               Members
-              <span className="ml-2 rounded-full bg-background shadow-sm px-2 py-0.5 text-xs text-foreground">
+              <span className="ml-2 rounded-full bg-background px-2 py-0.5 text-xs text-foreground">
                 {members.length}
               </span>
             </Button>
 
             <Button
+              id="workspace-invitations-tab"
+              aria-controls="workspace-members-panel"
+              aria-pressed={activeTab === "invitations"}
               type="button"
               size="sm"
               variant={activeTab === "invitations" ? "default" : "ghost"}
-              className="rounded-xl"
+              className="flex-1 rounded-lg sm:flex-none"
               onClick={() => setActiveTab("invitations")}
             >
               Invitations
-              <span className="ml-2 rounded-full bg-background shadow-sm px-2 py-0.5 text-xs text-foreground">
+              <span className="ml-2 rounded-full bg-background px-2 py-0.5 text-xs text-foreground">
                 {invitations.length}
               </span>
             </Button>
           </div>
         </div>
 
-        <div className="p-6">
+        <div
+          className="p-4 sm:p-6"
+          id="workspace-members-panel"
+        >
           {activeTab === "members" ? (
             <>
               {membersQuery.error ? (
@@ -283,9 +296,9 @@ export function OrganizationMembersPanel({
               ) : (
                 <div className="overflow-hidden rounded-2xl border">
                   <div
-                    className={`hidden gap-3 border-b bg-muted/30 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground lg:grid ${canManageMembers
-                      ? "grid-cols-[minmax(260px,1.4fr)_180px_160px_90px]"
-                      : "grid-cols-[minmax(260px,1.4fr)_180px_160px]"
+                    className={`hidden gap-3 border-b bg-muted/30 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground 2xl:grid ${canManageMembers
+                      ? "2xl:grid-cols-[minmax(260px,1.4fr)_180px_160px_90px]"
+                      : "2xl:grid-cols-[minmax(260px,1.4fr)_180px_160px]"
                       }`}
                   >
                     <span>{t("columns.member")}</span>
@@ -300,9 +313,9 @@ export function OrganizationMembersPanel({
                     {members.map((member) => (
                       <div
                         key={member.id}
-                        className={`grid gap-4 px-4 py-4 lg:items-center ${canManageMembers
-                          ? "lg:grid-cols-[minmax(260px,1.4fr)_180px_160px_90px]"
-                          : "lg:grid-cols-[minmax(260px,1.4fr)_180px_160px]"
+                        className={`grid gap-4 px-4 py-4 2xl:items-center ${canManageMembers
+                          ? "2xl:grid-cols-[minmax(260px,1.4fr)_180px_160px_90px]"
+                          : "2xl:grid-cols-[minmax(260px,1.4fr)_180px_160px]"
                           }`}
                       >
                         <div className="min-w-0">

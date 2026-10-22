@@ -49,7 +49,7 @@ export function DashboardOpenTasks({
           <div className="space-y-3">
             {openTasksQuery.data.items.map((task) => (
               <div
-                className="rounded-2xl border border-border/50 bg-muted/30 p-4 transition-colors hover:bg-muted/50"
+                className="rounded-xl border border-border bg-background p-4 transition-colors hover:bg-muted/30"
                 key={task.id}
               >
                 <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">

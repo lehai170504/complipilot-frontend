@@ -1,11 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { FileCheck2, Download } from "lucide-react";
+import { FileCheck2 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useAutoAnimate } from "@formkit/auto-animate/react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { CreateFileEvidenceDialog } from "@/features/evidence/components/create-file-evidence-dialog";
@@ -77,34 +78,23 @@ export default function EvidencePage() {
 
   return (
     <div className="compliance-page-shell">
-      <section className="compliance-hero">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
-
-        <div className="relative z-10 flex flex-col justify-between gap-6 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
-              {t("heroEyebrow")}
-            </p>
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-              {t("heroTitle")}
-            </h2>
-            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-              {t("heroDescription")}
-            </p>
-          </div>
-
-          <div className="rounded-3xl border border-border/50 bg-muted/30 p-5 backdrop-blur-md">
+      <ManagementPageHeader
+        eyebrow={t("heroEyebrow")}
+        title={t("heroTitle")}
+        description={t("heroDescription")}
+        icon={FileCheck2}
+        actions={
+          <div className="rounded-xl border border-border bg-background/80 px-4 py-3 sm:min-w-40">
             <p className="text-sm text-muted-foreground uppercase tracking-wider font-semibold">{t("activeEvidence")}</p>
-            <p className="mt-1 text-3xl font-extrabold text-foreground">{totalItems}</p>
+            <p className="mt-1 text-2xl font-semibold tracking-tight text-foreground">{totalItems}</p>
             <div className="mt-2 inline-flex items-center rounded-full bg-primary/10 px-2.5 py-0.5 text-xs font-semibold text-primary">
               {activeOrganization?.organizationName ?? t("loadingWorkspace")}
             </div>
           </div>
-        </div>
-      </section>
+        }
+      />
 
-      <div className="sticky top-0 z-30 -mx-2 px-2 py-4 bg-background/80 backdrop-blur-md border-b border-border/40 shadow-sm">
+      <div className="management-list-toolbar sticky top-0 z-20 px-3 py-3 sm:px-4">
         <EvidenceToolbar
           value={toolbarState}
           onChange={handleToolbarChange}
@@ -171,7 +161,7 @@ export default function EvidencePage() {
         </section>
       )}
 
-      <div className="flex items-center justify-between rounded-3xl border border-border/50 bg-card p-4 shadow-sm">
+      <div className="management-pagination">
         <p className="text-sm text-muted-foreground">
           {tPagination("summary", {
             page: page + 1,

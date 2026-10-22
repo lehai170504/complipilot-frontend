@@ -125,7 +125,7 @@ export function TaskCard({
 
   if (isEditing) {
     return (
-      <Card className="compliance-surface overflow-hidden ring-2 ring-cyan-300">
+      <Card className="compliance-surface overflow-hidden border-primary/40 ring-2 ring-primary/15">
         <CardContent className="p-5">
           <div className="space-y-4">
             <div className="space-y-2">
@@ -226,15 +226,15 @@ export function TaskCard({
   return (
     <Card className="compliance-surface overflow-hidden">
       <CardContent className="p-0">
-        <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-start lg:justify-between">
+        <div className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0 flex-1">
             <div className="flex flex-wrap items-center gap-2">
               <div
-                className={`flex size-10 items-center justify-center rounded-2xl ${
+                className={`flex size-10 items-center justify-center rounded-xl ${
                   task.status === "DONE"
                     ? "bg-success/20 text-success"
                     : task.status === "IN_PROGRESS"
-                      ? "bg-blue-100 text-blue-600"
+                        ? "bg-info/10 text-info"
                       : "bg-background text-primary"
                 }`}
               >
@@ -250,7 +250,7 @@ export function TaskCard({
               <StatusPill status={task.priority} />
             </div>
 
-            <h3 className="mt-3 truncate text-lg font-semibold tracking-tight">
+            <h3 className="mt-3 break-words text-base font-semibold tracking-tight sm:text-lg">
               {task.title}
             </h3>
 
@@ -299,7 +299,7 @@ export function TaskCard({
 
         {showDeleteConfirm ? (
           <div className="border-t bg-destructive/10 p-4">
-            <p className="text-sm font-medium text-red-800">
+            <p className="text-sm font-medium text-destructive">
               {t("deleteConfirm", { title: task.title })}
             </p>
             <div className="mt-3 flex gap-2">

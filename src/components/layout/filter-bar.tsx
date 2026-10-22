@@ -1,6 +1,6 @@
 "use client";
 
-import { ReactNode, useState } from "react";
+import { ReactNode, useId, useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
@@ -22,6 +22,7 @@ export function FilterBar({
   actions?: ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const filterContentId = useId();
   const t = useTranslations("common");
 
   return (
@@ -32,8 +33,10 @@ export function FilterBar({
       )}
     >
       {/* Mobile toggle + always-visible actions */}
-      <div className="flex items-center justify-between p-3 lg:hidden">
+      <div className="flex min-w-0 flex-wrap items-center justify-between gap-2 p-3 lg:hidden">
         <Button
+          aria-controls={filterContentId}
+          aria-expanded={isOpen}
           variant="outline"
           size="sm"
           onClick={() => setIsOpen(!isOpen)}
@@ -45,18 +48,25 @@ export function FilterBar({
             <X className="ml-2 size-3" />
           ) : null}
         </Button>
-        {actions ? <div className="flex gap-2">{actions}</div> : null}
+        {actions ? (
+          <div className="flex min-w-0 flex-1 flex-wrap justify-end gap-2">
+            {actions}
+          </div>
+        ) : null}
       </div>
 
       {/* Filter content: always visible on desktop, collapsible on mobile */}
       <div
+        id={filterContentId}
         className={cn(
           "p-3 lg:p-4",
           "hidden lg:block", // desktop: always show
           isOpen && "block" // mobile: show when open
         )}
       >
-        <div className="flex flex-wrap items-end gap-3">{children}</div>
+        <div className="grid min-w-0 grid-cols-1 items-end gap-3 sm:grid-cols-2 lg:flex lg:flex-wrap">
+          {children}
+        </div>
       </div>
 
       {/* Desktop actions row */}

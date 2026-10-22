@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { FormEvent, useState } from "react";
+import { useTranslations } from "next-intl";
 import {
   AlertTriangle,
   ArrowRight,
@@ -15,6 +16,7 @@ import {
 } from "lucide-react";
 
 import { ErrorAlert } from "@/components/feedback/error-alert";
+import { ManagementPageHeader } from "@/components/layout/management-page-header";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -46,6 +48,7 @@ function statusTone(status: string) {
 }
 
 export default function SettingsPage() {
+  const tHeader = useTranslations("managementHeaders.workspaceSettings");
   const { activeOrganization, canManageMembers } = useActiveOrganization();
   const organizationId = activeOrganization?.organizationId;
 
@@ -86,32 +89,13 @@ export default function SettingsPage() {
   );
 
   return (
-    <div className="space-y-6">
-      <section className="compliance-hero">
-        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 mix-blend-overlay dark:opacity-40" />
-        <div className="pointer-events-none absolute -right-20 -top-20 h-[30rem] w-[30rem] rounded-full bg-primary/10 blur-[100px]" />
-        
-        <div className="relative z-10 flex flex-col justify-between gap-8 lg:flex-row lg:items-end">
-          <div>
-            <p className="text-sm font-semibold uppercase tracking-[0.28em] text-primary">
-              Workspace settings
-            </p>
-
-            <h2 className="mt-4 text-2xl font-bold tracking-tight text-foreground">
-              Manage your workspace profile and controls
-            </h2>
-
-            <p className="mt-3 max-w-2xl text-lg text-muted-foreground">
-              Update workspace identity, review status metadata, and jump to
-              member or billing management.
-            </p>
-          </div>
-
-          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-primary text-primary-foreground shadow-lg shadow-primary/25">
-            <Settings className="size-6" />
-          </div>
-        </div>
-      </section>
+    <div className="compliance-page-shell">
+      <ManagementPageHeader
+        eyebrow={tHeader("eyebrow")}
+        title={tHeader("title")}
+        description={tHeader("description")}
+        icon={Settings}
+      />
 
       {settingsQuery.error ? <ErrorAlert error={settingsQuery.error} /> : null}
 

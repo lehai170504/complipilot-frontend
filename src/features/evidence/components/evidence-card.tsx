@@ -129,9 +129,9 @@ export function EvidenceCard({
 
   return (
     <>
-      <Card className="compliance-surface overflow-hidden transition-all duration-300 hover:shadow-md hover:border-primary/20 hover:-translate-y-0.5">
+      <Card className="compliance-surface overflow-hidden">
         <CardContent className="p-0">
-          <div className="flex flex-col gap-5 p-5 lg:flex-row lg:items-start lg:justify-between">
+          <div className="flex flex-col gap-4 p-4 sm:p-5 lg:flex-row lg:items-start lg:justify-between">
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <div className="flex size-10 items-center justify-center rounded-2xl bg-background text-primary">
@@ -141,7 +141,7 @@ export function EvidenceCard({
                 <EvidenceSourceBadge sourceType={evidence.sourceType} />
               </div>
 
-              <h3 className="mt-4 truncate text-lg font-semibold tracking-tight">
+              <h3 className="mt-4 break-words text-base font-semibold tracking-tight sm:text-lg">
                 {evidence.title}
               </h3>
 
@@ -151,7 +151,7 @@ export function EvidenceCard({
 
               {evidence.sourceType === "FILE" ? (
                 <div className="mt-4 rounded-2xl border bg-muted/30 p-4 text-sm">
-                  <p className="font-medium text-slate-700">
+                  <p className="font-medium text-foreground">
                     {t("storedFile")}
                   </p>
                   <p className="mt-1 text-muted-foreground">
@@ -185,13 +185,14 @@ export function EvidenceCard({
               </p>
             </div>
 
-            <div className="flex shrink-0 items-start gap-2">
-              <div className="flex flex-col gap-2 sm:flex-row">
+            <div className="flex w-full shrink-0 items-start gap-2 lg:w-auto">
+              <div className="flex w-full flex-wrap gap-2 lg:w-auto lg:justify-end">
                 {evidence.sourceType === "FILE" ? (
                   <Button
                     disabled={downloadUrlMutation.isPending}
                     onClick={handleDownload}
                     size="sm"
+                    className="flex-1 sm:flex-none"
                     type="button"
                     variant="outline"
                   >
@@ -206,6 +207,7 @@ export function EvidenceCard({
                   disabled={analyzeMutation.isPending}
                   onClick={handleAnalyze}
                   size="sm"
+                  className="flex-1 sm:flex-none"
                   type="button"
                   variant="outline"
                 >
