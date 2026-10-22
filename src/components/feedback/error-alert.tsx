@@ -1,7 +1,11 @@
-import { AlertTriangle } from "lucide-react";
+"use client";
+
+import { useEffect, useRef } from "react";
 
 import { getFriendlyApiError } from "@/lib/api/api-error";
-import { cn } from "@/lib/utils";
+import { toast } from "@/lib/toast";
+
+const shownErrors = new WeakSet<object>();
 
 export function ErrorAlert({
   error,
@@ -10,28 +14,31 @@ export function ErrorAlert({
   error: unknown;
   className?: string;
 }) {
-  const friendlyError = getFriendlyApiError(error);
+  const lastError = useRef<unknown>(undefined);
 
-  return (
-    <div
-      className={cn(
-        "rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-red-700",
-        className,
-      )}
-    >
-      <div className="flex items-start gap-3">
-        <AlertTriangle className="mt-0.5 size-4 shrink-0 text-red-500" />
-        <div>
-          <p className="font-semibold">{friendlyError.title}</p>
-          <p className="mt-1 leading-6">{friendlyError.description}</p>
+  void className;
 
-          {friendlyError.requestId ? (
-            <p className="mt-3 text-xs text-red-500">
-              Request ID: {friendlyError.requestId}
-            </p>
-          ) : null}
-        </div>
-      </div>
-    </div>
-  );
+  useEffect(() => {
+    if (!error || Object.is(lastError.current, error)) {
+      return;
+    }
+
+    lastError.current = error;
+    if (typeof error === "object" && shownErrors.has(error)) {
+      return;
+    }
+
+    if (typeof error === "object") {
+      shownErrors.add(error);
+    }
+
+    const friendlyError = getFriendlyApiError(error);
+    toast.error(friendlyError.title, {
+      description: friendlyError.requestId
+        ? `${friendlyError.description} Request ID: ${friendlyError.requestId}`
+        : friendlyError.description,
+    });
+  }, [error]);
+
+  return null;
 }

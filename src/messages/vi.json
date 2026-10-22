@@ -25,6 +25,7 @@
     "title": "Không gian vận hành tuân thủ",
     "searchPlaceholder": "Tìm control, bằng chứng, công việc và hoạt động kiểm toán...",
     "loadingUser": "Đang tải...",
+    "openNavigation": "Mở điều hướng",
     "modules": "Phân hệ",
     "management": "Quản lý",
     "noResults": "Không tìm thấy kết quả."
@@ -129,6 +130,7 @@
   },
   "common": {
     "loading": "Đang tải...",
+    "filters": "Bộ lọc",
     "cancel": "Hủy",
     "previous": "Trước",
     "next": "Tiếp",
@@ -393,7 +395,8 @@
     "errors": {
       "fileTooLarge": "Dung lượng file phải nhỏ hơn hoặc bằng 10MB.",
       "chooseFile": "Vui lòng chọn file để tải lên.",
-      "missingOrganization": "Thiếu tổ chức đang hoạt động."
+      "missingOrganization": "Thiếu tổ chức đang hoạt động.",
+      "titleRequired": "Vui lòng nhập tiêu đề cho bằng chứng này."
     }
   },
   "evidenceUrlDialog": {

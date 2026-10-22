@@ -105,3 +105,27 @@ export const appNavigationGroups: NavigationGroup[] = [
     ],
   },
 ];
+
+export function getVisibleNavigationGroups({
+  canViewAudit,
+  canManageBilling,
+  canViewPlatformAdmin,
+}: {
+  canViewAudit: boolean;
+  canManageBilling: boolean;
+  canViewPlatformAdmin: boolean;
+}) {
+  return appNavigationGroups
+    .map((group) => ({
+      ...group,
+      items: group.items.filter((item) => {
+        if (item.permission === "canViewAudit") return canViewAudit;
+        if (item.permission === "canManageBilling") return canManageBilling;
+        if (item.permission === "canViewPlatformAdmin") {
+          return canViewPlatformAdmin;
+        }
+        return true;
+      }),
+    }))
+    .filter((group) => group.items.length > 0);
+}

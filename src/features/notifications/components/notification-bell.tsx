@@ -1,8 +1,8 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import { Bell, CheckCheck } from "lucide-react";
 
-import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -15,7 +15,9 @@ import {
   useNotificationsQuery,
   useUnreadNotificationCountQuery,
 } from "@/features/notifications/hooks/notification-hooks";
+import { getFriendlyApiError } from "@/lib/api/api-error";
 import type { NotificationResponse } from "@/lib/api/api-types";
+import { toast } from "@/lib/toast";
 
 function formatRelativeTime(value: string) {
   const date = new Date(value);
@@ -64,9 +66,30 @@ export function NotificationBell({
   const notificationsQuery = useNotificationsQuery(organizationId);
   const unreadCountQuery = useUnreadNotificationCountQuery(organizationId);
   const markAsReadMutation = useMarkNotificationAsReadMutation(organizationId);
+  const hasShownLoadError = useRef(false);
 
   const notifications = notificationsQuery.data?.items ?? [];
   const unreadCount = unreadCountQuery.data?.unreadCount ?? 0;
+
+  useEffect(() => {
+    if (notificationsQuery.isSuccess) {
+      hasShownLoadError.current = false;
+      return;
+    }
+
+    if (!notificationsQuery.error || hasShownLoadError.current) {
+      return;
+    }
+
+    hasShownLoadError.current = true;
+    const error = getFriendlyApiError(notificationsQuery.error);
+
+    toast.error(error.title, {
+      description: error.requestId
+        ? `${error.description} Request ID: ${error.requestId}`
+        : error.description,
+    });
+  }, [notificationsQuery.error, notificationsQuery.isSuccess]);
 
   function handleMarkAsRead(notification: NotificationResponse) {
     if (notification.read) {
@@ -105,13 +128,23 @@ export function NotificationBell({
           </p>
         </div>
 
-        {notificationsQuery.error ? (
-          <div className="p-4">
-            <ErrorAlert error={notificationsQuery.error} />
-          </div>
-        ) : notificationsQuery.isLoading ? (
+        {notificationsQuery.isLoading ? (
           <div className="p-4 text-sm text-muted-foreground">
             Loading notifications...
+          </div>
+        ) : notificationsQuery.error ? (
+          <div className="p-8 text-center">
+            <p className="text-sm text-muted-foreground">
+              Notifications are temporarily unavailable.
+            </p>
+            <Button
+              className="mt-3"
+              size="sm"
+              variant="outline"
+              onClick={() => void notificationsQuery.refetch()}
+            >
+              Try again
+            </Button>
           </div>
         ) : notifications.length === 0 ? (
           <div className="p-8 text-center">

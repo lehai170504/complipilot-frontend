@@ -15,32 +15,32 @@ export function LandingHighlights() {
   const t = useTranslations("landing.highlightsNew");
 
   return (
-    <section className="relative z-10 mx-auto max-w-7xl px-6 mt-32">
-      <div className="absolute inset-x-6 inset-y-0 rounded-[3rem] bg-gradient-to-br from-primary/10 via-background to-accent/10 border border-border/50 shadow-2xl backdrop-blur-xl -z-10" />
+    <section className="relative z-10 mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
+      <div className="absolute inset-x-4 inset-y-0 -z-10 rounded-2xl border border-border bg-card sm:inset-x-6 sm:rounded-3xl" />
 
-      <div className="relative rounded-[3rem] p-10 md:p-16">
-        <div className="grid gap-12 lg:grid-cols-[0.8fr_1.2fr] lg:items-center">
+      <div className="relative rounded-2xl p-5 sm:rounded-3xl sm:p-8 md:p-12">
+        <div className="grid gap-8 lg:grid-cols-[0.8fr_1.2fr] lg:items-center lg:gap-12">
           <div>
             <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">
               {t("eyebrow")}
             </p>
-            <h2 className="mt-4 text-3xl font-bold tracking-tight text-foreground md:text-4xl">
+            <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:text-3xl md:text-4xl">
               {t("title")}
             </h2>
-            <p className="mt-6 text-lg text-muted-foreground">
+            <p className="mt-4 text-sm leading-6 text-muted-foreground sm:mt-6 sm:text-base">
               {t("description")}
             </p>
 
-            <Button className="mt-8 bg-foreground text-background hover:bg-foreground/90 rounded-full px-8">
+            <Button className="mt-6 sm:mt-8">
               {t("cta")}
             </Button>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2">
+          <div className="grid gap-3 sm:grid-cols-2 sm:gap-4">
             {highlights.map((item) => (
               <div
                 key={item}
-                className="flex items-center gap-4 rounded-2xl border border-border/50 bg-card/50 p-5 shadow-sm backdrop-blur-md transition-all hover:-translate-y-1 hover:shadow-md"
+                className="flex items-center gap-3 rounded-xl border border-border bg-background p-4 sm:gap-4 sm:p-5"
               >
                 <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <CheckCircle2 className="size-5" />

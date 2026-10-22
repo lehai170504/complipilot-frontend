@@ -14,20 +14,19 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
   ];
 
   return (
-    <main className="min-h-screen bg-background text-foreground relative overflow-hidden">
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,var(--color-primary)_0%,transparent_30%)] opacity-10 pointer-events-none" />
-      <div className="relative mx-auto grid min-h-screen w-full max-w-7xl gap-10 px-6 py-8 lg:grid-cols-[1fr_440px] lg:items-center">
-        <section className="hidden lg:block animate-in fade-in slide-in-from-left-8 duration-1000">
+    <main className="relative min-h-dvh overflow-hidden bg-background text-foreground">
+      <div className="mx-auto grid min-h-dvh w-full max-w-7xl gap-8 px-4 py-6 sm:px-6 sm:py-8 lg:grid-cols-[1fr_440px] lg:items-center lg:gap-12">
+        <section className="hidden lg:block">
           <BrandMark />
 
-          <div className="mt-16 max-w-2xl">
-            <p className="text-sm font-semibold uppercase tracking-[0.35em] text-primary">
+          <div className="mt-12 max-w-2xl">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-primary">
               {t("eyebrow")}
             </p>
-            <h1 className="mt-5 text-5xl font-bold leading-tight tracking-tight text-foreground">
+            <h1 className="mt-4 text-4xl font-semibold leading-tight tracking-tight text-foreground xl:text-5xl">
               {t("title")}
             </h1>
-            <p className="mt-6 text-lg leading-8 text-muted-foreground">
+            <p className="mt-5 text-base leading-7 text-muted-foreground">
               {t("description")}
             </p>
           </div>
@@ -35,7 +34,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           <div className="mt-10 grid max-w-2xl gap-4">
             {features.map((item) => (
               <div
-                className="compliance-glass rounded-3xl p-5 text-muted-foreground transition-all duration-300 hover:text-foreground hover:shadow-primary/10 hover:-translate-y-1"
+                className="compliance-surface rounded-xl p-4 text-muted-foreground"
                 key={item}
               >
                 {item}
@@ -44,7 +43,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           </div>
         </section>
 
-        <section className="animate-in fade-in slide-in-from-right-8 duration-1000 z-10">{children}</section>
+        <section className="z-10 w-full max-w-md justify-self-center lg:max-w-none">{children}</section>
       </div>
     </main>
   );

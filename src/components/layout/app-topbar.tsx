@@ -7,6 +7,7 @@ import {
   UserCircle,
   Settings,
   Crown,
+  ShieldCheck,
 } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -33,58 +34,94 @@ import { OrganizationUsageDialog } from "@/features/billing/components/organizat
 import { ProfileModal } from "@/features/profile/components/profile-modal";
 import { SettingsModal } from "@/features/organizations/components/settings-modal";
 import { UpgradePlanModal } from "@/features/billing/components/upgrade-plan-modal";
+import { getVisibleNavigationGroups } from "@/components/layout/app-navigation";
+import { usePathname } from "next/navigation";
+import Link from "next/link";
 
 export function AppTopbar({
   organizationId,
 }: {
   organizationId?: string;
 }) {
-  const { canManageBilling, canManageMembers } = useActiveOrganization();
+  const {
+    activeOrganization,
+    canViewAudit,
+    canManageBilling,
+    canManageMembers,
+  } = useActiveOrganization();
   const currentUserQuery = useCurrentUserQuery();
   const logoutMutation = useLogoutMutation();
 
   const [isProfileModalOpen, setIsProfileModalOpen] = useState(false);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isUpgradeModalOpen, setIsUpgradeModalOpen] = useState(false);
+  const [isMobileNavigationOpen, setIsMobileNavigationOpen] = useState(false);
+  const pathname = usePathname();
 
   const tTopbar = useTranslations("topbar");
   const tAuth = useTranslations("auth");
+  const tBrand = useTranslations("brand");
+  const tNavigation = useTranslations("navigation");
+  const tWorkspace = useTranslations("workspace");
+  const tStatus = useTranslations("status");
+  const currentUserEmail = currentUserQuery.data?.email?.toLowerCase();
+  const canViewPlatformAdmin =
+    Boolean(currentUserEmail) &&
+    (process.env.NEXT_PUBLIC_PLATFORM_ADMIN_EMAILS ?? "")
+      .split(",")
+      .map((email) => email.trim().toLowerCase())
+      .includes(currentUserEmail ?? "");
+  const mobileNavigationGroups = getVisibleNavigationGroups({
+    canViewAudit,
+    canManageBilling,
+    canViewPlatformAdmin,
+  });
 
   return (
-    <header className="z-20 shrink-0 border-b border-border/50 bg-background/60 px-4 py-3 backdrop-blur-2xl xl:px-8">
-      <div className="flex items-center justify-between gap-4">
+    <>
+    <header className="z-20 shrink-0 border-b border-border bg-card px-4 py-3 sm:px-6 lg:px-8">
+      <div className="flex min-h-10 items-center gap-3">
         <div className="flex items-center gap-3">
-          <Button className="lg:hidden" size="icon" variant="outline">
+          <Button
+            aria-label={tTopbar("openNavigation")}
+            className="lg:hidden"
+            size="icon"
+            variant="ghost"
+            onClick={() => setIsMobileNavigationOpen(true)}
+          >
             <Menu className="size-5" />
           </Button>
 
-          <div className="flex flex-col justify-center">
-            <p className="mb-0.5 text-[10px] font-semibold uppercase leading-none tracking-[0.1em] text-muted-foreground">
+          <div className="hidden flex-col justify-center sm:flex">
+            <p className="mb-1 text-[10px] font-semibold uppercase leading-none tracking-[0.12em] text-muted-foreground">
               {tTopbar("workspace")}
             </p>
-
-            <h1 className="text-base font-bold leading-none tracking-tight text-foreground">
+            <h1 className="text-sm font-semibold leading-none tracking-tight text-foreground">
               {tTopbar("title")}
             </h1>
           </div>
         </div>
 
-        <GlobalSearch />
+        <div className="flex min-w-0 flex-1 justify-center md:flex-none md:px-4">
+          <GlobalSearch />
+        </div>
 
-        <div className="flex items-center gap-3">
-          <OrganizationUsageDialog organizationId={organizationId} />
+        <div className="ml-auto flex items-center gap-1 sm:gap-2">
+          <div className="hidden sm:block">
+            <OrganizationUsageDialog organizationId={organizationId} />
+          </div>
           <NotificationBell organizationId={organizationId} />
 
           <LanguageSwitcher />
 
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex items-center gap-3 rounded-full hover:bg-muted/50 p-1 pr-3 transition-colors outline-none focus-visible:ring-2 focus-visible:ring-primary">
+              <button className="flex items-center gap-2 rounded-lg p-1.5 pr-2 transition-colors hover:bg-muted outline-none focus-visible:ring-2 focus-visible:ring-primary sm:pr-3">
                 <div className="flex size-9 items-center justify-center rounded-full bg-primary/10 text-primary">
                   <UserCircle className="size-5" />
                 </div>
                 <div className="hidden flex-col items-start gap-1 text-left sm:flex">
-                  <p className="text-sm font-semibold leading-none text-foreground">
+                  <p className="max-w-40 truncate text-sm font-semibold leading-none text-foreground">
                     {currentUserQuery.data?.fullName ?? tTopbar("loadingUser")}
                   </p>
                   <p className="text-xs leading-none text-muted-foreground">
@@ -127,7 +164,6 @@ export function AppTopbar({
             </DropdownMenuContent>
           </DropdownMenu>
 
-          {/* Placeholders for upcoming Modals */}
           <ProfileModal open={isProfileModalOpen} onOpenChange={setIsProfileModalOpen} />
           <SettingsModal open={isSettingsModalOpen} onOpenChange={setIsSettingsModalOpen} />
 
@@ -135,5 +171,70 @@ export function AppTopbar({
         </div>
       </div>
     </header>
+    <Dialog open={isMobileNavigationOpen} onOpenChange={setIsMobileNavigationOpen}>
+      <DialogContent
+        className="left-0 top-0 h-dvh max-h-dvh w-[min(19rem,88vw)] max-w-none translate-x-0 translate-y-0 gap-0 overflow-y-auto rounded-none border-0 bg-sidebar p-0 text-sidebar-foreground"
+        showCloseButton
+      >
+        <DialogTitle className="sr-only">{tTopbar("openNavigation")}</DialogTitle>
+        <div className="border-b border-sidebar-border px-5 py-5">
+          <div className="flex items-center gap-3">
+            <div className="flex size-10 items-center justify-center rounded-xl bg-sidebar-primary text-sidebar-primary-foreground">
+              <ShieldCheck className="size-5" />
+            </div>
+            <div>
+              <p className="text-sm font-bold">{tBrand("name")}</p>
+              <p className="mt-0.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-sidebar-foreground/50">
+                {tBrand("shortDescription")}
+              </p>
+            </div>
+          </div>
+          <div className="mt-5 rounded-lg border border-sidebar-border bg-sidebar-accent/40 p-3">
+            <p className="text-xs font-semibold text-sidebar-foreground">
+              {activeOrganization?.organizationName ?? tWorkspace("noWorkspace")}
+            </p>
+            {activeOrganization ? (
+              <p className="mt-1 text-[10px] uppercase tracking-wider text-sidebar-foreground/55">
+                {tStatus(activeOrganization.role)}
+              </p>
+            ) : null}
+          </div>
+        </div>
+        <nav className="space-y-6 px-3 py-5">
+          {mobileNavigationGroups.map((group) => (
+            <div key={group.groupLabelKey ?? group.items[0]?.href}>
+              {group.groupLabelKey ? (
+                <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.15em] text-sidebar-foreground/40">
+                  {tNavigation(group.groupLabelKey)}
+                </p>
+              ) : null}
+              <div className="space-y-1">
+                {group.items.map((item) => {
+                  const isActive =
+                    pathname === item.href || pathname.startsWith(`${item.href}/`);
+                  return (
+                    <Link
+                      aria-current={isActive ? "page" : undefined}
+                      className={`flex items-center gap-3 rounded-lg px-3 py-3 text-sm font-medium ${
+                        isActive
+                          ? "bg-sidebar-accent text-sidebar-primary"
+                          : "text-sidebar-foreground/70 hover:bg-sidebar-accent/60"
+                      }`}
+                      href={item.href}
+                      key={item.href}
+                      onClick={() => setIsMobileNavigationOpen(false)}
+                    >
+                      <item.icon className="size-4" />
+                      {tNavigation(item.labelKey)}
+                    </Link>
+                  );
+                })}
+              </div>
+            </div>
+          ))}
+        </nav>
+      </DialogContent>
+    </Dialog>
+    </>
   );
 }

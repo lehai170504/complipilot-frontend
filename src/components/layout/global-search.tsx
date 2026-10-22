@@ -90,13 +90,14 @@ export function GlobalSearch() {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="hidden max-w-xs flex-1 items-center rounded-xl border border-border/80 bg-muted/50 px-3 py-1.5 text-sm text-muted-foreground shadow-inner transition-all hover:bg-muted focus-within:border-primary focus-within:bg-background focus-within:shadow-md focus-within:shadow-primary/10 dark:hover:bg-muted/80 md:flex"
+        aria-label={tTopbar("searchPlaceholder")}
+        className="flex size-9 shrink-0 items-center justify-center rounded-lg border border-border bg-background text-sm text-muted-foreground transition-colors hover:bg-muted md:h-10 md:w-auto md:max-w-xs md:flex-1 md:justify-start md:px-3"
       >
-        <Search className="mr-2 size-4 text-muted-foreground" />
-        <span className="opacity-80 flex-1 text-left">
+        <Search className="size-4 text-muted-foreground md:mr-2" />
+        <span className="hidden flex-1 text-left opacity-80 md:block">
           {tTopbar("searchPlaceholder")}
         </span>
-        <kbd className="pointer-events-none inline-flex h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100">
+        <kbd className="pointer-events-none hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium text-muted-foreground opacity-100 md:inline-flex">
           <span className="text-xs">⌘</span>K
         </kbd>
       </button>

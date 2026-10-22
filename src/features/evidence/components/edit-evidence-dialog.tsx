@@ -5,7 +5,6 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 
-import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,6 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { evidenceTypeOptions } from "@/features/evidence/constants";
 import { useUpdateEvidenceMutation } from "@/features/evidence/hooks/evidence-hooks";
+import { toastFirstValidationError } from "@/lib/forms/toast-first-validation-error";
 import {
   editEvidenceSchema,
   type EditEvidenceFormData,
@@ -53,7 +53,7 @@ export function EditEvidenceDialog({
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<EditEvidenceFormData>({
     resolver: zodResolver(editEvidenceSchema),
   });
@@ -101,13 +101,13 @@ export function EditEvidenceDialog({
           <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-5"
+          onSubmit={handleSubmit(onSubmit, toastFirstValidationError)}
+        >
           <div className="space-y-2">
             <Label htmlFor="edit-evidence-title">{t("titleLabel")}</Label>
             <Input id="edit-evidence-title" {...register("title")} />
-            {errors.title ? (
-              <p className="text-sm text-destructive">{errors.title.message}</p>
-            ) : null}
           </div>
 
           <div className="space-y-2">
@@ -140,11 +140,6 @@ export function EditEvidenceDialog({
                 type="url"
                 {...register("externalUrl")}
               />
-              {errors.externalUrl ? (
-                <p className="text-sm text-destructive">
-                  {errors.externalUrl.message}
-                </p>
-              ) : null}
             </div>
           ) : null}
 
@@ -155,16 +150,7 @@ export function EditEvidenceDialog({
               {...register("description")}
               rows={4}
             />
-            {errors.description ? (
-              <p className="text-sm text-destructive">
-                {errors.description.message}
-              </p>
-            ) : null}
           </div>
-
-          {updateMutation.error ? (
-            <ErrorAlert error={updateMutation.error} />
-          ) : null}
 
           <div className="flex justify-end gap-3">
             <Button

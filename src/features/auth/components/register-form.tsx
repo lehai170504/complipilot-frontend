@@ -6,7 +6,6 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft } from "lucide-react";
 
-import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -19,6 +18,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { DEMO_REGISTER_DATA } from "@/features/auth/constants";
 import { useRegisterMutation } from "@/features/auth/hooks/auth-hooks";
+import { toastFirstValidationError } from "@/lib/forms/toast-first-validation-error";
 import {
   registerSchema,
   type RegisterFormData,
@@ -31,7 +31,7 @@ export function RegisterForm() {
   const {
     register,
     handleSubmit,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
     defaultValues: {
@@ -62,7 +62,10 @@ export function RegisterForm() {
       </CardHeader>
 
       <CardContent>
-        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-5"
+          onSubmit={handleSubmit(onSubmit, toastFirstValidationError)}
+        >
           <div className="space-y-2">
             <Label htmlFor="fullName">{t("fullName")}</Label>
             <Input
@@ -70,19 +73,11 @@ export function RegisterForm() {
               autoComplete="name"
               {...register("fullName")}
             />
-            {errors.fullName ? (
-              <p className="text-sm text-destructive">{errors.fullName.message}</p>
-            ) : null}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="organizationName">{t("organization")}</Label>
             <Input id="organizationName" {...register("organizationName")} />
-            {errors.organizationName ? (
-              <p className="text-sm text-destructive">
-                {errors.organizationName.message}
-              </p>
-            ) : null}
           </div>
 
           <div className="space-y-2">
@@ -93,9 +88,6 @@ export function RegisterForm() {
               type="email"
               {...register("email")}
             />
-            {errors.email ? (
-              <p className="text-sm text-destructive">{errors.email.message}</p>
-            ) : null}
           </div>
 
           <div className="space-y-2">
@@ -106,14 +98,7 @@ export function RegisterForm() {
               type="password"
               {...register("password")}
             />
-            {errors.password ? (
-              <p className="text-sm text-destructive">{errors.password.message}</p>
-            ) : null}
           </div>
-
-          {registerMutation.error ? (
-            <ErrorAlert error={registerMutation.error} />
-          ) : null}
 
           <Button
             className="w-full"

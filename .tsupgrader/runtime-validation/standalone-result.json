@@ -1,0 +1,135 @@
+{
+  "planHash": "af60069598b9d3ac831da1dad8de17fa7c24775f3da4e82411de5645090952d2",
+  "phase": "standalone",
+  "recordedAtUtc": "2026-10-22T03:58:50.8217926Z",
+  "retryCount": 2,
+  "resetBaseline": false,
+  "complete": true,
+  "result": {
+    "setupSucceeded": true,
+    "setupDurationMs": 58733,
+    "setupFailureOutput": null,
+    "assertions": [
+      {
+        "name": "tsc-no-emit",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "",
+        "durationMs": 10104
+      },
+      {
+        "name": "production-build",
+        "kind": "process",
+        "verificationMethod": "exit-code",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\r\n\u003E complipilot-frontend@0.1.0 build\r\n\u003E next build\r\n\r\n\u25B2 Next.js 16.2.6 (Turbopack)\r\n- Environments: .env.local\r\n\r\n  Creating an optimized production build ...\r\n\u2713 Compiled successfully in 5.3s\r\n  Running TypeScript ...\r\n  Finished TypeScript in 9.2s ...\r\n  Collecting page data using 15 workers ...\r\n  Generating static pages using 15 workers (0/19) ...\r\n  Generating static pages using 15 workers (4/19) \r\n  Generating static pages using 15 workers (9/19) \r\n  Generating static pages using 15 workers (14/19) \r\n\u2713 Generating static pages using 15 workers (19/19) in 491ms\r\n  Finalizing page optimization ...\r\n\r\nRoute (app)\r\n\u250C \u0192 /\r\n\u251C \u0192 /_not-found\r\n\u251C \u0192 /audit\r\n\u251C \u0192 /billing\r\n\u251C \u0192 /billing/cancel\r\n\u251C \u0192 /billing/success\r\n\u251C \u0192 /compliance\r\n\u251C \u0192 /compliance/[itemId]\r\n\u251C \u0192 /dashboard\r\n\u251C \u0192 /evidence\r\n\u251C \u25CB /icon.png\r\n\u251C \u0192 /invite/[token]\r\n\u251C \u0192 /login\r\n\u251C \u0192 /platform-admin\r\n\u251C \u0192 /profile\r\n\u251C \u0192 /register\r\n\u251C \u0192 /settings\r\n\u251C \u0192 /system-status\r\n\u251C \u0192 /tasks\r\n\u2514 \u0192 /workspaces\r\n\r\n\r\n\u25CB  (Static)   prerendered as static content\r\n\u0192  (Dynamic)  server-rendered on demand\r\n\r\n",
+        "durationMs": 19354
+      },
+      {
+        "name": "tests-pass",
+        "kind": "process",
+        "verificationMethod": "test-results",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": 0,
+        "outputSample": "\r\n\u003E complipilot-frontend@0.1.0 test\r\n\u003E vitest run\r\n\r\n\r\n\u001B[1m\u001B[46m RUN \u001B[49m\u001B[22m \u001B[36mv3.2.7 \u001B[39m\u001B[90mC:/Users/ADMIN/AppData/Local/Temp/complipilot-frontend-validation-6cb5622b\u001B[39m\r\n\r\n \u001B[32m\u2713\u001B[39m src/components/layout/app-navigation.test.ts \u001B[2m(\u001B[22m\u001B[2m2 tests\u001B[22m\u001B[2m)\u001B[22m\u001B[32m 4\u001B[2mms\u001B[22m\u001B[39m\r\n\r\n\u001B[2m Test Files \u001B[22m \u001B[1m\u001B[32m1 passed\u001B[39m\u001B[22m\u001B[90m (1)\u001B[39m\r\n\u001B[2m      Tests \u001B[22m \u001B[1m\u001B[32m2 passed\u001B[39m\u001B[22m\u001B[90m (2)\u001B[39m\r\n\u001B[2m   Start at \u001B[22m 10:58:43\r\n\u001B[2m   Duration \u001B[22m 690ms\u001B[2m (transform 61ms, setup 0ms, collect 172ms, tests 4ms, environment 0ms, prepare 211ms)\u001B[22m\r\n\r\n",
+        "durationMs": 1857,
+        "testResults": {
+          "testFramework": "vitest",
+          "runnerDetectedFrom": "package_json",
+          "testsTotal": 2,
+          "testsPassed": 2,
+          "testsFailed": 0,
+          "testsSkipped": 0,
+          "parseFailed": false
+        }
+      },
+      {
+        "name": "home-route-responds",
+        "kind": "http-probe",
+        "verificationMethod": "http-status",
+        "passed": true,
+        "timedOut": false,
+        "skipped": false,
+        "skippedReason": null,
+        "exitCode": null,
+        "outputSample": "HTTP 200\n\u003C!DOCTYPE html\u003E\u003Chtml lang=\u0022vi\u0022 class=\u0022inter_6f63e4fe-module__BMM7va__variable jetbrains_mono_506ffa67-module__IMbS5W__variable h-full bg-background antialiased\u0022\u003E\u003Chead\u003E\u003Cmeta charSet=\u0022utf-8\u0022/\u003E\u003Cmeta name=\u0022viewport\u0022 content=\u0022width=device-width, initial-scale=1\u0022/\u003E\u003Clink rel=\u0022stylesheet\u0022 href=\u0022/_next/static/chunks/%5Broot-of-the-server%5D__0t4yuvt._.css\u0022 data-precedence=\u0022next_static/chunks/[root-of-the-server]__0t4yuvt._.css\u0022/\u003E\u003Clink rel=\u0022preload\u0022 as=\u0022script\u0022 fetchPriority=\u0022low\u0022 href=\u0022/_next/static/chunks/%5Bturbopack%5D_browser_dev_hmr-client_hmr-client_ts_10z625~._.js\u0022/\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_compiled_next-devtools_index_0553esy.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_compiled_react-dom_058-ah~._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_compiled_react-server-dom-turbopack_0p3wegg._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_compiled_0rpq4pf._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_client_0fhqo1d._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_115brz8._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_%40swc_helpers_cjs_0-4ujiy._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/_0rqeker._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/turbopack-_0p44nws._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_0khb9_b._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/src_0scy1~b._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/src_app_layout_tsx_004glpo._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_client_components_builtin_global-error_05htxoj.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_09jt2ga._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/src_00dti~v._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cscript src=\u0022/_next/static/chunks/src_app_page_tsx_05htxoj._.js\u0022 async=\u0022\u0022\u003E\u003C/script\u003E\u003Cmeta name=\u0022next-size-adjust\u0022 content=\u0022\u0022/\u003E\u003Cmeta name=\u0022theme-color\u0022 content=\u0022#020617\u0022/\u003E\u003Ctitle\u003ECompliPilot\u003C/title\u003E\u003Cmeta name=\u0022description\u0022 content=\u0022AI Compliance \u0026amp; Evidence OS for managing controls, evidence, tasks, and audit readiness.\u0022/\u003E\u003Cmeta name=\u0022application-name\u0022 content=\u0022CompliPilot\u0022/\u003E\u003Cmeta name=\u0022keywords\u0022 content=\u0022CompliPilot,Compliance,Evidence Management,Audit Trail,GRC,Security Controls,Compliance Tasks,AI Compliance\u0022/\u003E\u003Clink rel=\u0022icon\u0022 href=\u0022/icon.png?icon.0kf.p8--nm1vl.png\u0022 sizes=\u00221024x1024\u0022 type=\u0022image/png\u0022/\u003E\u003Cscript src=\u0022/_next/static/chunks/node_modules_next_dist_build_polyfills_polyfill-nomodule.js\u0022 noModule=\u0022\u0022\u003E\u003C/script\u003E\u003C/head\u003E\u003Cbody class=\u0022min-h-screen overflow-x-hidden bg-background font-sans text-foreground\u0022\u003E\u003Cdiv hidden=\u0022\u0022\u003E\u003C!--$--\u003E\u003C!--/$--\u003E\u003C/div\u003E\u003Cmain class=\u0022min-h-screen bg-background text-foreground selection:bg-primary/30 selection:text-primary-foreground\u0022\u003E\u003Csection class=\u0022relative flex flex-col overflow-hidden\u0022\u003E\u003Cdiv class=\u0022fixed left-3 right-3 top-3 z-50 mx-auto max-w-7xl animate-in fade-in slide-in-from-top-4 duration-700 sm:left-6 sm:right-6 sm:top-6\u0022\u003E\u003Cheader class=\u0022flex items-center justify-between gap-2 rounded-xl border border-border bg-card px-3 py-2 shadow-sm sm:gap-8 sm:rounded-full sm:px-4\u0022\u003E\u003Ca class=\u0022ml-1 flex shrink-0 items-center gap-2 group sm:ml-2\u0022 href=\u0022/\u0022\u003E\u003Cdiv class=\u0022flex size-8 items-center justify-center rounded-xl bg-primary text-primary-foreground shadow-sm transition-transform group-hover:scale-105\u0022\u003E\u003Csvg xmlns=\u0022http://www.w3.org/2000/svg\u0022 width=\u002224\u0022 height=\u002224\u0022 viewBox=\u00220 0 24 24\u0022 fill=\u0022none\u0022 stroke=\u0022currentColor\u0022 stroke-width=\u00222\u0022 stroke-linecap=\u0022round\u0022 stroke-linejoin=\u0022round\u0022 class=\u0022lucide lucide-shield-check size-4\u0022 aria-hidden=\u0022true\u0022\u003E\u003Cpath d=\u0022M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z\u0022\u003E\u003C/path\u003E\u003Cpath d=\u0022m9 12 2 2 4-4\u0022\u003E\u003C/path\u003E\u003C/svg\u003E\u003C/div\u003E\u003Cspan class=\u0022font-bold tracking-tight text-foreground\u0022\u003ECompliPilot\u003C/span\u003E\u003C/a\u003E\u003Cdiv class=\u0022flex min-w-0 items-center gap-1 s\n\u2026[truncated]",
+        "durationMs": 6089
+      }
+    ],
+    "executions": [
+      {
+        "source": "setup[0]",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "ci"
+        ],
+        "cwd": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\complipilot-frontend-validation-6cb5622b",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "tsc-no-emit",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npx.CMD",
+        "args": [
+          "tsc",
+          "--noEmit"
+        ],
+        "cwd": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\complipilot-frontend-validation-6cb5622b",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "production-build",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "build"
+        ],
+        "cwd": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\complipilot-frontend-validation-6cb5622b",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "tests-pass",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "test"
+        ],
+        "cwd": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\complipilot-frontend-validation-6cb5622b",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      },
+      {
+        "source": "home-route-responds",
+        "resolvedExecutable": "C:\\Program Files\\nodejs\\npm.CMD",
+        "args": [
+          "run",
+          "dev",
+          "--",
+          "-p",
+          "3107"
+        ],
+        "cwd": "C:\\Users\\ADMIN\\AppData\\Local\\Temp\\complipilot-frontend-validation-6cb5622b",
+        "env": {},
+        "prependPath": [],
+        "platform": "win32"
+      }
+    ]
+  }
+}

@@ -25,6 +25,7 @@
     "title": "Compliance Workspace",
     "searchPlaceholder": "Search controls, evidence, tasks, and audit activity...",
     "loadingUser": "Loading...",
+    "openNavigation": "Open navigation",
     "modules": "Modules",
     "management": "Management",
     "noResults": "No results found."
@@ -129,6 +130,7 @@
   },
   "common": {
     "loading": "Loading...",
+    "filters": "Filters",
     "cancel": "Cancel",
     "previous": "Previous",
     "next": "Next",
@@ -393,7 +395,8 @@
     "errors": {
       "fileTooLarge": "File size must be 10MB or smaller.",
       "chooseFile": "Please choose a file to upload.",
-      "missingOrganization": "Missing active organization."
+      "missingOrganization": "Missing active organization.",
+      "titleRequired": "Please enter a title for this evidence."
     }
   },
   "evidenceUrlDialog": {

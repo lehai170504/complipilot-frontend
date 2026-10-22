@@ -2,6 +2,7 @@
 
 import { ReactNode, useState } from "react";
 import { SlidersHorizontal, X } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -21,11 +22,12 @@ export function FilterBar({
   actions?: ReactNode;
 }) {
   const [isOpen, setIsOpen] = useState(false);
+  const t = useTranslations("common");
 
   return (
     <div
       className={cn(
-        "rounded-2xl border bg-background shadow-sm",
+        "rounded-xl border border-border bg-card shadow-none",
         className
       )}
     >
@@ -38,7 +40,7 @@ export function FilterBar({
           type="button"
         >
           <SlidersHorizontal className="mr-2 size-4" />
-          Filters
+          {t("filters")}
           {isOpen ? (
             <X className="ml-2 size-3" />
           ) : null}

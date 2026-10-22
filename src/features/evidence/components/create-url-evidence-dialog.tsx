@@ -4,7 +4,6 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 
-import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -25,6 +24,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { evidenceTypeOptions } from "@/features/evidence/constants";
 import { useCreateEvidenceMutation } from "@/features/evidence/hooks/evidence-hooks";
+import { toastFirstValidationError } from "@/lib/forms/toast-first-validation-error";
 import {
   urlEvidenceSchema,
   type UrlEvidenceFormData,
@@ -50,7 +50,7 @@ export function CreateUrlEvidenceDialog({
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<UrlEvidenceFormData>({
     resolver: zodResolver(urlEvidenceSchema),
     defaultValues: {
@@ -91,13 +91,13 @@ export function CreateUrlEvidenceDialog({
           <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-5"
+          onSubmit={handleSubmit(onSubmit, toastFirstValidationError)}
+        >
           <div className="space-y-2">
             <Label htmlFor="evidence-title">{t("titleLabel")}</Label>
             <Input id="evidence-title" {...register("title")} />
-            {errors.title ? (
-              <p className="text-sm text-destructive">{errors.title.message}</p>
-            ) : null}
           </div>
 
           <div className="space-y-2">
@@ -125,11 +125,6 @@ export function CreateUrlEvidenceDialog({
           <div className="space-y-2">
             <Label htmlFor="external-url">{t("externalUrl")}</Label>
             <Input id="external-url" type="url" {...register("externalUrl")} />
-            {errors.externalUrl ? (
-              <p className="text-sm text-destructive">
-                {errors.externalUrl.message}
-              </p>
-            ) : null}
           </div>
 
           <div className="space-y-2">
@@ -141,16 +136,7 @@ export function CreateUrlEvidenceDialog({
               {...register("description")}
               rows={4}
             />
-            {errors.description ? (
-              <p className="text-sm text-destructive">
-                {errors.description.message}
-              </p>
-            ) : null}
           </div>
-
-          {createEvidenceMutation.error ? (
-            <ErrorAlert error={createEvidenceMutation.error} />
-          ) : null}
 
           <div className="flex justify-end gap-3">
             <Button

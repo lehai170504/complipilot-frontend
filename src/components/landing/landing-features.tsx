@@ -33,31 +33,31 @@ export function LandingFeatures() {
   const t = useTranslations("landing.featuresNew");
 
   return (
-    <section className="relative z-10 mx-auto max-w-7xl px-6 mt-32">
+    <section className="relative z-10 mx-auto mt-16 max-w-7xl px-4 sm:mt-24 sm:px-6">
       <div className="mx-auto max-w-3xl text-center">
         <p className="text-sm font-semibold uppercase tracking-[0.25em] text-primary">
           {t("eyebrow")}
         </p>
-        <h2 className="mt-4 text-3xl font-bold tracking-tight md:text-4xl text-foreground">
+        <h2 className="mt-3 text-2xl font-semibold tracking-tight text-foreground sm:mt-4 sm:text-3xl md:text-4xl">
           {t("title")}
         </h2>
-        <p className="mt-4 text-lg text-muted-foreground">
+        <p className="mt-3 text-sm leading-6 text-muted-foreground sm:mt-4 sm:text-base">
           {t("description")}
         </p>
       </div>
 
-      <div className="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:mt-12 sm:grid-cols-2 sm:gap-5 xl:grid-cols-3">
         {features.map((feature, idx) => (
           <Card
             key={feature.key}
-            className="group relative overflow-hidden border-border/50 bg-card/40 backdrop-blur-md transition-all duration-300 hover:border-primary/50 hover:bg-card/60 hover:shadow-xl hover:shadow-primary/5"
+            className="group relative overflow-hidden border-border bg-card transition-colors hover:border-primary/30"
           >
-            <CardContent className="p-8">
-              <div className="mb-6 flex size-12 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-                <feature.icon className="size-6" />
+            <CardContent className="p-5 sm:p-6">
+              <div className="mb-4 flex size-10 items-center justify-center rounded-xl bg-primary/8 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground sm:mb-5 sm:size-11">
+                <feature.icon className="size-5" />
               </div>
 
-              <h3 className="text-xl font-semibold text-foreground">
+              <h3 className="text-base font-semibold text-foreground sm:text-lg">
                 {t(`items.${idx}.title`)}
               </h3>
 
@@ -66,8 +66,6 @@ export function LandingFeatures() {
               </p>
             </CardContent>
 
-            {/* Subtle gradient overlay on hover */}
-            <div className="absolute inset-0 bg-gradient-to-br from-primary/5 to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100 pointer-events-none" />
           </Card>
         ))}
       </div>

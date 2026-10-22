@@ -5,6 +5,7 @@ import {
   listNotifications,
   markNotificationAsRead,
 } from "@/features/notifications/api/notifications-api";
+import { toast } from "@/lib/toast";
 
 export function useNotificationsQuery(organizationId: string | undefined) {
   return useQuery({
@@ -42,6 +43,9 @@ export function useMarkNotificationAsReadMutation(
       void queryClient.invalidateQueries({
         queryKey: ["notifications-unread-count", organizationId],
       });
+    },
+    onError: () => {
+      toast.error("Could not mark notification as read");
     },
   });
 }

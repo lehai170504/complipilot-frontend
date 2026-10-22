@@ -7,26 +7,26 @@ export function LandingHero() {
   const t = useTranslations("landing");
 
   return (
-    <div className="relative z-10 mx-auto max-w-7xl px-6 pb-24 pt-32 md:pt-40">
-      <div className="mx-auto max-w-4xl text-center animate-in fade-in slide-in-from-bottom-8 duration-1000">
-        <div className="mx-auto mb-8 inline-flex items-center rounded-full border border-primary/20 bg-primary/10 px-4 py-2 text-sm font-medium text-primary backdrop-blur-sm">
-          <Sparkles className="mr-2 size-4 animate-pulse" />
+    <div className="relative z-10 mx-auto max-w-7xl px-4 pb-12 pt-28 sm:px-6 sm:pb-16 sm:pt-36 lg:pb-20">
+      <div className="mx-auto max-w-4xl text-center">
+        <div className="mx-auto mb-6 inline-flex items-center rounded-full border border-primary/15 bg-primary/5 px-3 py-1.5 text-xs font-semibold text-primary sm:mb-8 sm:px-4 sm:py-2 sm:text-sm">
+          <Sparkles className="mr-2 size-4" />
           {t("hero.eyebrow")}
         </div>
 
-        <h1 className="text-5xl font-extrabold tracking-tight md:text-7xl lg:leading-[1.1] bg-gradient-to-br from-foreground to-muted-foreground bg-clip-text text-transparent">
+        <h1 className="text-4xl font-semibold leading-[1.08] tracking-tight text-foreground sm:text-5xl md:text-7xl">
           {t("hero.title")}
         </h1>
 
-        <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-muted-foreground">
+        <p className="mx-auto mt-5 max-w-2xl text-base leading-7 text-muted-foreground sm:mt-6 sm:text-lg sm:leading-8">
           {t("hero.description")}
         </p>
 
-        <div className="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+        <div className="mt-8 flex flex-col justify-center gap-3 sm:mt-10 sm:flex-row sm:gap-4">
           <Button
             asChild
             size="lg"
-            className="bg-primary text-primary-foreground shadow-xl shadow-primary/20 hover:bg-primary/90 transition-all hover:scale-105 h-12 px-8 text-base rounded-full"
+            className="h-11 rounded-lg px-6 text-sm sm:h-12 sm:rounded-full sm:px-8 sm:text-base"
           >
             <Link href="/register">
               {t("hero.primaryCta")}
@@ -38,7 +38,7 @@ export function LandingHero() {
             asChild
             size="lg"
             variant="outline"
-            className="rounded-full border-border bg-card/50 text-foreground backdrop-blur-sm hover:bg-muted/50 hover:text-foreground transition-all h-12 px-8 text-base"
+            className="h-11 rounded-lg px-6 text-sm sm:h-12 sm:rounded-full sm:px-8 sm:text-base"
           >
             <Link href="/login">{t("hero.secondaryCta")}</Link>
           </Button>

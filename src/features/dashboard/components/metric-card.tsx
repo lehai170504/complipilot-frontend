@@ -14,15 +14,15 @@ export function MetricCard({
   icon: LucideIcon;
 }) {
   return (
-    <Card className="compliance-surface transition-all duration-300 hover:-translate-y-1 hover:shadow-md">
-      <CardContent className="flex items-start justify-between p-6">
+    <Card className="compliance-surface">
+      <CardContent className="flex items-start justify-between gap-4 p-5 sm:p-6">
         <div>
           <p className="text-sm font-medium text-muted-foreground">{title}</p>
-          <p className="mt-2 text-3xl font-extrabold tracking-tight text-foreground">{value}</p>
-          <p className="mt-1 text-sm text-muted-foreground">{description}</p>
+          <p className="mt-3 text-3xl font-semibold tracking-tight text-foreground sm:text-4xl">{value}</p>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">{description}</p>
         </div>
-        <div className="rounded-2xl bg-primary/10 p-3 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
-          <Icon className="size-5" />
+        <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-primary/8 text-primary">
+          <Icon className="size-[18px]" />
         </div>
       </CardContent>
     </Card>

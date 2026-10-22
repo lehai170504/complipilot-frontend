@@ -4,7 +4,6 @@ import { FormEvent, useState } from "react";
 import { FileUp, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
-import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -26,6 +25,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { evidenceTypeOptions } from "@/features/evidence/constants";
 import { useCreateFileEvidenceMutation } from "@/features/evidence/hooks/evidence-hooks";
 import type { EvidenceType } from "@/lib/api/api-types";
+import { toast } from "@/lib/toast";
 
 const MAX_FILE_SIZE_BYTES = 10 * 1024 * 1024;
 
@@ -60,14 +60,12 @@ export function CreateFileEvidenceDialog({
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [evidenceType, setEvidenceType] = useState<EvidenceType>("SCREENSHOT");
-  const [clientError, setClientError] = useState<string | null>(null);
 
   function resetForm() {
     setFile(null);
     setTitle("");
     setDescription("");
     setEvidenceType("SCREENSHOT");
-    setClientError(null);
   }
 
   function handleOpenChange(nextOpen: boolean) {
@@ -79,15 +77,13 @@ export function CreateFileEvidenceDialog({
   }
 
   function handleFileChange(selectedFile: File | null) {
-    setClientError(null);
-
     if (!selectedFile) {
       setFile(null);
       return;
     }
 
     if (selectedFile.size > MAX_FILE_SIZE_BYTES) {
-      setClientError(t("errors.fileTooLarge"));
+      toast.error(t("errors.fileTooLarge"));
       setFile(null);
       return;
     }
@@ -102,15 +98,19 @@ export function CreateFileEvidenceDialog({
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    setClientError(null);
 
     if (!file) {
-      setClientError(t("errors.chooseFile"));
+      toast.error(t("errors.chooseFile"));
       return;
     }
 
     if (!organizationId) {
-      setClientError(t("errors.missingOrganization"));
+      toast.error(t("errors.missingOrganization"));
+      return;
+    }
+
+    if (!title.trim()) {
+      toast.error(t("errors.titleRequired"));
       return;
     }
 
@@ -143,6 +143,7 @@ export function CreateFileEvidenceDialog({
         <form
           className="space-y-5 overflow-y-auto px-1 py-2"
           onSubmit={handleSubmit}
+          noValidate
         >
           <div className="space-y-2">
             <Label htmlFor="evidence-file">{t("file")}</Label>
@@ -201,7 +202,6 @@ export function CreateFileEvidenceDialog({
               value={title}
               onChange={(event) => setTitle(event.target.value)}
               placeholder={t("titlePlaceholder")}
-              required
               className="w-full"
             />
           </div>
@@ -238,16 +238,6 @@ export function CreateFileEvidenceDialog({
               className="w-full resize-y"
             />
           </div>
-
-          {clientError ? (
-            <div className="rounded-2xl border border-destructive/30 bg-destructive/10 p-4 text-sm text-red-700 break-words">
-              {clientError}
-            </div>
-          ) : null}
-
-          {createFileEvidenceMutation.error ? (
-            <ErrorAlert error={createFileEvidenceMutation.error} />
-          ) : null}
 
           <div className="flex justify-end gap-3 pt-2">
             <Button

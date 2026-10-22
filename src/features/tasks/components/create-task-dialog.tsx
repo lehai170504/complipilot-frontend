@@ -4,7 +4,6 @@ import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useTranslations } from "next-intl";
 
-import { ErrorAlert } from "@/components/feedback/error-alert";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -24,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
 import { useCreateTaskMutation } from "@/features/tasks/hooks/tasks-hooks";
+import { toastFirstValidationError } from "@/lib/forms/toast-first-validation-error";
 import {
   createTaskSchema,
   type CreateTaskFormData,
@@ -51,7 +51,7 @@ export function CreateTaskDialog({
     handleSubmit,
     control,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { isSubmitting },
   } = useForm<CreateTaskFormData>({
     resolver: zodResolver(createTaskSchema),
     defaultValues: {
@@ -95,7 +95,10 @@ export function CreateTaskDialog({
           <DialogDescription>{t("description")}</DialogDescription>
         </DialogHeader>
 
-        <form className="space-y-5" onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="space-y-5"
+          onSubmit={handleSubmit(onSubmit, toastFirstValidationError)}
+        >
           <div className="space-y-2">
             <Label htmlFor="task-title">{t("fields.title")}</Label>
             <Input
@@ -103,19 +106,11 @@ export function CreateTaskDialog({
               {...register("title")}
               placeholder={t("placeholders.title")}
             />
-            {errors.title ? (
-              <p className="text-sm text-destructive">{errors.title.message}</p>
-            ) : null}
           </div>
 
           <div className="space-y-2">
             <Label htmlFor="task-desc">{t("fields.description")}</Label>
             <Textarea id="task-desc" {...register("description")} rows={3} />
-            {errors.description ? (
-              <p className="text-sm text-destructive">
-                {errors.description.message}
-              </p>
-            ) : null}
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
@@ -146,10 +141,6 @@ export function CreateTaskDialog({
               <Input type="date" {...register("dueDate")} />
             </div>
           </div>
-
-          {createMutation.error ? (
-            <ErrorAlert error={createMutation.error} />
-          ) : null}
 
           <div className="flex justify-end gap-3">
             <Button

@@ -37,23 +37,19 @@ function AppShellContent({ children }: { children: ReactNode }) {
   }
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-background relative">
-      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,var(--color-primary)_0%,transparent_50%)] opacity-5 pointer-events-none" />
+    <div className="flex h-dvh w-full overflow-hidden bg-background">
       <AppSidebar />
 
-      <div className="flex min-w-0 flex-1 flex-col overflow-hidden transition-all duration-300">
+      <div className="flex min-w-0 flex-1 flex-col overflow-hidden">
         <AppTopbar organizationId={organizationId} />
 
         <DisabledWorkspaceBanner organizationId={organizationId} />
 
-        {/* Main Content Area with floating effect */}
-        <div className="flex-1 overflow-hidden p-2 md:p-4 z-10">
-          <main className="compliance-glass h-full overflow-y-auto rounded-3xl shadow-xl shadow-primary/5">
-            <div className="mx-auto max-w-7xl px-4 py-6 xl:px-8 xl:py-8 compliance-page-shell">
+        <main className="min-h-0 flex-1 overflow-y-auto">
+            <div className="mx-auto max-w-[1440px] px-4 py-6 sm:px-6 lg:px-8 lg:py-8 compliance-page-shell">
               {children}
             </div>
-          </main>
-        </div>
+        </main>
       </div>
 
       <OnboardingModal
